@@ -7,6 +7,8 @@ TRACE_PATH=/tmp/trace
 
 SRC_NAME =			\
 		entry.c		\
+		exit.c		\
+
 
 OBJ_NAME = $(SRC_NAME:.c=.o)
 
