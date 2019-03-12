@@ -1,8 +1,10 @@
 OBFUSCATION:
 	
-	ENTRY (pestilence)
+	ENTRY (pestilence) DONE
 	INFECTION ROUTINE (pestilence)
 	STUB (war)
+
+	virus has to decrypt his infection routine, inject, then reencrypt !
 
 ENTRY:
 	entry will not be executed if a specific process is running (AV);
@@ -17,9 +19,10 @@ ENTRY:
 	foo the key for bar etc..
 
 INFECTION ROUTINE:
-	SEGMENT_TEXT_REVERSE ?
+	PT_NOTE ?
 
 	The flow of execution has to be linear;
+	it has to contains the reencryption, because when the virus will replicate all functions will be in clear
 
 	NOPE:
 	main()
@@ -46,7 +49,7 @@ INFECTION ROUTINE:
 	}
 
 STUB:
-	PT_NOTE ?
+	REVERSE_TEXT_SEGMENT ?
 
 	The stub is the polymorphic launcher, it will unencrypt entry, infection routine until me, then launch entry;
 	The stub will be in clear, so it must be different in every replication;

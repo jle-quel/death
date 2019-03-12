@@ -5,11 +5,14 @@ OBJ_PATH = obj
 INC_PATH = inc
 TRACE_PATH=/tmp/trace
 
-SRC_NAME =			\
-		main.c		\
-		entry.c		\
-		decrypt.c	\
-
+SRC_NAME =				\
+		main.c			\
+		__entry.c		\
+		host.c			\
+		criteria.c		\
+		infection_text.c	\
+		__exit.c		\
+		stub_obfuscation.c	\
 
 OBJ_NAME = $(SRC_NAME:.c=.o)
 

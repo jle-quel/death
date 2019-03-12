@@ -1,3 +1,5 @@
+#include "../inc/war.h"
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -7,14 +9,16 @@
 #include <stdlib.h>
 #include <elf.h>
 
-#define ENT_ADDR 0x1145
-#define FOO_ADDR 0x1192
-#define BAR_ADDR 0x11df
-#define EXI_ADDR 0x11f2
+#define ENT_ADDR 0x11c5
+#define F1_ADDR 0x1288
+#define F2_ADDR 0x1479
+#define F3_ADDR 0x15d9
+#define F4_ADDR 0x15fb
 
-#define ENT_SIZE FOO_ADDR - ENT_ADDR
-#define FOO_SIZE BAR_ADDR - FOO_ADDR
-#define BAR_SIZE EXI_ADDR - BAR_ADDR
+#define ENT_SIZE F1_ADDR - ENT_ADDR
+#define F1_SIZE F2_ADDR - F1_ADDR
+#define F2_SIZE F3_ADDR - F2_ADDR
+#define F3_SIZE F4_ADDR - F3_ADDR
 
 char *ptr;
 
@@ -35,30 +39,59 @@ void segment_write(char *ptr)
 	}
 }
 
-void decrypt(const char *caller, char *callee, const size_t caller_size, const size_t callee_size, size_t n)
+void update_keychain_left(struct s_keychain *keychain, const char *caller, const size_t size)
 {
-	unsigned int key = 0;
-	size_t junk[] = {13, 23, -23, -13};
+	size_t key = 0;
+	size_t junk[2] = {23, 32};
 
-	for (size_t index = 0; index < caller_size; index++)
+	for (register size_t index = 0; index < size; index++)
 	{
-		key += caller[index];
-		junk[index % 4] = index ^ key;
-		junk[index % 4] ^= junk[index % 4] + 1;
-		key += caller[index] ^ junk[index % 4];
+		key = caller[index];
+		junk[index % 2] = index ^ key;
+		key += caller[index] ^ (junk[index % 2] + 1);
+		junk[index % 2] |= key;
+		key += junk[index % 2];
 	}
 
-	if (n)
-		decrypt(ptr + FOO_ADDR, ptr + BAR_ADDR, FOO_SIZE, BAR_SIZE, n - 1);
+	keychain->key[LEFT] = key;
+	keychain->junk[LEFT][0] = junk[0];
+	keychain->junk[LEFT][1] = junk[1];
+}
 
-	for (register size_t index = 0; index < callee_size; index++)
+void update_keychain_right(struct s_keychain *keychain, const char *caller, const size_t size)
+{
+	size_t key = 0;
+	size_t junk[2] = {23, 32};
+
+	for (register size_t index = 0; index < size; index++)
 	{
-		junk[index % 4] <<= 2;
-		callee[index] ^= (key / junk[index % 4]);
-		junk[index % 4] >>= 1;
+		key += junk[index % 2];
+		junk[index % 2] = index ^ key;
+		key = caller[index];
+		junk[index % 2] |= key;
+		key += caller[index] ^ (junk[index % 2] + 1);
+	}
+
+	keychain->key[RIGHT] = key;
+	keychain->junk[RIGHT][0] = junk[0];
+	keychain->junk[RIGHT][1] = junk[1];
+}
+
+void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+	{
+		callee[index] ^= 42;//keychain->key[LEFT];
 	}
 }
 
+void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+	{
+		callee[index] ^= 42;//keychain->key[RIGHT];
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
@@ -66,6 +99,7 @@ void decrypt(const char *caller, char *callee, const size_t caller_size, const s
 
 int main(void)
 {
+	struct s_keychain keychain = {0};
 	char *filename = "../war";
 	int fd;
 	struct stat statbuf;
@@ -87,7 +121,16 @@ int main(void)
 	}
 
 	segment_write(ptr);
-	decrypt(ptr + ENT_ADDR, ptr + FOO_ADDR, ENT_SIZE, FOO_SIZE, 1);
+
+	update_keychain_left(&keychain, ptr + ENT_ADDR, ENT_SIZE);
+	update_keychain_right(&keychain, ptr + F1_ADDR, F1_SIZE);
+
+	update_keychain_left(&keychain, ptr + F2_ADDR, F2_SIZE);
+
+	decrypt_left(&keychain, ptr + F3_ADDR, F3_SIZE);
+
+	decrypt_left(&keychain, ptr + F1_ADDR, F1_SIZE);
+	decrypt_right(&keychain, ptr + F2_ADDR, F2_SIZE);
 
 	write(fd, ptr, statbuf.st_size);
 	munmap(ptr, statbuf.st_size);
