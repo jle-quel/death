@@ -6,8 +6,9 @@ INC_PATH = inc
 TRACE_PATH=/tmp/trace
 
 SRC_NAME =			\
+		main.c		\
 		entry.c		\
-		exit.c		\
+		decrypt.c	\
 
 
 OBJ_NAME = $(SRC_NAME:.c=.o)

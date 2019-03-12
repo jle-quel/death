@@ -5,21 +5,8 @@
 /// INCLUDES 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <stdlib.h>
-#include <string.h>
-#include <limits.h>
-#include <sys/mman.h>
-#include <stdbool.h>
-#include <dirent.h>
-#include <elf.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <sys/resource.h>
-#include <sys/wait.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 /// MACROS 
@@ -37,6 +24,9 @@
 void __entry(void);
 void __exit(void);
 
-void _fatal(const int status);
+void foo(void);
+void bar(void);
+
+void decrypt(const char *caller, char *callee, const size_t caller_size, const size_t callee_size);
 
 #endif
