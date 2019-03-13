@@ -9,18 +9,20 @@
 #include <stdlib.h>
 #include <elf.h>
 
-#define ENT_ADDR 0x11b5
-#define F1_ADDR 0x1278
-#define F2_ADDR 0x141b
-#define F3_ADDR 0x1592
-#define F4_ADDR 0x164e
-#define F5_ADDR 0x16a1
+#define ENT_ADDR 0x1195
+#define F1_ADDR 0x1290
+#define F2_ADDR 0x140d
+#define F3_ADDR 0x1578
+#define F4_ADDR 0x1628
+#define F5_ADDR 0x1917
+#define F6_ADDR 0x1a29
 
 #define ENT_SIZE F1_ADDR - ENT_ADDR
 #define F1_SIZE F2_ADDR - F1_ADDR
 #define F2_SIZE F3_ADDR - F2_ADDR
 #define F3_SIZE F4_ADDR - F3_ADDR
 #define F4_SIZE F5_ADDR - F4_ADDR
+#define F5_SIZE F6_ADDR - F5_ADDR
 
 char *ptr;
 
@@ -58,9 +60,6 @@ void update_keychain_left(struct s_keychain *keychain, const char *caller, const
 	keychain->key[LEFT] = key;
 	keychain->junk[LEFT][0] = junk[0];
 	keychain->junk[LEFT][1] = junk[1];
-
-	printf("key: %ld\n", key);
-	printf("junk: %ld %ld\n", junk[0], junk[1]);
 }
 
 void update_keychain_right(struct s_keychain *keychain, const char *caller, const size_t size)
@@ -80,9 +79,6 @@ void update_keychain_right(struct s_keychain *keychain, const char *caller, cons
 	keychain->key[RIGHT] = key;
 	keychain->junk[RIGHT][0] = junk[0];
 	keychain->junk[RIGHT][1] = junk[1];
-
-	printf("key: %ld\n", key);
-	printf("junk: %ld %ld\n", junk[0], junk[1]);
 }
 
 void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
@@ -108,7 +104,7 @@ void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t
 int main(void)
 {
 	struct s_keychain keychain = {0};
-	char *filename = "../war";
+	char *filename = "./war";
 	int fd;
 	struct stat statbuf;
 
@@ -129,6 +125,9 @@ int main(void)
 	}
 
 	segment_write(ptr);
+
+	update_keychain_left(&keychain, ptr + F4_ADDR, F4_SIZE);
+	decrypt_left(&keychain, ptr + F5_ADDR, F5_SIZE);
 
 	update_keychain_right(&keychain, ptr + F3_ADDR, F3_SIZE);
 	decrypt_right(&keychain, ptr + F4_ADDR, F4_SIZE);
