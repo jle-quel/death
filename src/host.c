@@ -30,11 +30,6 @@ void host_constructor(struct s_host *host, struct s_keychain *keychain, const ch
 
 	close(fd);
 
-	printf("%p\n", host->header);
-	printf("%s\n", host->filename);
-	printf("%ld\n", host->filesize);
-	printf("\n");
-
 	update_keychain_right(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
 	decrypt_right(keychain, (char *)criteria, (void *)infection_text - (void *)criteria);
 
