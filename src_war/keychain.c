@@ -21,9 +21,6 @@ void update_keychain_left(struct s_keychain *keychain, const char *caller, const
 	keychain->key[LEFT] = key;
 	keychain->junk[LEFT][0] = junk[0];
 	keychain->junk[LEFT][1] = junk[1];
-	
-	printf("key: %ld\n", key);
-	printf("junk: %ld %ld\n", junk[0], junk[1]);
 }
 
 void update_keychain_right(struct s_keychain *keychain, const char *caller, const size_t size)
@@ -43,9 +40,6 @@ void update_keychain_right(struct s_keychain *keychain, const char *caller, cons
 	keychain->key[RIGHT] = key;
 	keychain->junk[RIGHT][0] = junk[0];
 	keychain->junk[RIGHT][1] = junk[1];
-
-	printf("key: %ld\n", key);
-	printf("junk: %ld %ld\n", junk[0], junk[1]);
 }
 
 void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)

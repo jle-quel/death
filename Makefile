@@ -17,6 +17,7 @@ SRC_WAR_NAME =				\
 		criteria.c		\
 		text.c			\
 		note.c			\
+		header.c		\
 		__exit.c		\
 					\
 		keychain.c		\
@@ -62,7 +63,6 @@ $(OBJ_WAR_PATH)/%.o: $(SRC_WAR_PATH)/%.c Makefile
 
 $(LOAD): $(OBJ_LOAD)
 	@$(CC) $(CFLAGS) $^ -o $@
-	@./loader
 
 $(OBJ_LOAD_PATH)/%.o: $(SRC_LOAD_PATH)/%.c Makefile
 	@mkdir $(OBJ_LOAD_PATH) 2> /dev/null || true
