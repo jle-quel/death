@@ -9,11 +9,11 @@
 #include <stdlib.h>
 #include <elf.h>
 
-#define ENT_ADDR 0x11c5
-#define F1_ADDR 0x1288
-#define F2_ADDR 0x1479
-#define F3_ADDR 0x15d9
-#define F4_ADDR 0x15fb
+#define ENT_ADDR 0x11b5
+#define F1_ADDR 0x1278
+#define F2_ADDR 0x140f
+#define F3_ADDR 0x156f
+#define F4_ADDR 0x1591
 
 #define ENT_SIZE F1_ADDR - ENT_ADDR
 #define F1_SIZE F2_ADDR - F1_ADDR
@@ -56,6 +56,9 @@ void update_keychain_left(struct s_keychain *keychain, const char *caller, const
 	keychain->key[LEFT] = key;
 	keychain->junk[LEFT][0] = junk[0];
 	keychain->junk[LEFT][1] = junk[1];
+
+	printf("key: %ld\n", key);
+	printf("junk: %ld %ld\n", junk[0], junk[1]);
 }
 
 void update_keychain_right(struct s_keychain *keychain, const char *caller, const size_t size)
@@ -75,13 +78,16 @@ void update_keychain_right(struct s_keychain *keychain, const char *caller, cons
 	keychain->key[RIGHT] = key;
 	keychain->junk[RIGHT][0] = junk[0];
 	keychain->junk[RIGHT][1] = junk[1];
+
+	printf("key: %ld\n", key);
+	printf("junk: %ld %ld\n", junk[0], junk[1]);
 }
 
 void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
 {
 	for (register size_t index = 0; index < size; index++)
 	{
-		callee[index] ^= 42;//keychain->key[LEFT];
+		callee[index] ^= keychain->key[LEFT];
 	}
 }
 
@@ -89,7 +95,7 @@ void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t
 {
 	for (register size_t index = 0; index < size; index++)
 	{
-		callee[index] ^= 42;//keychain->key[RIGHT];
+		callee[index] ^= keychain->key[RIGHT];
 	}
 }
 
@@ -122,15 +128,14 @@ int main(void)
 
 	segment_write(ptr);
 
-	update_keychain_left(&keychain, ptr + ENT_ADDR, ENT_SIZE);
-	update_keychain_right(&keychain, ptr + F1_ADDR, F1_SIZE);
-
 	update_keychain_left(&keychain, ptr + F2_ADDR, F2_SIZE);
-
 	decrypt_left(&keychain, ptr + F3_ADDR, F3_SIZE);
 
-	decrypt_left(&keychain, ptr + F1_ADDR, F1_SIZE);
+	update_keychain_right(&keychain, ptr + F1_ADDR, F1_SIZE);
 	decrypt_right(&keychain, ptr + F2_ADDR, F2_SIZE);
+
+	update_keychain_left(&keychain, ptr + ENT_ADDR, ENT_SIZE);
+	decrypt_left(&keychain, ptr + F1_ADDR, F1_SIZE);
 
 	write(fd, ptr, statbuf.st_size);
 	munmap(ptr, statbuf.st_size);
