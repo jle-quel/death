@@ -33,12 +33,25 @@
 /// STRUCTURES
 ////////////////////////////////////////////////////////////////////////////////
 
+struct s_note
+{
+
+};
+
+struct s_text
+{
+
+};
+
 struct s_host
 {
 	Elf64_Ehdr *header;
 
 	size_t filesize;
 	const char *filename;
+
+	struct s_note *note;
+	struct s_text *text;
 };
 
 struct s_keychain
@@ -56,7 +69,8 @@ struct s_keychain
 void __entry(void);
 void host_constructor(struct s_host *host, struct s_keychain *keychain, const char *filename);
 void criteria(struct s_host *host, struct s_keychain *keychain);
-void infection_text(struct s_host *host);
+void text_infection(struct s_host *host, struct s_keychain *keychain);
+void note_infection(struct s_host *host, struct s_keychain *keychain);
 void __exit(void);
 
 // STUB (OBFUSCATION)
