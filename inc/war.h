@@ -60,9 +60,9 @@ void infection_text(struct s_host *host);
 void __exit(void);
 
 // STUB (OBFUSCATION)
-void update_keychain_left(struct s_keychain *keychain, const char *caller, const size_t size);
-void update_keychain_right(struct s_keychain *keychain, const char *caller, const size_t size);
-void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size);
-void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size);
+__attribute__((hot)) void update_keychain_left(struct s_keychain *keychain, const char *caller, const size_t size);
+__attribute__((hot)) void update_keychain_right(struct s_keychain *keychain, const char *caller, const size_t size);
+__attribute__((hot)) void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size);
+__attribute__((hot)) void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size);
 
 #endif
