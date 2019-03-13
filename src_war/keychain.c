@@ -45,15 +45,11 @@ void update_keychain_right(struct s_keychain *keychain, const char *caller, cons
 void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
 {
 	for (register size_t index = 0; index < size; index++)
-	{
 		callee[index] ^= keychain->key[LEFT];
-	}
 }
 
 void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)
 {
 	for (register size_t index = 0; index < size; index++)
-	{
 		callee[index] ^= keychain->key[RIGHT];
-	}
 }

