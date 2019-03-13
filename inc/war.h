@@ -35,7 +35,8 @@
 
 struct s_note
 {
-
+	Elf64_Phdr *data;
+	Elf64_Phdr *self;
 };
 
 struct s_text

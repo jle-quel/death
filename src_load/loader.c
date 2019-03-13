@@ -10,11 +10,11 @@
 #include <elf.h>
 
 #define ENT_ADDR 0x11b5
-#define F1_ADDR 0x1278
-#define F2_ADDR 0x141b
-#define F3_ADDR 0x1592
-#define F4_ADDR 0x164e
-#define F5_ADDR 0x16a1
+#define F1_ADDR 0x12a0
+#define F2_ADDR 0x1443
+#define F3_ADDR 0x15ba
+#define F4_ADDR 0x1676
+#define F5_ADDR 0x179c
 
 #define ENT_SIZE F1_ADDR - ENT_ADDR
 #define F1_SIZE F2_ADDR - F1_ADDR
@@ -108,7 +108,7 @@ void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t
 int main(void)
 {
 	struct s_keychain keychain = {0};
-	char *filename = "../war";
+	char *filename = "./war";
 	int fd;
 	struct stat statbuf;
 

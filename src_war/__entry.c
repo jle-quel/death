@@ -7,7 +7,7 @@
 void __entry(void)
 {
 	struct s_keychain keychain = {0};
-	struct s_host host;
+	struct s_host host = {0};
 
 	const char filename[] = "/tmp/host";
 
