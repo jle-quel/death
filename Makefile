@@ -18,6 +18,7 @@ SRC_WAR_NAME =				\
 		text.c			\
 		note.c			\
 		header.c		\
+		injection.c		\
 		__exit.c		\
 					\
 		keychain.c		\
