@@ -9,14 +9,16 @@
 #include <stdlib.h>
 #include <elf.h>
 
-#define ENT_ADDR 0x1145
-#define F1_ADDR 0x1242
-#define F2_ADDR 0x147d
-#define F3_ADDR 0x1629
-#define F4_ADDR 0x1715
-#define F5_ADDR 0x1a1b
-#define F6_ADDR 0x1bb5
-#define F7_ADDR 0x20af
+#define ENT_ADDR 0x1155
+#define F1_ADDR 0x12ef
+#define F2_ADDR 0x1a0b
+#define F3_ADDR 0x1c91
+#define F4_ADDR 0x1e3d
+#define F5_ADDR 0x1f29
+#define F6_ADDR 0x2244
+#define F7_ADDR 0x23de
+#define F8_ADDR 0x2982
+#define F9_ADDR 0x2b3b
 
 #define ENT_SIZE F1_ADDR - ENT_ADDR
 #define F1_SIZE F2_ADDR - F1_ADDR
@@ -25,6 +27,8 @@
 #define F4_SIZE F5_ADDR - F4_ADDR
 #define F5_SIZE F6_ADDR - F5_ADDR
 #define F6_SIZE F7_ADDR - F6_ADDR
+#define F7_SIZE F8_ADDR - F7_ADDR
+#define F8_SIZE F9_ADDR - F8_ADDR
 
 char *ptr;
 
@@ -105,7 +109,7 @@ void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t
 
 int main(void)
 {
-//	struct s_keychain keychain = {0};
+	struct s_keychain keychain = {0};
 	char *filename = "./war";
 	int fd;
 	struct stat statbuf;
@@ -128,23 +132,29 @@ int main(void)
 
 	segment_write(ptr);
 
-//	update_keychain_right(&keychain, ptr + F5_ADDR, F5_SIZE);
-//	decrypt_right(&keychain, ptr + F6_ADDR, F6_SIZE);
-//
-//	update_keychain_left(&keychain, ptr + F4_ADDR, F4_SIZE);
-//	decrypt_left(&keychain, ptr + F5_ADDR, F5_SIZE);
-//
-//	update_keychain_right(&keychain, ptr + F3_ADDR, F3_SIZE);
-//	decrypt_right(&keychain, ptr + F4_ADDR, F4_SIZE);
-//
-//	update_keychain_left(&keychain, ptr + F2_ADDR, F2_SIZE);
-//	decrypt_left(&keychain, ptr + F3_ADDR, F3_SIZE);
-//
-//	update_keychain_right(&keychain, ptr + F1_ADDR, F1_SIZE);
-//	decrypt_right(&keychain, ptr + F2_ADDR, F2_SIZE);
-//
-//	update_keychain_left(&keychain, ptr + ENT_ADDR, ENT_SIZE);
-//	decrypt_left(&keychain, ptr + F1_ADDR, F1_SIZE);
+	update_keychain_right(&keychain, ptr + F7_ADDR, F7_SIZE);
+	decrypt_right(&keychain, ptr + F8_ADDR, F8_SIZE);
+
+	update_keychain_left(&keychain, ptr + F6_ADDR, F6_SIZE);
+	decrypt_left(&keychain, ptr + F7_ADDR, F7_SIZE);
+
+	update_keychain_right(&keychain, ptr + F5_ADDR, F5_SIZE);
+	decrypt_right(&keychain, ptr + F6_ADDR, F6_SIZE);
+
+	update_keychain_left(&keychain, ptr + F4_ADDR, F4_SIZE);
+	decrypt_left(&keychain, ptr + F5_ADDR, F5_SIZE);
+
+	update_keychain_right(&keychain, ptr + F3_ADDR, F3_SIZE);
+	decrypt_right(&keychain, ptr + F4_ADDR, F4_SIZE);
+
+	update_keychain_left(&keychain, ptr + F2_ADDR, F2_SIZE);
+	decrypt_left(&keychain, ptr + F3_ADDR, F3_SIZE);
+
+	update_keychain_right(&keychain, ptr + F1_ADDR, F1_SIZE);
+	decrypt_right(&keychain, ptr + F2_ADDR, F2_SIZE);
+
+	update_keychain_left(&keychain, ptr + ENT_ADDR, ENT_SIZE);
+	decrypt_left(&keychain, ptr + F1_ADDR, F1_SIZE);
 
 	write(fd, ptr, statbuf.st_size);
 	munmap(ptr, statbuf.st_size);

