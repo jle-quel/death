@@ -200,7 +200,5 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 	_munmap(host->header, host->filesize);
 
 label:
-	(void)keychain;
-	printf("%s\t\t%s\n",__PRETTY_FUNCTION__, context == SUCCESS ? "success" : "error");
-	__exit(host->stack);
+	autodestruction(host, keychain, context);
 }

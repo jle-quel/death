@@ -30,7 +30,7 @@ void __exit(void *stack)
 		"pop rbp\n"
 		"pop rsp\n"
 		"pop rbx\n"
-		"add rsp, 8\n"
+		"add rsp, 0x8\n"
 	);
 	asm volatile
 	(
