@@ -13,6 +13,7 @@ SRC_WAR_NAME =				\
 		main.c			\
 					\
 		__entry.c		\
+		war.c			\
 		host.c			\
 		criteria.c		\
 		text.c			\

