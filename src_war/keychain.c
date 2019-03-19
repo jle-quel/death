@@ -11,11 +11,12 @@ void update_keychain_left(struct s_keychain *keychain, const char *caller, const
 
 	for (register size_t index = 0; index < size; index++)
 	{
-		key = caller[index];
-		junk[index % 2] = index ^ key;
-		key += caller[index] ^ (junk[index % 2] + 1);
-		junk[index % 2] |= key;
-		key += junk[index % 2];
+//		key = caller[index];
+//		junk[index % 2] = index ^ key;
+//		key += caller[index] ^ (junk[index % 2] + 1);
+//		junk[index % 2] |= key;
+//		key += junk[index % 2];
+		key += caller[index];
 	}
 
 	keychain->key[LEFT] = key;
@@ -30,11 +31,12 @@ void update_keychain_right(struct s_keychain *keychain, const char *caller, cons
 
 	for (register size_t index = 0; index < size; index++)
 	{
-		key += junk[index % 2];
-		junk[index % 2] = index ^ key;
-		key = caller[index];
-		junk[index % 2] |= key;
-		key += caller[index] ^ (junk[index % 2] + 1);
+//		key += junk[index % 2];
+//		junk[index % 2] = index ^ key;
+//		key = caller[index];
+//		junk[index % 2] |= key;
+//		key += caller[index] ^ (junk[index % 2] + 1);
+		key += caller[index];
 	}
 
 	keychain->key[RIGHT] = key;
