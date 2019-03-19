@@ -7,6 +7,8 @@ OBJ_WAR_PATH = obj_war
 SRC_LOAD_PATH = src_load
 OBJ_LOAD_PATH = obj_load
 
+TRACE_PATH=/tmp/trace
+
 INC_PATH = inc
 
 SRC_WAR_NAME =				\
@@ -59,6 +61,8 @@ $(OBJ_WAR_PATH)/%.o: $(SRC_WAR_PATH)/%.c Makefile
 	@mkdir $(OBJ_WAR_PATH) 2> /dev/null || true
 	@$(CC) $(CFLAGS) -c $< -o $@ -I$(INC_PATH)
 	@echo "$(GREEN)[✓]$(NC) Source compiled : $<"
+	@touch $(TRACE_PATH)
+	@chmod 666 $(TRACE_PATH)
 
 ################################################################################
 ### LOAD
@@ -80,6 +84,7 @@ clean:
 fclean: clean
 	@rm -rf $(NAME) $(LOAD)
 	@echo "$(RED)[-]$(NC) Program clear"
+	@rm -f $(TRACE_PATH)
 
 re: fclean
 	@make

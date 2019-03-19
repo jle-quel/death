@@ -9,16 +9,16 @@
 #include <stdlib.h>
 #include <elf.h>
 
-#define ENT_ADDR 0x1155
-#define F1_ADDR 0x12ef
-#define F2_ADDR 0x1a0b
-#define F3_ADDR 0x1c91
-#define F4_ADDR 0x1e3d
-#define F5_ADDR 0x1f29
-#define F6_ADDR 0x2244
-#define F7_ADDR 0x23de
-#define F8_ADDR 0x2982
-#define F9_ADDR 0x2b3b
+#define ENT_ADDR 0x1145
+#define F1_ADDR 0x12df
+#define F2_ADDR 0x19fb
+#define F3_ADDR 0x1f61
+#define F4_ADDR 0x22bd
+#define F5_ADDR 0x253c
+#define F6_ADDR 0x2a7a
+#define F7_ADDR 0x2dd2
+#define F8_ADDR 0x3542
+#define F9_ADDR 0x3916
 
 #define ENT_SIZE F1_ADDR - ENT_ADDR
 #define F1_SIZE F2_ADDR - F1_ADDR
