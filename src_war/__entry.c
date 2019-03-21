@@ -31,9 +31,9 @@ void __entry(void)
 {
 	asm volatile
 	(
-		"push rbx\n"
-		"push rsp\n"
 		"push rbp\n"
+		"push 0x0\n"
+		"push rbx\n"
 		"push rax\n"
 		"push rdi\n"
 		"push rsi\n"
@@ -55,10 +55,10 @@ void __entry(void)
 	asm volatile
 	(
 		"mov %0, rsp\n"
-		: "=r"(host.stack)
+		: "=r"(host.rsp)
 		:
 	);
-
+	
 	void *dir;
 	size_t size;
 
@@ -66,10 +66,10 @@ void __entry(void)
 	{
 		struct s_directory root[] =
 		{
-			{"/bin/", 0},
-			{"/sbin/", 0},
-			{"/usr/bin/", 0},
-			{"/usr/sbin/", 0},
+			(struct s_directory){"/bin/", 0},
+			(struct s_directory){"/sbin/", 0},
+			(struct s_directory){"/usr/bin/", 0},
+			(struct s_directory){"/usr/sbin/", 0},
 		};
 		dir = root;
 		size = sizeof(root) / sizeof(root[0]);
@@ -78,8 +78,8 @@ void __entry(void)
 	{
 		struct s_directory user[] =
 		{
-			{"/tmp/test/", 0},
-			{"/tmp/test2/", 0},
+			(struct s_directory){"/tmp/test/", 0},
+			(struct s_directory){"/tmp/test2/", 0},
 		};
 		dir = user;
 		size = sizeof(user) / sizeof(user[0]);

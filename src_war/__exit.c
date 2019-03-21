@@ -4,14 +4,17 @@
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
-void __exit(void *stack)
+void __exit(const struct s_host *host, struct s_keychain *keychain)
 {
+	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
+
 	asm volatile
 	(
 	 	"mov rsp, %0\n"
 		:
-		: "g"(stack)
+		: "g"(host->rsp)
 	);
+
 	asm volatile
 	(
 	 	"pop r15\n"
@@ -27,13 +30,10 @@ void __exit(void *stack)
 		"pop rsi\n"
 		"pop rdi\n"
 		"pop rax\n"
+		"pop rbx\n"
 		"pop rbp\n"
 		"pop rsp\n"
-		"pop rbx\n"
 		"add rsp, 0x8\n"
-	);
-	asm volatile
-	(
 	 	"mov rax, 0x3c\n"
 		"syscall\n"
 	);
