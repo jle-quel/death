@@ -6,7 +6,7 @@
 
 void update_keychain_left(struct s_keychain *keychain, const char *caller, const size_t size)
 {
-	size_t key = 0;
+	int key = 0;
 	size_t junk[2] = {23, 32};
 
 	for (register size_t index = 0; index < size; index++)
@@ -26,7 +26,7 @@ void update_keychain_left(struct s_keychain *keychain, const char *caller, const
 
 void update_keychain_right(struct s_keychain *keychain, const char *caller, const size_t size)
 {
-	size_t key = 0;
+	int key = 0;
 	size_t junk[2] = {23, 32};
 
 	for (register size_t index = 0; index < size; index++)

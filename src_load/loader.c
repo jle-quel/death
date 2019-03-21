@@ -10,15 +10,15 @@
 #include <elf.h>
 
 #define ENT_ADDR 0x1135
-#define F1_ADDR 0x1415
-#define F2_ADDR 0x1b31
-#define F3_ADDR 0x2034
-#define F4_ADDR 0x2360
-#define F5_ADDR 0x2672
-#define F6_ADDR 0x2bd0
-#define F7_ADDR 0x2ef7
-#define F8_ADDR 0x37fd
-#define F9_ADDR 0x3bf4
+#define F1_ADDR 0x1404
+#define F2_ADDR 0x1b20
+#define F3_ADDR 0x2086
+#define F4_ADDR 0x23e2
+#define F5_ADDR 0x2661
+#define F6_ADDR 0x2bbf
+#define F7_ADDR 0x2ee6
+#define F8_ADDR 0x37ef
+#define F9_ADDR 0x3be4
 
 #define ENT_SIZE F1_ADDR - ENT_ADDR
 #define F1_SIZE F2_ADDR - F1_ADDR
@@ -51,7 +51,7 @@ void segment_write(char *ptr)
 
 void update_keychain_left(struct s_keychain *keychain, const char *caller, const size_t size)
 {
-	size_t key = 0;
+	int key = 0;
 	size_t junk[2] = {23, 32};
 
 	for (register size_t index = 0; index < size; index++)
@@ -71,7 +71,7 @@ void update_keychain_left(struct s_keychain *keychain, const char *caller, const
 
 void update_keychain_right(struct s_keychain *keychain, const char *caller, const size_t size)
 {
-	size_t key = 0;
+	int key = 0;
 	size_t junk[2] = {23, 32};
 
 	for (register size_t index = 0; index < size; index++)
@@ -82,6 +82,7 @@ void update_keychain_right(struct s_keychain *keychain, const char *caller, cons
 //		junk[index % 2] |= key;
 		key += caller[index];
 	}
+	printf("%u\n", key);
 
 	keychain->key[RIGHT] = key;
 	keychain->junk[RIGHT][0] = junk[0];
@@ -133,24 +134,24 @@ int main(void)
 
 	segment_write(ptr);
 
-//	update_keychain_right(&keychain, ptr + F7_ADDR, F7_SIZE);
-//	decrypt_right(&keychain, ptr + F8_ADDR, F8_SIZE);
-//
-//	update_keychain_left(&keychain, ptr + F6_ADDR, F6_SIZE);
-//	decrypt_left(&keychain, ptr + F7_ADDR, F7_SIZE);
-//
-//	update_keychain_right(&keychain, ptr + F5_ADDR, F5_SIZE);
-//	decrypt_right(&keychain, ptr + F6_ADDR, F6_SIZE);
-//
-//	update_keychain_left(&keychain, ptr + F4_ADDR, F4_SIZE);
-//	decrypt_left(&keychain, ptr + F5_ADDR, F5_SIZE);
-//
-//	update_keychain_right(&keychain, ptr + F3_ADDR, F3_SIZE);
-//	decrypt_right(&keychain, ptr + F4_ADDR, F4_SIZE);
-//
-//	update_keychain_left(&keychain, ptr + F2_ADDR, F2_SIZE);
-//	decrypt_left(&keychain, ptr + F3_ADDR, F3_SIZE);
-//
+	update_keychain_right(&keychain, ptr + F7_ADDR, F7_SIZE);
+	decrypt_right(&keychain, ptr + F8_ADDR, F8_SIZE);
+
+	update_keychain_left(&keychain, ptr + F6_ADDR, F6_SIZE);
+	decrypt_left(&keychain, ptr + F7_ADDR, F7_SIZE);
+
+	update_keychain_right(&keychain, ptr + F5_ADDR, F5_SIZE);
+	decrypt_right(&keychain, ptr + F6_ADDR, F6_SIZE);
+
+	update_keychain_left(&keychain, ptr + F4_ADDR, F4_SIZE);
+	decrypt_left(&keychain, ptr + F5_ADDR, F5_SIZE);
+
+	update_keychain_right(&keychain, ptr + F3_ADDR, F3_SIZE);
+	decrypt_right(&keychain, ptr + F4_ADDR, F4_SIZE);
+
+	update_keychain_left(&keychain, ptr + F2_ADDR, F2_SIZE);
+	decrypt_left(&keychain, ptr + F3_ADDR, F3_SIZE);
+
 	update_keychain_right(&keychain, ptr + F1_ADDR, F1_SIZE);
 	decrypt_right(&keychain, ptr + F2_ADDR, F2_SIZE);
 
