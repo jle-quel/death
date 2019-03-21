@@ -194,7 +194,6 @@ __attribute__((always_inline)) static inline enum e_context update_path(struct s
 	size_t r_entry;
 
 recursion:
-
 	if ((fd = _open(dir->path, O_RDONLY | O_DIRECTORY, 0000)) < 0)
 		return FAILURE;
 
@@ -216,8 +215,9 @@ recursion:
 		if (r_entry == 0)
 			break ;
 	}
-
+	
 	_close(fd);
+
 
 	if (dirp->d_name[0] == '.')
 		goto recursion;

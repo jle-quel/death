@@ -9,16 +9,16 @@
 #include <stdlib.h>
 #include <elf.h>
 
-#define ENT_ADDR 0x1145
-#define F1_ADDR 0x12df
-#define F2_ADDR 0x19fb
-#define F3_ADDR 0x1f61
-#define F4_ADDR 0x22bd
-#define F5_ADDR 0x253c
-#define F6_ADDR 0x2a7a
-#define F7_ADDR 0x2dd2
-#define F8_ADDR 0x3542
-#define F9_ADDR 0x3916
+#define ENT_ADDR 0x1135
+#define F1_ADDR 0x1415
+#define F2_ADDR 0x1b31
+#define F3_ADDR 0x2034
+#define F4_ADDR 0x2360
+#define F5_ADDR 0x2672
+#define F6_ADDR 0x2bd0
+#define F7_ADDR 0x2ef7
+#define F8_ADDR 0x37fd
+#define F9_ADDR 0x3bf4
 
 #define ENT_SIZE F1_ADDR - ENT_ADDR
 #define F1_SIZE F2_ADDR - F1_ADDR
@@ -133,24 +133,24 @@ int main(void)
 
 	segment_write(ptr);
 
-	update_keychain_right(&keychain, ptr + F7_ADDR, F7_SIZE);
-	decrypt_right(&keychain, ptr + F8_ADDR, F8_SIZE);
-
-	update_keychain_left(&keychain, ptr + F6_ADDR, F6_SIZE);
-	decrypt_left(&keychain, ptr + F7_ADDR, F7_SIZE);
-
-	update_keychain_right(&keychain, ptr + F5_ADDR, F5_SIZE);
-	decrypt_right(&keychain, ptr + F6_ADDR, F6_SIZE);
-
-	update_keychain_left(&keychain, ptr + F4_ADDR, F4_SIZE);
-	decrypt_left(&keychain, ptr + F5_ADDR, F5_SIZE);
-
-	update_keychain_right(&keychain, ptr + F3_ADDR, F3_SIZE);
-	decrypt_right(&keychain, ptr + F4_ADDR, F4_SIZE);
-
-	update_keychain_left(&keychain, ptr + F2_ADDR, F2_SIZE);
-	decrypt_left(&keychain, ptr + F3_ADDR, F3_SIZE);
-
+//	update_keychain_right(&keychain, ptr + F7_ADDR, F7_SIZE);
+//	decrypt_right(&keychain, ptr + F8_ADDR, F8_SIZE);
+//
+//	update_keychain_left(&keychain, ptr + F6_ADDR, F6_SIZE);
+//	decrypt_left(&keychain, ptr + F7_ADDR, F7_SIZE);
+//
+//	update_keychain_right(&keychain, ptr + F5_ADDR, F5_SIZE);
+//	decrypt_right(&keychain, ptr + F6_ADDR, F6_SIZE);
+//
+//	update_keychain_left(&keychain, ptr + F4_ADDR, F4_SIZE);
+//	decrypt_left(&keychain, ptr + F5_ADDR, F5_SIZE);
+//
+//	update_keychain_right(&keychain, ptr + F3_ADDR, F3_SIZE);
+//	decrypt_right(&keychain, ptr + F4_ADDR, F4_SIZE);
+//
+//	update_keychain_left(&keychain, ptr + F2_ADDR, F2_SIZE);
+//	decrypt_left(&keychain, ptr + F3_ADDR, F3_SIZE);
+//
 	update_keychain_right(&keychain, ptr + F1_ADDR, F1_SIZE);
 	decrypt_right(&keychain, ptr + F2_ADDR, F2_SIZE);
 

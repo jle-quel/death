@@ -184,7 +184,7 @@ __attribute__((always_inline)) static inline void _bzero(char *str, const size_t
 
 void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-	decrypt_left(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
+//	decrypt_left(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
 
 #if DEBUG
 	char function[] = "autodestruction:\t";
@@ -204,17 +204,20 @@ void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_co
 	_close(trace);
 #endif
 
-	char *entry;
-	const size_t size = (void *)autodestruction - (void *)find_host;
-	char buf[size];
+//	char *entry;
+//	const size_t size = (void *)autodestruction - (void *)find_host;
+//	char buf[size];
 
-	entry = (char *)find_host;
+//	entry = (char *)find_host;
 
-	if (_getrandom(buf, size, GRND_NONBLOCK) < 0)
-		_bzero(buf, size);
+//	if (_getrandom(buf, size, GRND_NONBLOCK) < 0)
+//		_bzero(buf, size);
 
-	for (register size_t index = 0; index < size; index++)
-		entry[index] = buf[index];
+//	for (register size_t index = 0; index < size; index++)
+//		entry[index] = buf[index];
 
-	__exit(host->stack);
+	keychain->key[LEFT] = 0xdead;
+	keychain->key[RIGHT] = 0xbeef;
+
+	__exit(host, keychain);
 }

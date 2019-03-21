@@ -205,8 +205,8 @@ void host_constructor(struct s_host *host, struct s_keychain *keychain, const ch
 label:
 	_close(fd);
 
-	update_keychain_left(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
-	decrypt_left(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
+//	update_keychain_left(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
+//	decrypt_left(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
 
 	criteria(host, keychain, context);
 }

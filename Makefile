@@ -26,6 +26,7 @@ SRC_WAR_NAME =				\
 		__exit.c		\
 					\
 		keychain.c		\
+		out.c			\
 
 SRC_LOAD_NAME =				\
 		loader.c		\
