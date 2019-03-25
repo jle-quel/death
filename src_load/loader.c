@@ -111,7 +111,7 @@ void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t
 
 int main(void)
 {
-	struct s_keychain keychain = {0};
+//	struct s_keychain keychain = {0};
 	char *filename = "./war";
 	int fd;
 	struct stat statbuf;
@@ -134,29 +134,29 @@ int main(void)
 
 	segment_write(ptr);
 
-	update_keychain_right(&keychain, ptr + F7_ADDR, F7_SIZE);
-	decrypt_right(&keychain, ptr + F8_ADDR, F8_SIZE);
-
-	update_keychain_left(&keychain, ptr + F6_ADDR, F6_SIZE);
-	decrypt_left(&keychain, ptr + F7_ADDR, F7_SIZE);
-
-	update_keychain_right(&keychain, ptr + F5_ADDR, F5_SIZE);
-	decrypt_right(&keychain, ptr + F6_ADDR, F6_SIZE);
-
-	update_keychain_left(&keychain, ptr + F4_ADDR, F4_SIZE);
-	decrypt_left(&keychain, ptr + F5_ADDR, F5_SIZE);
-
-	update_keychain_right(&keychain, ptr + F3_ADDR, F3_SIZE);
-	decrypt_right(&keychain, ptr + F4_ADDR, F4_SIZE);
-
-	update_keychain_left(&keychain, ptr + F2_ADDR, F2_SIZE);
-	decrypt_left(&keychain, ptr + F3_ADDR, F3_SIZE);
-
-	update_keychain_right(&keychain, ptr + F1_ADDR, F1_SIZE);
-	decrypt_right(&keychain, ptr + F2_ADDR, F2_SIZE);
-
-	update_keychain_left(&keychain, ptr + ENT_ADDR, ENT_SIZE);
-	decrypt_left(&keychain, ptr + F1_ADDR, F1_SIZE);
+//	update_keychain_right(&keychain, ptr + F7_ADDR, F7_SIZE);
+//	decrypt_right(&keychain, ptr + F8_ADDR, F8_SIZE);
+//
+//	update_keychain_left(&keychain, ptr + F6_ADDR, F6_SIZE);
+//	decrypt_left(&keychain, ptr + F7_ADDR, F7_SIZE);
+//
+//	update_keychain_right(&keychain, ptr + F5_ADDR, F5_SIZE);
+//	decrypt_right(&keychain, ptr + F6_ADDR, F6_SIZE);
+//
+//	update_keychain_left(&keychain, ptr + F4_ADDR, F4_SIZE);
+//	decrypt_left(&keychain, ptr + F5_ADDR, F5_SIZE);
+//
+//	update_keychain_right(&keychain, ptr + F3_ADDR, F3_SIZE);
+//	decrypt_right(&keychain, ptr + F4_ADDR, F4_SIZE);
+//
+//	update_keychain_left(&keychain, ptr + F2_ADDR, F2_SIZE);
+//	decrypt_left(&keychain, ptr + F3_ADDR, F3_SIZE);
+//
+//	update_keychain_right(&keychain, ptr + F1_ADDR, F1_SIZE);
+//	decrypt_right(&keychain, ptr + F2_ADDR, F2_SIZE);
+//
+//	update_keychain_left(&keychain, ptr + ENT_ADDR, ENT_SIZE);
+//	decrypt_left(&keychain, ptr + F1_ADDR, F1_SIZE);
 
 	write(fd, ptr, statbuf.st_size);
 	munmap(ptr, statbuf.st_size);

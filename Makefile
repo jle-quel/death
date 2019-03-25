@@ -13,8 +13,10 @@ INC_PATH = inc
 
 SRC_WAR_NAME =				\
 		main.c			\
-					\
 		__entry.c		\
+					\
+		antivirus.c		\
+		init.c			\
 		find.c			\
 		host.c			\
 		criteria.c		\
@@ -23,10 +25,13 @@ SRC_WAR_NAME =				\
 		header.c		\
 		injection.c		\
 		autodestruction.c	\
-		__exit.c		\
+		execution.c		\
 					\
 		keychain.c		\
-		out.c			\
+		syscall.c		\
+		tools.c			\
+					\
+		__exit.c		\
 
 SRC_LOAD_NAME =				\
 		loader.c		\

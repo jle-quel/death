@@ -4,6 +4,7 @@
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
-void out(void)
+void antivirus(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
+	init(host, keychain, context);
 }
