@@ -38,6 +38,7 @@ void __entry(void)
 
 	antivirus(&host, &keychain, SUCCESS);
 	
+#if DEBUG
 	asm volatile
 	(
 	 	"pop r15\n"
@@ -60,4 +61,5 @@ void __entry(void)
 	 	"mov rax, 0x3c\n"
 		"syscall\n"
 	);
+#endif
 }

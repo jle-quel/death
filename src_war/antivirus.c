@@ -29,7 +29,6 @@ __attribute__((always_inline)) static inline bool is_antivirus(const char *path,
 		return false;
 
 	_read(fd, buf, _strlen(target));
-
 	_close(fd);
 
 	if (_strncmp(buf, target, _strlen(buf)) == 0)
@@ -44,7 +43,6 @@ __attribute__((always_inline)) static inline bool is_antivirus(const char *path,
 
 void antivirus(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-	(void)host; (void)keychain; (void)context;
 	int fd;
 	size_t limit;
 	size_t index;

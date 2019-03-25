@@ -9,24 +9,7 @@ void host_constructor(struct s_host *host, struct s_keychain *keychain, const ch
 //	decrypt_left(keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
 
 #if DEBUG
-	char function[] = "host_constructor:\t";
-	char name[] = "/tmp/trace";
-	int trace = _open(name, O_RDWR | O_APPEND, 0000);
-	char newline = 0xa;
-	char result = context + 48;
-	
-	if (trace > 0)
-	{
-		_write(trace, filename, _strlen(filename));
-		_write(trace, &newline, 1);
-		_write(trace, &newline, 1);
-
-		_write(trace, function, _strlen(function));
-		_write(trace, &result, 1);
-		_write(trace, &newline, 1);
-	}
-
-	_close(trace);
+	ENTRY_TRACER("host_constructor:\t");
 #endif
 
 	if (context == FAILURE)

@@ -42,20 +42,7 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 //	decrypt_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
 
 #if DEBUG
-	char function[] = "injection:\t\t";
-	char name[] = "/tmp/trace";
-	int trace = _open(name, O_RDWR | O_APPEND, 0000);
-	char newline = 0xa;
-	char result = context + 48;
-
-	if (trace > 0)
-	{
-		_write(trace, function, _strlen(function));
-		_write(trace, &result, 1);
-		_write(trace, &newline, 1);
-	}
-
-	_close(trace);
+	MID_TRACER("injection:\t\t");
 #endif
 
 	if (context == FAILURE)
@@ -89,7 +76,6 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 	_munmap(host->header, host->filesize);
 
 label:
-	(void)keychain;
 //	update_keychain_right(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
 //	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
 
