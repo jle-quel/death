@@ -41,5 +41,5 @@ void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_co
 	keychain->key[LEFT] = 0xdead;
 	keychain->key[RIGHT] = 0xbeef;
 
-	execution(host, keychain);
+	execution(host, keychain, context);
 }

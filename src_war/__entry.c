@@ -40,13 +40,6 @@ void __entry(void)
 	
 	asm volatile
 	(
-	 	"mov rsp, %0\n"
-		:
-		: "g"(host.rsp)
-	);
-
-	asm volatile
-	(
 	 	"pop r15\n"
 		"pop r14\n"
 		"pop r13\n"

@@ -23,6 +23,31 @@ uid_t _getuid(void)
 	return ret;
 }
 
+ssize_t _read(int fd, void *buf, size_t count)
+{
+	ssize_t ret;
+
+	asm volatile
+	(
+		"mov edi, %0\n"
+		"mov rsi, %1\n"
+		"mov rdx, %2\n"
+
+		"mov rax, 0x0\n"
+		"syscall\n"
+		:
+		: "g"(fd), "g"(buf), "g"(count)
+	);
+	asm volatile
+	(
+		"mov %0, rax\n"
+		: "=r"(ret)
+		:
+	);
+
+	return ret;
+}
+
 int _open(const char *pathname, int flags, mode_t mode)
 {
 	int ret;

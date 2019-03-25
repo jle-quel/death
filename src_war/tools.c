@@ -51,6 +51,18 @@ void _memcpy(void *dst, void const *src, const size_t size)
 	char *dst_tmp = dst;
 	char const *src_tmp = src;
 
-	for (size_t index = 0; index < size; index++)
+	for (register size_t index = 0; index < size; index++)
 		dst_tmp[index] = src_tmp[index];
+}
+
+int _strncmp(const char *s1, const char *s2, size_t n)
+{
+	size_t		index;
+
+	index = 0;
+	if (!n || !s1 || !s2)
+		return (-1);
+	while (index < n - 1 && s1[index] && s2[index] && s1[index] == s2[index])
+		index++;
+	return ((unsigned char)s1[index] - (unsigned char)s2[index]);
 }

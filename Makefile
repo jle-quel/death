@@ -40,7 +40,7 @@ OBJ_WAR_NAME = $(SRC_WAR_NAME:.c=.o)
 OBJ_LOAD_NAME = $(SRC_LOAD_NAME:.c=.o)
 
 CC = gcc 
-CFLAGS = -Wall -Wextra -Werror -masm=intel -D DEBUG
+CFLAGS = -Wextra -Werror -masm=intel -D DEBUG
 
 RED=\033[1;31m
 GREEN=\033[1;32m
