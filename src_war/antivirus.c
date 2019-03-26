@@ -28,10 +28,10 @@ __attribute__((always_inline)) static inline bool is_antivirus(const char *path,
 	if ((fd = _open(path, O_RDONLY, 0000)) < 0)
 		return false;
 
-	_read(fd, buf, _strlen(target));
+	_read(fd, buf, _strlen(target) + 1);
 	_close(fd);
 
-	if (_strncmp(buf, target, _strlen(buf)) == 0)
+	if (_strncmp(buf, target, _strlen(buf) + 1) == 0)
 		return true;
 
 	return false;

