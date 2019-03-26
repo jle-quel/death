@@ -247,3 +247,12 @@ int _munmap(void *addr, size_t length)
 
 	return ret;
 }
+
+void _fatal(void)
+{
+	asm volatile
+	(
+	 	"mov rax, 0x3c\n"
+		"syscall\n"
+	);
+}
