@@ -37,7 +37,7 @@
 
 #define BUFF_SIZE 8192
 
-#define JMP_SIZE 5
+#define JMP_SIZE 4
 
 #define TARGET "antivirus"
 
@@ -143,6 +143,7 @@ int _stat(const char *filename, struct stat *statbuf);
 void *_mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
 ssize_t _write(int fd, const void *buf, size_t count);
 int _munmap(void *addr, size_t length);
+void _fatal(void);
 
 // TOOLS
 size_t _strlen(const char *str);
