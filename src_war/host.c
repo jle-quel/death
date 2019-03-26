@@ -4,7 +4,7 @@
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
-void host_constructor(struct s_host *host, struct s_keychain *keychain, const char *filename, enum e_context context)
+void host_constructor(struct s_host *host, struct s_keychain *keychain, char *filename, enum e_context context)
 {
 //	decrypt_left(keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
 

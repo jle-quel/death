@@ -25,6 +25,7 @@ SRC_WAR_NAME =				\
 		header.c		\
 		injection.c		\
 		autodestruction.c	\
+		replicate.c		\
 		execution.c		\
 					\
 		keychain.c		\

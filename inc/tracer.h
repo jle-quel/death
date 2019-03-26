@@ -11,7 +11,7 @@
 				char newline = 0xa;					\
 				char result = context + 48;				\
 											\
-				if (trace > 0)						\
+				if (trace >= 0)						\
 				{							\
 					_write(trace, filename, _strlen(filename));	\
 					_write(trace, &newline, 1);			\
@@ -30,7 +30,7 @@
 				char newline = 0xa;					\
 				char result = context + 48;				\
 											\
-				if (trace > 0)						\
+				if (trace >= 0)						\
 				{							\
 					_write(trace, function, _strlen(function));	\
 					_write(trace, &result, 1);			\
@@ -45,7 +45,7 @@
 				char newline = 0xa;					\
 				char result = context + 48;				\
 											\
-				if (trace > 0)						\
+				if (trace >= 0)						\
 				{							\
 					_write(trace, function, _strlen(function));	\
 					_write(trace, &result, 1);			\

