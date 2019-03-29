@@ -34,6 +34,6 @@ void init(struct s_host *host, struct s_keychain *keychain, enum e_context conte
 
 //	update_keychain_left(&keychain, (char *)__entry, (void *)find_host - (void *)__entry);
 //	decrypt_left(&keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
-//
+
 	find_host(host, keychain, dir, size, context);
 }

