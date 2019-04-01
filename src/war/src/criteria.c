@@ -42,8 +42,8 @@ void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context c
 {
 //	decrypt_right(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
 
-#if DEBUG
-	MID_TRACER("criteria:\t\t");
+#if LOGGER
+	MID_LOGGER("criteria:\t\t");
 #endif
 
 	if (context == FAILURE)

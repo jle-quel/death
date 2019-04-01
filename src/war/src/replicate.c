@@ -7,8 +7,8 @@
 void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
 
-#if DEBUG
-	EXIT_TRACER("replicate:\t\t");
+#if LOGGER
+	EXIT_LOGGER("replicate:\t\t");
 #endif
 
 	if (context == FAILURE)

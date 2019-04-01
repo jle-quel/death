@@ -78,8 +78,8 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 {
 //	decrypt_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
 
-#if DEBUG
-	MID_TRACER("injection:\t\t");
+#if LOGGER
+	MID_LOGGER("injection:\t\t");
 #endif
 
 	if (context == FAILURE)

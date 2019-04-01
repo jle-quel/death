@@ -8,8 +8,8 @@ void host_constructor(struct s_host *host, struct s_keychain *keychain, char *fi
 {
 //	decrypt_left(keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
 
-#if DEBUG
-	ENTRY_TRACER("host_constructor:\t");
+#if LOGGER 
+	ENTRY_LOGGER("host_constructor:\t");
 #endif
 
 	if (context == FAILURE)

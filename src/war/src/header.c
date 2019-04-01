@@ -8,8 +8,8 @@ void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_c
 {
 //	decrypt_left(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
 
-#if DEBUG
-	MID_TRACER("header_infection:\t");
+#if LOGGER
+	MID_LOGGER("header_infection:\t");
 #endif
 
 	if (context == FAILURE)

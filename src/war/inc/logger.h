@@ -1,11 +1,11 @@
-#ifndef TRACER_H
-#define TRACER_H
+#ifndef LOGGER_H
+#define LOGGER_H
 
 ////////////////////////////////////////////////////////////////////////////////
 /// MACROS
 ////////////////////////////////////////////////////////////////////////////////
 
-#define ENTRY_TRACER(str)	char function[] = (str);				\
+#define ENTRY_LOGGER(str)	char function[] = (str);				\
 				char name[] = "/tmp/trace";				\
 				int trace = _open(name, O_RDWR | O_APPEND, 0000);	\
 				char newline = 0xa;					\
@@ -24,7 +24,7 @@
 											\
 				_close(trace);
 
-#define MID_TRACER(str)		char function[] = (str);				\
+#define MID_LOGGER(str)		char function[] = (str);				\
 				char name[] = "/tmp/trace";				\
 				int trace = _open(name, O_RDWR | O_APPEND, 0000);	\
 				char newline = 0xa;					\
@@ -39,7 +39,7 @@
 											\
 				_close(trace);
 
-#define EXIT_TRACER(str)	char function[] = (str);				\
+#define EXIT_LOGGER(str)	char function[] = (str);				\
 				char name[] = "/tmp/trace";				\
 				int trace = _open(name, O_RDWR | O_APPEND, 0000);	\
 				char newline = 0xa;					\
