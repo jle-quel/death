@@ -6,53 +6,53 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #define ENTRY_LOGGER(str)	char function[] = (str);				\
-				char name[] = "/tmp/trace";				\
-				int trace = _open(name, O_RDWR | O_APPEND, 0000);	\
+				char name[] = "/tmp/logger";				\
+				int logger = _open(name, O_RDWR | O_APPEND, 0000);	\
 				char newline = 0xa;					\
 				char result = context + 48;				\
 											\
-				if (trace >= 0)						\
+				if (logger >= 0)						\
 				{							\
-					_write(trace, filename, _strlen(filename));	\
-					_write(trace, &newline, 1);			\
-					_write(trace, &newline, 1);			\
+					_write(logger, filename, _strlen(filename));	\
+					_write(logger, &newline, 1);			\
+					_write(logger, &newline, 1);			\
 											\
-					_write(trace, function, _strlen(function));	\
-					_write(trace, &result, 1);			\
-					_write(trace, &newline, 1);			\
+					_write(logger, function, _strlen(function));	\
+					_write(logger, &result, 1);			\
+					_write(logger, &newline, 1);			\
 				}							\
 											\
-				_close(trace);
+				_close(logger);
 
 #define MID_LOGGER(str)		char function[] = (str);				\
-				char name[] = "/tmp/trace";				\
-				int trace = _open(name, O_RDWR | O_APPEND, 0000);	\
+				char name[] = "/tmp/logger";				\
+				int logger = _open(name, O_RDWR | O_APPEND, 0000);	\
 				char newline = 0xa;					\
 				char result = context + 48;				\
 											\
-				if (trace >= 0)						\
+				if (logger >= 0)						\
 				{							\
-					_write(trace, function, _strlen(function));	\
-					_write(trace, &result, 1);			\
-					_write(trace, &newline, 1);			\
+					_write(logger, function, _strlen(function));	\
+					_write(logger, &result, 1);			\
+					_write(logger, &newline, 1);			\
 				}							\
 											\
-				_close(trace);
+				_close(logger);
 
 #define EXIT_LOGGER(str)	char function[] = (str);				\
-				char name[] = "/tmp/trace";				\
-				int trace = _open(name, O_RDWR | O_APPEND, 0000);	\
+				char name[] = "/tmp/logger";				\
+				int logger = _open(name, O_RDWR | O_APPEND, 0000);	\
 				char newline = 0xa;					\
 				char result = context + 48;				\
 											\
-				if (trace >= 0)						\
+				if (logger >= 0)						\
 				{							\
-					_write(trace, function, _strlen(function));	\
-					_write(trace, &result, 1);			\
-					_write(trace, &newline, 1);			\
-					_write(trace, &newline, 1);			\
+					_write(logger, function, _strlen(function));	\
+					_write(logger, &result, 1);			\
+					_write(logger, &newline, 1);			\
+					_write(logger, &newline, 1);			\
 				}							\
 											\
-				_close(trace);
+				_close(logger);
 
 #endif

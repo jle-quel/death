@@ -4,13 +4,13 @@
 /// STATIC FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
 
-static void generate_key(unsigned char *ptr VOID)
-{
-	for (register size_t index = 0; index < KEY_SIZE; index++)
-	{
-		ptr[index] = 'a';
-	}
-}
+//static void generate_key(unsigned char *ptr)
+//{
+//	for (register size_t index = 0; index < KEY_SIZE; index++)
+//	{
+//		ptr[index] = 'a';
+//	}
+//}
 
 static void update_segments(char *ptr)
 {
@@ -54,11 +54,11 @@ int main(void)
 		exit(1);
 	}
 
-	unsigned char key[KEY_SIZE] = {0};
+//	unsigned char key[KEY_SIZE] = {0};
 
-	generate_key(key);
+//	generate_key(key);
 	update_segments(ptr);
-	rc4(key, KEY_SIZE, ptr + _ENT_ADDR, _EXT_ADDR - _ENT_ADDR);
+//	rc4(key, KEY_SIZE, ptr + _ENT_ADDR, _EXT_ADDR - _ENT_ADDR);
 
 	if (write(fd, ptr, statbuf.st_size) < 0)
 	{
