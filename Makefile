@@ -41,7 +41,7 @@ OBJ_WAR_NAME = $(SRC_WAR_NAME:.c=.o)
 OBJ_LOAD_NAME = $(SRC_LOAD_NAME:.c=.o)
 
 CC = gcc 
-CFLAGS = -Wall -Wextra -Werror -masm=intel -D DEBUG
+CFLAGS = -Wall -Wextra -Werror -masm=intel -D DEBUG #-g3 -fsanitize=address -fno-sanitize-address-use-after-scope
 
 RED=\033[1;31m
 GREEN=\033[1;32m

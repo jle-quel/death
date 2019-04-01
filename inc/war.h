@@ -30,7 +30,6 @@
 
 #define ELF_MAGIC_NUMBER 1179403647
 #define INFECTED_MAGIC_NUMBER 0x4e5750
-#define X86_64_MAGIC_NUMBER 2
 
 #define LEFT 0
 #define RIGHT 1
@@ -39,6 +38,7 @@
 #define PAGE_SIZE 0x1000
 #define STUB_SIZE 0x40
 #define JUMP_SIZE 0x4
+#define JUMP_OFFSET 0x14
 
 #define TARGET "antivirus"
 
