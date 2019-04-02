@@ -27,16 +27,16 @@ function usage()
 }
 
 ################################################################################
-### PUBLIC FUNCTIONS
+### PUBLIC FUNCTION
 ################################################################################
 
 mkdir -p /tmp/test /tmp/test2
 rm -rf /tmp/test/* /tmp/test2/*
 
 case "$1" in
-	debug)
+	debug|d)
 		debug	;;
-	real)
+	real|r)
 		real	;;
 	*)
 		usage	;;

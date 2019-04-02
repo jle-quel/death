@@ -6,5 +6,6 @@
 
 int main(void)
 {
+	preload();
 	__entry();
 }

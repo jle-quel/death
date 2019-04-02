@@ -23,6 +23,8 @@ __attribute__((always_inline)) static inline bool is_text_segment(const Elf64_Ph
 
 __attribute__((always_inline)) static inline void update_text_segment(Elf64_Phdr *segment)
 {
+	segment->p_flags |= PF_W;
+
 	segment->p_filesz += STUB_SIZE;
 	segment->p_memsz += STUB_SIZE;
 }

