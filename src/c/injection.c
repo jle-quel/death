@@ -14,14 +14,14 @@ __attribute__((always_inline)) static inline void write_on_memory(char *dst, cha
 	for (register size_t index = 0; index < beg_stub; index++)
 		*dst++ = *src++;
 	for (register size_t index = 0; index < end_stub; index++)
-		*dst++ = '*';
+		*dst++ = 0;
 
 	src += STUB_SIZE;
 
 	for (register size_t index = 0; index < beg_parasite; index++)
 		*dst++ = *src++;
 	for (register size_t index = 0; index < end_parasite; index++)
-		*dst++ = '*';
+		*dst++ = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
