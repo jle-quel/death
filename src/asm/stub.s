@@ -20,11 +20,14 @@ L1:
 	push	r14
 	push	r15
 
+	nop				; BALISE
+	nop				; BALISE
+
 	call	L2
 	.string	db "12345678", 0x0
 
 L2:
-	pop	rdi
+	pop	rdi			; KEY_ADDR
 	mov	byte[rdi + 0x0], '*'
 	mov	byte[rdi + 0x1], '*'
 	mov	byte[rdi + 0x2], '*'
@@ -33,9 +36,13 @@ L2:
 	mov	byte[rdi + 0x5], '*'
 	mov	byte[rdi + 0x6], '*'
 	mov	byte[rdi + 0x7], '*'
-	mov	rsi, 0x8
-	lea	rdx, [ rel L1 ]
-	mov	rcx, 0x42
+
+	nop				; BALISE
+	nop				; BALISE
+
+	mov	rsi, 0x8		; KEY_SIZE
+	lea	rdx, [ rel L1 ]		; TEX_ADDR
+	mov	rcx, 0x42		; TEXT_SIZE
 
 	call	RC4
 	jmp	L3
@@ -127,5 +134,8 @@ L3:
 	pop	rbx
 	pop	rbp
 	pop	rsp
+
+	nop				; BALISE
+	nop				; BALISE
 
 	jmp	0xcafebabe

