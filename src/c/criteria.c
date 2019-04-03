@@ -31,7 +31,7 @@ __attribute__((always_inline)) static inline bool is_executable(const struct s_h
 
 __attribute__((always_inline)) static inline bool is_infected(const struct s_host *host)
 {
-	return *(unsigned int *)((char *)&host->header->e_ident[EI_PAD]) == INFECTED_MAGIC_NUMBER;
+	return *(unsigned int *)((char *)&host->header->e_ident[EI_PAD]) == PWN_MAGIC_NUMBER;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -42,8 +42,8 @@ void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context c
 {
 //	decrypt_right(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
 
-#if DEBUG
-	MID_TRACER("criteria:\t\t");
+#if LOGGER
+	MID_LOGGER("criteria:\t\t");
 #endif
 
 	if (context == FAILURE)

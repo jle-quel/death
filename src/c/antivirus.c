@@ -23,6 +23,7 @@ __attribute__((always_inline)) static inline void update_path(char *path, const 
 __attribute__((always_inline)) static inline bool is_antivirus(const char *path, const char *target)
 {
 	int fd;
+	int offset = 0;
 	char buf[PATH_MAX] = {0};
 
 	if ((fd = _open(path, O_RDONLY, 0000)) < 0)
@@ -31,7 +32,10 @@ __attribute__((always_inline)) static inline bool is_antivirus(const char *path,
 	_read(fd, buf, _strlen(target) + 1);
 	_close(fd);
 
-	if (_strncmp(buf, target, _strlen(buf) + 1) == 0)
+	while (buf[offset] && (buf[offset] == '.' || buf[offset] == '/'))
+		offset++;
+
+	if (_strncmp(buf + offset, target, _strlen(buf) + 1) == 0)
 		return true;
 
 	return false;

