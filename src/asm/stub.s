@@ -50,6 +50,10 @@ L2:
 RC4:
 	push	rbp
 	mov	rbp, rsp
+
+	nop				; BALISE
+	nop				; BALISE
+
 	sub	rsp, 0x188
 	mov	r9, rdx
 	mov	r8d, 0x0
@@ -61,7 +65,11 @@ R1:
 	idiv	esi
 	movsxd	rdx, edx
 	movzx	eax, byte [rdi+rdx*1]
-	mov	byte [rsp+r8*1-0x78],al
+	mov	byte [rsp+r8*1-0x78],al	
+
+	nop				; BALISE
+	nop				; BALISE
+
 	add	r8, 0x1
 	cmp	r8,0x100
 	jne	R1
@@ -70,6 +78,9 @@ R1:
 	lea	r8, [rsp-0x78]
 
 R2:
+	nop				; BALISE
+	nop				; BALISE
+
 	movzx	edi, byte [rsp+rdx*1+0x88]
 	movzx	eax, dil
 	add	eax, esi
@@ -79,6 +90,10 @@ R2:
 	sar	esi, 0x1f
 	shr	esi, 0x18
 	add	eax, esi
+
+	nop				; BALISE
+	nop				; BALISE
+
 	movzx	eax,al
 	sub	eax,esi
 	mov	esi, eax
@@ -86,6 +101,10 @@ R2:
 	movzx	r10d, byte [rsp+rax*1+0x88]
 	mov	[rsp+rdx*1+0x88], r10b
 	mov	[rsp+rax*1+0x88], dil
+
+	nop				; BALISE
+	nop				; BALISE
+
 	add	rdx,0x1
 	cmp	rdx,0x100
 	jne	R2
@@ -101,6 +120,10 @@ R4:
 	movzx 	eax,al
 	movzx 	ecx, byte [rsp+rax*1+0x88]
 	add 	edx, ecx
+
+	nop				; BALISE
+	nop				; BALISE
+
 	movzx 	edx,dl
 	movzx 	esi, byte [rsp+rdx*1+0x88]
 	mov	[rsp+rax*1+0x88], sil
@@ -113,6 +136,9 @@ R4:
 
 R3:
 	add	rsp,0x188
+
+	nop				; BALISE
+	nop				; BALISE
 
 	leave
 	ret
