@@ -34,7 +34,7 @@
 
 #define BUFF_SIZE 0x2000
 #define JUMP_SIZE 0x4
-#define STUB_SIZE 0x16f
+#define STUB_SIZE 0x16e
 #define PAGE_SIZE 0x1000
 #define FCNT_SIZE 0x7
 
@@ -166,7 +166,8 @@ void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t 
 void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size);
 
 // LIB_S
-void rc4(const unsigned char *key, const size_t key_length, char *data, const size_t data_length);
+void L1(void);
+void RC4(const unsigned char *key, const size_t key_length, char *data, const size_t data_length);
 
 // EXIT
 void __exit(void);

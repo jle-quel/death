@@ -3,7 +3,7 @@ global L1
 global RC4
 
 L1:
-	push	rbp
+	push	rsp
 	push	0x0
 	push	rbx
 	push	rax
@@ -124,7 +124,6 @@ L3:
 	pop	rsi
 	pop	rdi
 	pop	rax
-	pop	rbx
 	pop	rbx
 	pop	rbp
 	pop	rsp

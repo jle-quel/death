@@ -1,1 +1,1 @@
-{"master":[{"Name":"antivirus search not only for 'antivirus' but also './antivirus'","Status":false},{"Name":"test 0","Status":false},{"Name":"change stub payload to ptr on memory","Status":false}]}
+{"master":[{"Name":"antivirus search not only for 'antivirus' but also './antivirus'","Status":false},{"Name":"test 0","Status":false},{"Name":"change stub payload to ptr on memory","Status":false},{"Name":"switch autodestruction and replicate","Status":false}]}

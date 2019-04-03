@@ -1,14 +1,14 @@
 section .text
-global rc4
+global RC4
 
-rc4:
+RC4:
 	push	rbp
 	mov	rbp, rsp
 	sub	rsp, 0x188
 	mov	r9, rdx
 	mov	r8d, 0x0
 
-j1:
+R1:
 	mov	byte [rsp+r8*1+0x88], r8b
 	mov	eax, r8d
 	cdq
@@ -18,12 +18,12 @@ j1:
 	mov	byte [rsp+r8*1-0x78],al
 	add	r8, 0x1
 	cmp	r8,0x100
-	jne	j1
+	jne	R1
 	mov	edx, 0x0
 	mov	esi, 0x0
 	lea	r8, [rsp-0x78]
 
-j2:
+R2:
 	movzx	edi, byte [rsp+rdx*1+0x88]
 	movzx	eax, dil
 	add	eax, esi
@@ -42,15 +42,15 @@ j2:
 	mov	[rsp+rax*1+0x88], dil
 	add	rdx,0x1
 	cmp	rdx,0x100
-	jne	j2
+	jne	R2
 	test	ecx,ecx
-	jle	j3
+	jle	R3
 	lea	eax, [rcx-0x1]
 	lea	rdi, [r9+rax*1+0x1]
 	xor	edx, edx
 	xor	eax, eax
 
-j4:
+R4:
 	add 	rax, 0x1
 	movzx 	eax,al
 	movzx 	ecx, byte [rsp+rax*1+0x88]
@@ -63,9 +63,9 @@ j4:
 	xor	[r9],cl
 	add	r9, 1
 	cmp	rdi,r9
-	jne	j4
+	jne	R4
 
-j3:
+R3:
 	add	rsp,0x188
 	leave
 	ret

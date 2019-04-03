@@ -6,7 +6,7 @@
 
 void preload(void)
 {
-/*
+
 	void *base = (void *)__entry;
 	size_t diff = (unsigned long)base % PAGE_SIZE;
 
@@ -15,5 +15,4 @@ void preload(void)
 		perror("mprotect");
 		exit(errno);
 	}
-*/
 }

