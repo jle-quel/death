@@ -25,8 +25,8 @@ __attribute__((always_inline)) static inline void update_text_segment(Elf64_Phdr
 {
 	segment->p_flags |= PF_W;
 
-	segment->p_filesz += STUB_SIZE;
-	segment->p_memsz += STUB_SIZE;
+	segment->p_filesz += (void *)__exit - (void *)L1;
+	segment->p_memsz += (void *)__exit - (void *)L1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

