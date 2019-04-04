@@ -38,7 +38,7 @@
 #define PAGE_SIZE 0x1000
 #define FCNT_SIZE 0x7
 #define OFFS_SIZE 0xa
-#define CODE_SIZE 0x5
+#define CODE_SIZE 0x8
 
 #define ADDR_OFFSET 0x53
 #define SIZE_OFFSET 0x58
@@ -58,6 +58,15 @@
 #define OFFSET_9 0x15f
 #define OFFSET_A 0x17b
 
+#define RAX 0x5850
+#define RDI 0x5f57
+#define RSI 0x5e56
+#define RDX 0x5a52
+#define RCX 0x5951
+
+#define RBP 0x5d55
+#define RSP 0x5c54
+#define RBX 0x5b53
 #define RAX 0x5850
 #define RDI 0x5f57
 #define RSI 0x5e56
