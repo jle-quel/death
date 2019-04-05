@@ -37,7 +37,7 @@ OBJ_NAME_WAR		= antivirus.o						\
 			  injection.o						\
 			  parasite.o						\
 			  stub.o						\
-			  key.o							\
+			  signature.o						\
 			  clean.o						\
 			  replicate.o						\
 			  autodestruction.o					\

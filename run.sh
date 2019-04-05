@@ -8,9 +8,10 @@ function debug()
 {
 	cd /tmp
 	echo "int main(void) { }" > main.c
-	gcc main.c
-	cp a.out test/
-	cp a.out test2/
+	gcc main.c -o dyn
+	clang main.c -o exe
+	cp dyn test/
+	cp exe test2/
 	cd
 }
 

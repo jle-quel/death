@@ -23,24 +23,9 @@ L1:
 	nop				; BALISE
 	nop				; BALISE
 
-	call	L2
-	.string	db "12345678", 0x0
-
 L2:
-	pop	rdi			; KEY_ADDR
-	mov	byte[rdi + 0x0], '*'
-	mov	byte[rdi + 0x1], '*'
-	mov	byte[rdi + 0x2], '*'
-	mov	byte[rdi + 0x3], '*'
-	mov	byte[rdi + 0x4], '*'
-	mov	byte[rdi + 0x5], '*'
-	mov	byte[rdi + 0x6], '*'
-	mov	byte[rdi + 0x7], '*'
-
-	nop				; BALISE
-	nop				; BALISE
-
-	mov	rsi, 0x8		; KEY_SIZE
+	lea	rdi, [ rel L1 ]		; KEY_ADDR
+	mov	rsi, 0x42		; KEY_SIZE
 	lea	rdx, [ rel L1 ]		; TEX_ADDR
 	mov	rcx, 0x42		; TEXT_SIZE
 
