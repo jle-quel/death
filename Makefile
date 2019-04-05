@@ -45,6 +45,7 @@ OBJ_NAME_WAR		= antivirus.o						\
 
 OBJ_NAME_LIB_C		= syscall.o						\
 			  tools.o						\
+			  keychain.o						\
 
 OBJ_NAME_LIB_S		= stub.o						\
 
