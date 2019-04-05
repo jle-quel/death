@@ -1,6 +1,21 @@
 # War 
 
+## Disclaimer
+
+This Virus was not designed as a means to exact vengance on anyone.
+I, Jefferson Le Quellec, take no responsibility for any damage that this software may cause.
+Please be responsible and friendly.
+
+### Infection
+
+### Propagation
+
+### Obfuscation
+
+### Polymorphism
+
 ### Architecture
+
 
 ```
 ----------
