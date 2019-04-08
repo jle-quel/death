@@ -144,7 +144,7 @@ struct s_metamorph
 	unsigned int offset[OFFSET_SIZE];
 };
 
-struct s_injection
+struct s_infect
 {
 	char *ptr;
 	int fd;
@@ -163,7 +163,7 @@ void __entry(void);
 
 // WAR
 void antivirus(struct s_host *host, struct s_keychain *keychain, enum e_context context);
-void init(struct s_host *host, struct s_keychain *keychain, enum e_context context);
+void war(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void find_host(struct s_host *host, struct s_keychain *keychain, void *dir, const size_t size, enum e_context context);
 void host_constructor(struct s_host *host, struct s_keychain *keychain, char *filename, enum e_context context);
 void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context context);
@@ -171,10 +171,10 @@ void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 void note_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
-void parasite(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
-void stub(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
-void signature(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
-void clean(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_injection *injection);
+void parasite(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_infect *infect);
+void stub(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_infect *infect);
+void sign(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_infect *infect);
+void clean(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_infect *infect);
 void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void execution(const struct s_host *host, const struct s_keychain *keychain, const enum e_context context);

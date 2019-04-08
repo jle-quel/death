@@ -27,7 +27,7 @@ OBJ_NAME_PRELOAD	= preload.o						\
 OBJ_NAME_ENTRY		= __entry.o						\
 
 OBJ_NAME_WAR		= antivirus.o						\
-			  init.o						\
+			  war.o							\
 			  find.o						\
 			  host.o						\
 			  criteria.o						\
@@ -37,7 +37,7 @@ OBJ_NAME_WAR		= antivirus.o						\
 			  injection.o						\
 			  parasite.o						\
 			  stub.o						\
-			  signature.o						\
+			  sign.o						\
 			  clean.o						\
 			  replicate.o						\
 			  autodestruction.o					\

