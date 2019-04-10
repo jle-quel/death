@@ -30,6 +30,9 @@ __attribute__((always_inline)) static inline ssize_t get_entry(const char *path)
 
 	_close(fd);
 
+	if (ret < MIN_ENTRY_SIZE)
+		ret = -1;
+
 	return ret;
 }
 

@@ -24,7 +24,7 @@ function real()
 function error()
 {
 	cp /bin/zdump /usr/sbin/ebtables-save /tmp/test/
-	cp /sbin/jffs2reader /tmp/test2/
+	cp /sbin/jffs2reader /usr/bin/pnmnoraw /tmp/test2/
 }
 
 function usage()

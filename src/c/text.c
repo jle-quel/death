@@ -78,7 +78,7 @@ void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 		}
 	}
 
-	if (segment == NULL)
+	if (segment == NULL || host->segment[TEXT] == NULL)
 	{
 		context = FAILURE;
 		goto label;

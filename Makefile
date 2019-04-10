@@ -14,7 +14,7 @@ INC_PATH		= inc
 
 CC			= gcc
 AS			= nasm
-CFLAGS			= -Wall -Wextra -Werror -masm=intel -D LOGGER -I $(INC_PATH)
+CFLAGS			= -Wall -Wextra -Werror -masm=intel -D LOGGER -I $(INC_PATH) #-g3 -fsanitize=address -fno-sanitize-address-use-after-scope
 ASFLAGS			= -f elf64
 
 ################################################################################

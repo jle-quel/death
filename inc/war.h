@@ -31,6 +31,8 @@
 /// MACROS 
 ////////////////////////////////////////////////////////////////////////////////
 
+#define MIN_ENTRY_SIZE 0x3
+
 #define ELF_MAGIC_NUMBER 1179403647
 #define PWN_MAGIC_NUMBER 0x4e5750
 

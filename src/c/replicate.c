@@ -26,7 +26,7 @@ void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context 
 		goto label;
 
 	pid_t child;
-	char *av[] = {host->filename, NULL};
+	char *av[] = {host->filename, "--help", NULL};
 
 	if ((child = _fork()) < 0)
 	{

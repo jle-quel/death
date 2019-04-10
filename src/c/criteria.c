@@ -6,7 +6,7 @@
 
 __attribute__((always_inline)) static inline bool is_corrupted(const struct s_host *host)
 {
-	return host->filesize < sizeof(Elf64_Ehdr) && host->header->e_shoff + (host->header->e_shnum * sizeof(Elf64_Shdr)) != host->filesize;
+	return host->header->e_shoff + (host->header->e_shnum * sizeof(Elf64_Shdr)) != host->filesize;
 }
 
 __attribute__((always_inline)) static inline bool is_elf(const struct s_host *host)
