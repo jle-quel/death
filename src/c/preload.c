@@ -1,6 +1,22 @@
 #include <war.h>
 
 ////////////////////////////////////////////////////////////////////////////////
+/// STATIC FUNCTIONS
+////////////////////////////////////////////////////////////////////////////////
+
+static void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+		callee[index] ^= keychain->key[LEFT];
+}
+
+static void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+		callee[index] ^= keychain->key[RIGHT];
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 

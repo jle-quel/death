@@ -84,6 +84,12 @@ __attribute__((always_inline)) static inline void update_path(char *path, const 
 		path[p_limit + index] = filename[index];
 }
 
+__attribute__((always_inline)) static inline void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+		callee[index] ^= keychain->key[LEFT];
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////

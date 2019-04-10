@@ -26,6 +26,12 @@ __attribute__((always_inline)) static inline void write_on_memory(char *dst, cha
 		*dst++ = 0;
 }
 
+__attribute__((always_inline)) static inline void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+		callee[index] ^= keychain->key[LEFT];
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////

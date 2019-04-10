@@ -32,6 +32,17 @@ __attribute__((always_inline)) static inline void patch_entry_point(char *dst, c
 	_memcpy(dst, &entry_point, sizeof(int));
 }
 
+__attribute__((always_inline)) static inline void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+		callee[index] ^= keychain->key[LEFT];
+}
+
+__attribute__((always_inline)) static inline void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+		callee[index] ^= keychain->key[RIGHT];
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION

@@ -49,6 +49,12 @@ __attribute__((always_inline)) static inline void insert_stub(char *dst, Elf64_P
 	_memcpy(dst + ((segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - stub_size), stub, stub_size);
 }
 
+__attribute__((always_inline)) static inline void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+		callee[index] ^= keychain->key[LEFT];
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////

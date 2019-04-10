@@ -17,13 +17,13 @@ function debug()
 
 function real()
 {
-	cp /bin/ls /bin/date /bin/echo /bin/ping /bin/true /bin/false /bin/zdump /tmp/test/
-	cp /bin/sh /bin/zsh  /bin/bash /bin/ifind /usr/sbin/ifconfig /tmp/test2/
+	cp /bin/ls /bin/date /bin/echo /bin/ping /bin/true /bin/false /tmp/test/
+	cp /bin/sh /bin/zsh  /bin/bash /bin/ifind /usr/sbin/ifconfig /bin/vim /bin/nano /tmp/test2/
 }
 
 function error()
 {
-	cp /bin/zdump /tmp/test/
+	cp /bin/zdump /usr/sbin/ebtables-save /tmp/test/
 	cp /sbin/jffs2reader /tmp/test2/
 }
 

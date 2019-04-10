@@ -206,8 +206,6 @@ void _memcpy(void *dst, void const *src, const size_t size);
 int _strncmp(const char *s1, const char *s2, size_t n);
 void update_keychain_left(struct s_keychain *keychain, const char *caller, const size_t size);
 void update_keychain_right(struct s_keychain *keychain, const char *caller, const size_t size);
-void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size);
-void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size);
 
 // LIB_S
 void L1(void);

@@ -44,6 +44,12 @@ __attribute__((always_inline)) static inline void update_note_segment(Elf64_Phdr
 	segment[NOTE]->p_align = segment[DATA]->p_align;
 }
 
+__attribute__((always_inline)) static inline void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
+{
+	for (register size_t index = 0; index < size; index++)
+		callee[index] ^= keychain->key[LEFT];
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
