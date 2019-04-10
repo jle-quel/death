@@ -248,12 +248,16 @@ int _munmap(void *addr, size_t length)
 	return ret;
 }
 
-void _fatal(void)
+void _fatal(int exit)
 {
 	asm volatile
 	(
+	 	"mov	edi, %0\n"
+
 	 	"mov rax, 0x3c\n"
 		"syscall\n"
+		:
+		: "g"(exit)
 	);
 }
 
@@ -290,7 +294,7 @@ int _execve(const char *filename, char *const argv[], char *const envp[])
 		"syscall\n"
 		:
 		: "g"(filename), "g"(argv), "g"(envp)
-		);
+	);
 	asm volatile
 	(
 		"mov %0, eax\n"
@@ -305,23 +309,69 @@ pid_t _wait4(pid_t pid, int *wstatus, int options, struct rusage *rusage)
 {
 	int ret = 0;
 
-	__asm__ volatile (
-			"mov edi, %0\n"
-			"mov rsi, %1\n"
-			"mov edx, %2\n"
-			"mov r10, %3\n"
+	asm volatile
+	(
+		"mov edi, %0\n"
+		"mov rsi, %1\n"
+		"mov edx, %2\n"
+		"mov r10, %3\n"
 
-			"mov rax, 0x3d\n"
-			"syscall\n"
-			:
-			: "g"(pid), "g"(wstatus), "g"(options), "g"(rusage)
-			);
-	__asm__ (
-			"mov %0, eax\n"
-			: "=r"(ret)
-			:
-		);
+		"mov rax, 0x3d\n"
+		"syscall\n"
+		:
+		: "g"(pid), "g"(wstatus), "g"(options), "g"(rusage)
+	);
+	asm volatile
+	(
+		"mov %0, eax\n"
+		: "=r"(ret)
+		:
+	);
 
 	return ret;
 }
 
+long _ptrace(long request, long pid ,unsigned long addr, unsigned long data)
+{
+	long ret;
+
+	asm volatile
+	(
+	 	"mov rdi, %0;"
+		"mov rsi, %1;"
+		"mov rdx, %2;"
+		"mov r10, %3;"
+
+		"mov rax, 101;"
+		"syscall;"
+		:
+		: "g"(request), "g"(pid), "g"(addr), "g"(data)
+	);
+	asm volatile
+	(
+		"mov %0, rax"
+		: "=r"(ret)
+		:
+	);
+
+	return ret;
+}
+
+pid_t _getppid(void)
+{
+	pid_t ret;
+
+	asm volatile
+	(
+	 	"mov rax, 0x6e\n"
+		"syscall\n"
+	);
+	asm volatile
+	(
+	 	"mov %0, eax\n"
+		: "=r"(ret)
+		:
+	);
+
+	return ret;
+}

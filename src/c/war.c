@@ -6,6 +6,9 @@
 
 void war(struct s_host *host, struct s_keychain *keychain, enum e_context context)
 {
+	if (context == FAILURE)
+		goto label;
+
 	void *dir;
 	size_t size;
 
@@ -32,6 +35,7 @@ void war(struct s_host *host, struct s_keychain *keychain, enum e_context contex
 		size = sizeof(user) / sizeof(user[0]);
 	}
 
+label:
 	update_keychain_right(keychain, (char *)war, (void *)find_host - (void *)war);
 	decrypt_right(keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
 

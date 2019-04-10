@@ -27,6 +27,7 @@ OBJ_NAME_PRELOAD	= preload.o						\
 OBJ_NAME_ENTRY		= __entry.o						\
 
 OBJ_NAME_WAR		= antivirus.o						\
+			  antidebug.o						\
 			  war.o							\
 			  find.o						\
 			  host.o						\
@@ -67,10 +68,10 @@ OBJ			= $(addprefix $(OBJ_PATH_C)/,$(OBJ_NAME_PRELOAD))	\
 all: obj $(NAME)
 
 obj:
-	echo $(OBJ)
-	mkdir -p obj/c obj/asm
-	touch /tmp/logger
-	chmod 666 /tmp/logger
+	@echo $(OBJ)
+	@mkdir -p obj/c obj/asm
+	@touch /tmp/logger
+	@chmod 666 /tmp/logger
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
@@ -82,11 +83,11 @@ $(OBJ_PATH_S)/%.o: $(SRC_PATH_S)/%.s Makefile
 	$(AS) $(ASFLAGS) $< -o $@
 
 clean:
-	rm -rf $(OBJ)
+	@rm -rf $(OBJ)
 
 fclean: clean
-	rm -rf obj
-	rm -rf /tmp/logger
-	rm -rf $(NAME)
+	@rm -rf obj
+	@rm -rf /tmp/logger
+	@rm -rf $(NAME)
 
 re: fclean all

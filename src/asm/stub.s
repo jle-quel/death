@@ -25,12 +25,36 @@ L1:
 
 L2:
 	lea	rdi, [ rel L1 ]		; KEY_ADDR
-	mov	rsi, 0x42		; KEY_SIZE
+	mov	rsi, 0x59 		; KEY_SIZE
 	lea	rdx, [ rel L1 ]		; TEX_ADDR
 	mov	rcx, 0x42		; TEXT_SIZE
 
 	call	RC4
-	jmp	L3
+
+	nop				; BALISE
+	nop				; BALISE
+
+	pop	r15
+	pop	r14
+	pop	r13
+	pop	r12
+	pop	r11
+	pop	r10
+	pop	r9
+	pop	r8
+	pop	rcx
+	pop	rdx
+	pop	rsi
+	pop	rdi
+	pop	rax
+	pop	rbx
+	pop	rbp
+	pop	rsp
+
+	nop				; BALISE
+	nop				; BALISE
+
+	jmp	0xcafebabe
 
 RC4:
 	push	rbp
@@ -127,26 +151,3 @@ R3:
 
 	leave
 	ret
-
-L3:
-	pop	r15
-	pop	r14
-	pop	r13
-	pop	r12
-	pop	r11
-	pop	r10
-	pop	r9
-	pop	r8
-	pop	rcx
-	pop	rdx
-	pop	rsi
-	pop	rdi
-	pop	rax
-	pop	rbx
-	pop	rbp
-	pop	rsp
-
-	nop				; BALISE
-	nop				; BALISE
-
-	jmp	0xcafebabe
