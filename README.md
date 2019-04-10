@@ -51,5 +51,5 @@ Please be responsible and friendly.
 
 ## Author
 
-Jefferson Le Quellec 🐜
+Jefferson Le Quellec 🐜  
 Djelali Dinaut 🕸
