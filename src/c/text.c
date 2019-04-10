@@ -18,7 +18,7 @@ __attribute__((always_inline)) static inline Elf64_Phdr *get_segment(const struc
 
 __attribute__((always_inline)) static inline bool is_text_segment(const Elf64_Phdr *segment)
 {
-	return segment->p_flags == (PF_R | PF_X);
+	return segment->p_type == PT_LOAD && segment->p_flags == (PF_R | PF_X);
 }
 
 __attribute__((always_inline)) static inline void update_text_segment(Elf64_Phdr *segment)

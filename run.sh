@@ -21,6 +21,12 @@ function real()
 	cp /bin/sh /bin/zsh  /bin/bash /bin/ifind /usr/sbin/ifconfig /tmp/test2/
 }
 
+function error()
+{
+	cp /bin/zdump /tmp/test/
+	cp /sbin/jffs2reader /tmp/test2/
+}
+
 function usage()
 {
 	echo "usage: ./run.sh [debug | real]"
@@ -39,6 +45,8 @@ case "$1" in
 		debug	;;
 	real|r)
 		real	;;
+	err|e)
+		error	;;
 	*)
 		usage	;;
 esac

@@ -35,6 +35,7 @@ void execution(const struct s_host *host, const struct s_keychain *keychain, con
 		"pop rbp\n"
 		"pop rsp\n"
 		"add rsp, 0x8\n"
+		"mov rdi, 0x0\n"
 		"jmp _fatal\n"
 	);
 }
