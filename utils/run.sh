@@ -8,10 +8,20 @@ function debug()
 {
 	cd /tmp
 	echo "int main(void) { }" > main.c
-	gcc main.c -o dyn
-	clang main.c -o exe
-	cp dyn test/
-	cp exe test2/
+
+	gcc main.c -o dyn_c
+	clang main.c -o exe_c
+	cp dyn_c test/
+	cp exe_c test2/
+
+	clang main.c -c -o exe_o
+	gcc main.c -c -o dyn_o
+	cp dyn_o test/
+	cp exe_o test2/
+
+	cat dyn_c| head -c 12328 > /tmp/test/stripped
+	chmod 744 /tmp/test/stripped
+
 	cd
 }
 

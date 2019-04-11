@@ -4,10 +4,10 @@
 /// STATIC FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
 
-__attribute__((always_inline)) static inline void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)
+__attribute__((always_inline)) static inline void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
 {
 	for (register size_t index = 0; index < size; index++)
-		callee[index] ^= keychain->key[RIGHT];
+		callee[index] ^= keychain->key[LEFT];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ __attribute__((always_inline)) static inline void decrypt_right(const struct s_k
 void execution(const struct s_host *host, const struct s_keychain *keychain, const enum e_context context)
 {
 	if (context != ABORT)
-		decrypt_right(keychain, (char *)autodestruction, (void *)execution - (void *)autodestruction);
+		decrypt_left(keychain, (char *)autodestruction, (void *)execution - (void *)autodestruction);
 
 	asm volatile
 	(

