@@ -56,12 +56,12 @@ The flow of execution is shown below.
 ### Infection
 
 War contains two different types of infection.  
-The first is the Segment Text, and the second is the PT_NOTE to PT_LOAD.
+The first is the `Segment Text`, second is the `PT_NOTE to PT_LOAD`.
 
-Segment text infection is used for the decryption routine, the size of the stub is 342 bytes. We can then inject this code between the TEXT_SEGMENT and DATA_SEGMENT since the stub is less than 1 page (4096 bytes).
-If the size of the stub was more than 4096 bytes we would not have been able to inject it between those segment since we will have to increase the offset of the data segment and his virtual memory, which means that every interaction (segment text -> data segment) will be wronged.
+Segment text infection is used for the decryption routine, the size of the stub is *342 bytes*. We can then inject this code between the `TEXT_SEGMENT` and `DATA_SEGMENT` since the stub is less than 1 page (*4096 bytes*).
+If the size of the stub was more than *4096 bytes* we would not have been able to inject it between those segment since we will have to increase the offset of the data segment and his virtual memory, which means that every interaction (segment text -> data segment) will be wronged.
 
-PT_NOTE to PT_LOAD infection is used for the infection routine, the size of the routine is about 18000 bytes. We use the PT_NOTE segment which is not necessary for the runtime of the binary, and convert it to PT_LOAD, change his offset and virtual memory to reside after the data segment.
+`PT_NOTE to PT_LOAD` infection is used for the infection routine, the size of the routine is about *18000 bytes*. We use the `PT_NOTE segment` which is not necessary for the runtime of the binary, and convert it to `PT_LOAD`, change his offset and virtual memory to reside after the data segment.
 We can now inject the parasite inside the host.
 
 ### Propagation
