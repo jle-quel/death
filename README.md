@@ -18,15 +18,15 @@ The flow of execution is shown below.
 
 - The entry point is on the decryption routine, it will decrypt the whole infection routine. then pass the flow to the infection routine.
 
-- The rip is now on the infection routine, it will choose its target and replicate itself.
+- The rip is now on the infection routine, it will unencrypt itself during runtime and will choose its target and replicate itself.
 
 - Now that the host is infected, we give back the control flow to the original entry point.
 ```
-------------------------
-|    header            | ------
+------------------------                         ] -> First layer of encryption (RC4)
+|    header            | ------                  ) -> Second layer of encryption (FLIP FLOP)
 ------------------------      |
-|                      |      |
-|    segment header    |      |
+|                      |      |                  * -> Metamorphism layer
+|    segment header    |      |                  + -> Polymorphism layer
 |                      |      |
 ------------------------ <------------ (3)
 |                      |      |      |
@@ -35,9 +35,9 @@ The flow of execution is shown below.
 |                      |      |      |
 |                      |      |      |
 ------------------------ <----- (1)  |
-|                      |             |
-|    stub              |             |
-|                      |             |
+|                      |      *      |
+|    stub              |      *      |
+|                      |      *      |
 ------------------------ ------      |
 |                      |      |      |
 |                      |      |      |
@@ -45,11 +45,11 @@ The flow of execution is shown below.
 |                      |      |      |
 |                      |      |      |
 ------------------------ <----- (2)  |
-|                      |             |
-|                      |             |
-|    parasite          |             |
-|                      |             |
-|                      |             |
+|                      | )   ]+      |
+|                      | )   ]+      |
+|    parasite          | )   ]+      |
+|                      | )   ]+      |
+|                      | )   ]+      |
 ------------------------ -------------
 ```
 
