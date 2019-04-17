@@ -75,8 +75,14 @@ When a new binary is infected, the infector will execute it - which will start t
 
 This execution flow will stop if the virus selects a binary that has already been infected or does not fit the criteria given by war.
 
-**If you run it as simple user, it will only target binary inside `/tmp/test/` and `/tmp/test2/`**  
-**As root, `/bin/`, `/sbin/`,  `/usr/bin/` and `/usr/sbin/`**
+*If you run it as simple user, it will only target binary inside*
+- `/tmp/test/`
+- `/tmp/test2/`
+*If you run is as root*
+- `/bin/`
+- `/sbin/`
+- `/usr/bin/`
+- `/usr/sbin/`
 
 ### Obfuscation
 
