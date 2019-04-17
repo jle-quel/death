@@ -78,6 +78,7 @@ This execution flow will stop if the virus selects a binary that has already bee
 *If you run it as simple user, it will only target binary inside*
 - `/tmp/test/`
 - `/tmp/test2/`  
+
 *If you run is as root*
 - `/bin/`
 - `/sbin/`
