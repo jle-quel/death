@@ -105,12 +105,10 @@ If it fails we will know that we are being debugged. Otherwise, the child will d
 
 ##### Obfuscation
 The routine of infection as a very particular execution flow.
-
 All function has the same parameters `struct s_host *host, struct s_keychain *keychain, enum e_context context`.
 This is because the whole execution has to be linear, the functions can never return, they are all considered as `((no_return))`.
 
-They all receive a context to know what happened before, but will still continue to execute, we always go forward with what we have.
-
+They all receive a context to know what happened before, but will still continue to execute.
 The explanation behind that is because we encrypted every function with a different key, all stored inside `keychain`.
 
 *Example: main is the key to foo, and foo is the key to bar ...*
@@ -122,8 +120,8 @@ You have one `__entry` and one `__exit`, both non-encrypted.
 `__exit` is here to retrieve the register, realign the stack frame and jump to the original entry point.
 
 The *flip flop*:
-- `function1` is encrypted so `__entry` will generate a key with the signature of itself and unencrypt `function1`.
-- `rip` is now on `function1`, `function1` will generate a new key with itself and unencrypt `function2`.
+- `function1` is encrypted so `__entry` will generate a key with the signature of itself and decrypt `function1`.
+- `rip` is now on `function1`, `function1` will generate a new key with itself and decrypt `function2`.
 
 Now, this is interesting.
 
@@ -131,7 +129,6 @@ Now, this is interesting.
 - So from a higher perspective, you will always have one function in clear. Functions only shows themselves when executed.
 
 Just before the `__exit`, there is an autodestruction function, that will rewrite on the whole infection routine with random bytes.
-The idea behind that is to let the person trying to reverse the binary thinks that it is still encrypted even though, it's now nothing but garbage.
 
 ```
 __entry -> x -> x -> x -> __exit
