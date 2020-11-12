@@ -82,7 +82,7 @@ We use the `PT_NOTE` segment which is not necessary at runtime; Convert it to `P
 It gives us the advantage to not care about the size of the infection routine.
 
 ##### Propagation
-War will infect different directory if you run it as root or as a simple user, but the way it chooses its target will be the same.
+Death will infect different directory if you run it as root or as a simple user, but the way it chooses its target will be the same.
 
 First, it will count the number of entries inside the predefined directories. Now that we know how many executables are inside the directories, it will choose a random integer that is in range of the maximum entries and save one executable for each directory. Then select, again randomly, one of those executables and start the infection routine. This way every executable has as many chances to be chosen.
 
@@ -100,7 +100,7 @@ The virus will stop his propagation if he chooses (randomly) a host that has alr
 - `/usr/sbin/`
 
 ##### Anti-debugging
-To prevent the virus to run if being debugged we need to check if it is traced. To do that, we create a child that will try to trace his father (war).
+To prevent the virus to run if being debugged we need to check if it is traced. To do that, we create a child that will try to trace his father (Death).
 If it fails we will know that we are being debugged. Otherwise, the child will detach itself from the father.
 
 ##### Obfuscation
@@ -139,7 +139,7 @@ __entry -> y -> y -> y -> __exit
 ```
 
 ### Logger
-By default (like Famine), War is compiled in debug mode which means it will log on `tmp/logger`. You will be able to trace the path of the virus.
+By default (like Famine), Death is compiled in debug mode which means it will log on `tmp/logger`. You will be able to trace the path of the virus.
 
 ## Author
 Jefferson Le Quellec 🐜  
