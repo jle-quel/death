@@ -8,7 +8,7 @@ Please be responsible and friendly.
 ### Introduction
 This project is part of the Virology branch at 42.
 
-The idea behind War is to write a virus  (more evolved than famine) that is not about executing malicious payload but only about propagating itself in an organic/natural way and obfuscate has much possible his infection routine.
+The idea behind Death is to write a virus  (more evolved than famine) that is not about executing malicious payload but only about propagating itself in an organic/natural way and obfuscate has much possible his infection routine.
 
 ### Table of Contents
 - ##### Architecture
