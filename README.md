@@ -1,4 +1,4 @@
-# War 
+# Death 
 
 ## Disclaimer
 This Virus was not designed as a means to exact vengance on anyone.
